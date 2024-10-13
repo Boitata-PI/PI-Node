@@ -1,4 +1,4 @@
-import AlunoRepository from "../repositories/AlunoRepository";
+import AlunoRepository from "../repositories/AlunoRepository.js";
 
 class AlunoController {
   constructor() {

@@ -1,17 +1,23 @@
 {
-  "name": "uniWorks",
+  "name": "uniWorks_back",
   "version": "1.0.0",
-  "description": "",
-  "main": "app/index.js",
+  "type": "module",
+  "description": "Backend UniWorks",
+  "main": "index.js",
   "scripts": {
-    "frontdev": "nodemon assets/index.js",
-    "backdev": "nodemon app/index.js",
-    "front": "node assets/index.js",
-    "back": "node app/index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Boitata-PI/PI-Node.git"
+  },
   "author": "Boitata",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Boitata-PI/PI-Node/issues"
+  },
+  "homepage": "https://github.com/Boitata-PI/PI-Node#readme",
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
