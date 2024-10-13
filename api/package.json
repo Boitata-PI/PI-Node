@@ -1,7 +1,7 @@
 {
-  "name": "uniWorks_front",
+  "name": "uniWorks_api",
   "version": "1.0.0",
-  "description": "Frontend UniWorks",
+  "description": "API UniWorks",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
@@ -18,11 +18,8 @@
   },
   "homepage": "https://github.com/Boitata-PI/PI-Node#readme",
   "dependencies": {
-    "bootstrap": "^5.3.3",
     "dotenv": "^16.4.5",
-    "express": "^4.21.1",
-    "jquery": "^3.7.1",
-    "public": "^0.1.5"
+    "express": "^4.21.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"

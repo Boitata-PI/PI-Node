@@ -1,6 +1,6 @@
 @echo off
 echo Iniciando o servidor FrontEnd...
-cd /d "assets"
+cd /d "api"
 
 IF NOT EXIST "node_modules" (
     echo A pasta node_modules nao existe. Executando npm install...
