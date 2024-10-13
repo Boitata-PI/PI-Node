@@ -1,0 +1,3 @@
+@echo off
+echo Iniciando o servidor Node.js...
+cmd /k "node app/index.js"

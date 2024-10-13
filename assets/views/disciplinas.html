@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniWorks</title>
+  
+  <!-- Link para o CSS do Bootstrap -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Link para o CSS externo -->
+  <link href="/public/css/style.css" rel="stylesheet">
+</head>
+<section>
+  <!-- Menu lateral (sidenav) -->
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="/menuCadastro">Cadastrar</a>
+    <a href="/turmas">Turmas</a>
+    <a href="/menuCurso">Curso</a>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <button class="navbar-toggler" type="button" onclick="openNav()">&#9776;</button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/menuCadastro">Cadastrar</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/menuCurso">Curso</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/turmas">Turmas</a>
+        </li>
+      </ul>
+    </div>
+    <div class="user-icon"><a class="nav-link" href="/registro"></a></div>
+  </nav>
+</section>
+
+  <!-- Container de Diciplinas -->
+  <div class="turma-container">
+    <h2>Diciplinas</h2>
+    <div class="turma-card">
+      <div class="turma-info">
+        <h3>Matemática <span>(06302)</span></h3>
+        <div class="tags">
+          <span class="tag">Cálculo</span>
+          <span class="tag">1º SEMESTRE</span>
+        </div>
+      </div>
+      <div class="ver-mais">
+        <button class="ver-mais-btn"><a class="btn-branco" href="PagDesenvolvimento.html">VER MAIS</a></button>
+      </div>
+    </div>
+  </div>
+
+    <!-- Botão para adicionar tarefa -->
+    <div class="add-task-btn"><a class="btn-branco" href="/CadastroDiciplina.html">+</div>
+  </div>
+
+  <!-- Link para o JS do Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script  type = "módulo"  src = "https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" ></script> 
+  <script  nomodule  src = "https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  
+  <!-- Link para o JS externo -->
+  <script src="/public/js/scripts.js"></script>
+</body>
+</html>

@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "app/index.js",
-  "type": "module",
   "scripts": {
-    "start": "node app/index.js",
-    "dev": "nodemon app/index.js"
+    "frontdev": "nodemon assets/index.js",
+    "backdev": "nodemon app/index.js",
+    "front": "node assets/index.js",
+    "back": "node app/index.js"
   },
   "keywords": [],
   "author": "Boitata",

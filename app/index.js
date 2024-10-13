@@ -1,7 +1,6 @@
 import 'dotenv/config'; 
 import express from 'express';
 import Api from './rotas/api.js';
-import Web from './rotas/web.js';
 import bodyParser from 'body-parser';
 import Database from './database/Database.js';
 import cors from 'cors';
@@ -32,10 +31,8 @@ catch(e){
     throw e;
 }
 
-const webRoutes = new Web(database);
 const apiRoutes = new Api(database);
 
-app.use('/', webRoutes.getRouter());
 app.use('/api', apiRoutes.getRouter());
 
 app.listen(port, () => {

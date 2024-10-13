@@ -1,0 +1,3 @@
+@echo off
+echo Iniciando o servidor Node.js...
+cmd /k "nodemon assets/index.js"

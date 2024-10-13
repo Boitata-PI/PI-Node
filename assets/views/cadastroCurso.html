@@ -41,32 +41,27 @@
     </nav>
   </section>
 
+  <main class="login-container">
+    <h1>Adicionar Curso</h1>
 
-  <section class="cardcontainer">
-      <div class="card-container">
-        <a class="nav-link" href="/menuCadastro">
-          <div class="card">
-            Cadastrar
-          </div>
-        </a>
-        <a class="nav-link" href="/menuCurso">
-          <div class="card">
-              Curso
-            </div>
-          </a>  
+    <div class="form-container">
+        <form>
+            <label for="name">Nome do Curso:</label>
+            <input type="text" id="namecurso" name="namecurso" placeholder="Insira o nome do Curso">
+
+
+            <label for="name">Periodo:</label>
+            <input type="text" id="periodo" name="periodo" placeholder="Periodo">
+
+
+            <label for="name">Nome do Coordenador:</label>
+            <input type="text" id="namecoordenador" name="namecoordenador" placeholder="Nome do Coordenador">
+
+
+            <button type="submit" class="submit-btn">Cadastrar</button>
+        </form>
     </div>
-  </section>
-
-  
-  <section class="cardcontainer">
-    <div class="card-container"> 
-      <a class="nav-link" href="/turmas">
-        <div class="card">
-          Turmas
-        </div>
-      </a>
-  </div>
-</section>
+</main>
 
   <!-- Link para o JS do Bootstrap -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

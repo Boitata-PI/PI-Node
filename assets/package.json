@@ -1,0 +1,26 @@
+{
+  "name": "assets",
+  "version": "1.0.0",
+  "description": "frontend uniWorks",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Boitata-PI/PI-Node.git"
+  },
+  "author": "Boitata",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Boitata-PI/PI-Node/issues"
+  },
+  "homepage": "https://github.com/Boitata-PI/PI-Node#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "jquery": "^3.7.1"
+  }
+}
