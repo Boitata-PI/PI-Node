@@ -2,17 +2,22 @@ import Sequelize from 'sequelize';
 
 const getDisciplinaModel = (sequelize) => {
     const Disciplina = sequelize.define('disciplinas', {
-        codDisc: {
+        codProf: {
             type: Sequelize.INTEGER,
-            primaryKey: true
+            references: {
+              model: 'usuarios',
+              key: 'codProf',
+            }
         },
+
         nome: {
             type: Sequelize.STRING
-        },
-        codUsu: {
-            type: Sequelize.INTEGER
         }
     });
+
+    Disciplina.sync();
+
+    return Disciplina;
 };
 
 export default getDisciplinaModel;

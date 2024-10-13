@@ -1,10 +1,17 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import AlunoRoutes from './rotas/alunoRoutes.js';
-import UsuarioRoutes from './rotas/usuarioRoutes.js';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import Database from './database/Database.js';
+
+//Rotas
+import AuthRoutes from './rotas/authRoutes.js';
+import AlunoRoutes from './rotas/alunoRoutes.js';
+//import ProfessorRoutes from './rotas/professorRoutes.js';
+//import CoordenadorRoutes from './rotas/coordenadorRoutes.js';
+//import DisciplinaRoutes from './rotas/disciplinaRoutes.js';
+//import CursoRoutes from './rotas/cursoRoutes.js';
+//import AlunoDiscRoutes from './rotas/alunoDiscRoutes.js';
 
 dotenv.config();
 
@@ -34,14 +41,21 @@ catch(e){
     throw e;
 }
 
+const authRoutes = new AuthRoutes(database);
 const alunoRoutes = new AlunoRoutes(database);
-const usuarioRoutes = new UsuarioRoutes(database);
 
 
 app.get('/', (req, res) => res.json({success: true, message: 'BackEnd UniWorks Ativo!'}));
 
+app.use('/auth', authRoutes.getRouter());
+
 app.use('/aluno', alunoRoutes.getRouter());
-app.use('/usuario', usuarioRoutes.getRouter());
+//app.use('/coordenador', coordenadorRoutes.getRouter());
+//app.use('/professor', professorRoutes.getRouter());
+
+//app.use('/disciplina', disciplinaRoutes.getRouter());
+//app.use('/alunoDisc', alunoDiscRoutes.getRouter());
+//app.use('/curso', cursoRoutes.getRouter());
 
 
 app.use((req, res) => res.status(404).json({success: false, message: 'Not Found'}));

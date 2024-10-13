@@ -1,7 +1,11 @@
 class Curso {
-    constructor(id, nome) {
-        this.id = id;
-        this.nome = nome;
+    constructor(params) {
+        this.updateAttributes(params);
+    }
+
+
+    updateAttributes(params){
+        Object.assign(this, params);
     }
 
     setId(id) {
@@ -18,6 +22,14 @@ class Curso {
 
     getNome() {
         return this.nome;
+    }
+
+    setCodCord(codCord) {
+        this.codCord = codCord;
+    }
+
+    getCodCord() {
+        return this.codCord;
     }
 }
 

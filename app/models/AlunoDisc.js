@@ -1,7 +1,11 @@
 class AlunoDisc {
-    constructor(codDisc, codAluno) {
-        this.codDisc = codDisc;
-        this.codAluno = codAluno;
+    constructor(params) {
+        this.updateAttributes(params);
+    }
+
+
+    updateAttributes(params){
+        Object.assign(this, params);
     }
 
     setCodDisc(codDisc) {

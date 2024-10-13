@@ -1,8 +1,11 @@
 class Disciplina {
-    constructor(id, nome, codUsuario) {
-        this.id = id;
-        this.nome = nome;
-        this.codUsuario = codUsuario;
+    constructor(params) {
+        this.updateAttributes(params);
+    }
+
+
+    updateAttributes(params){
+        Object.assign(this, params);
     }
 
     setId(id) {
@@ -21,12 +24,12 @@ class Disciplina {
         return this.nome;
     }
 
-    setCodUsuario(codUsuario) {
-        this.codUsuario = codUsuario;
+    setCodProf(codProf) {
+        this.codProf = codProf;
     }
 
-    getCodUsuario() {
-        return this.codUsuario;
+    getCodProf() {
+        return this.codProf;
     }
 }
 
