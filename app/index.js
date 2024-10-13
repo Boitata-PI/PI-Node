@@ -1,10 +1,12 @@
-import 'dotenv/config'; 
+import dotenv from 'dotenv';
 import express from 'express';
-import Api from './rotas/api.js';
-import Web from './rotas/web.js';
+import AlunoRoutes from './rotas/alunoRoutes.js';
+import UsuarioRoutes from './rotas/usuarioRoutes.js';
 import bodyParser from 'body-parser';
-import Database from './database/Database.js';
 import cors from 'cors';
+import Database from './database/Database.js';
+
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8081;
@@ -32,11 +34,20 @@ catch(e){
     throw e;
 }
 
-const webRoutes = new Web(database);
-const apiRoutes = new Api(database);
+const alunoRoutes = new AlunoRoutes(database);
+const usuarioRoutes = new UsuarioRoutes(database);
 
-app.use('/', webRoutes.getRouter());
-app.use('/api', apiRoutes.getRouter());
+
+app.get('/', (req, res) => res.json({success: true, message: 'BackEnd UniWorks Ativo!'}));
+
+app.use('/aluno', alunoRoutes.getRouter());
+app.use('/usuario', usuarioRoutes.getRouter());
+
+
+app.use((req, res) => res.status(404).json({success: false, message: 'Not Found'}));
+
+
+
 
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
