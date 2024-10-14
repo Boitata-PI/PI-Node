@@ -1,62 +1,49 @@
 import AlunoDisc from '../models/AlunoDisc.js';
-import getAlunoDiscModel from '../database/migrations/AlunoDisc.js';
+import Disciplina from '../database/migrations/DisciplinaSequelize.js';
+import AlunoDiscSequelize from '../database/migrations/AlunoDiscSequelize.js';
 
 class AlunoDiscRepository {
   constructor(sequelize) {
     this.sequelize = sequelize;
-    this.AlunoDisc = getAlunoDiscModel(this.sequelize);
+    this.AlunoDisc = AlunoDiscSequelize(this.sequelize);
   }
 
   async create(alunoDisc) {
-    const alunoDiscData = await this.AlunoDisc.create({
-      nome: alunoDisc.getNome(),
-      ra: alunoDisc.getRA(),
-      senha: alunoDisc.getSenha(),
-      tipo: alunoDisc.getTipo()
+    return await this.AlunoDisc.create({
+      codDisc: alunoDisc.getCodDisc(),
+      codAluno: alunoDisc.getCodAluno()
     });
-
-    return alunoDiscData;
   }
 
   async update(alunoDisc){
-    const alunoDiscData = await this.AlunoDisc.update({
-      nome: alunoDisc.getNome(),
-      ra: alunoDisc.getRA(),
-      senha: alunoDisc.getSenha(),
-      tipo: alunoDisc.getTipo()
+    return await this.AlunoDisc.update({
+      codDisc: alunoDisc.getCodDisc(),
+      codAluno: alunoDisc.getCodAluno()
     }, {
       where: {
         id: alunoDisc.getId()
       }
     });
-
-    return alunoDiscData;
   }
 
   async list(){
-    const alunoDiscs = await this.AlunoDisc.findAll();
-
-    return alunoDiscs;
+    return await this.AlunoDisc.findAll({
+      include: [Disciplina],  // Inclui os posts relacionados
+    })
   }
 
   async find(id){
-    const alunoDisc = await this.AlunoDisc.findOne({ where: { id } });
-
-    return alunoDisc;
+    return await this.AlunoDisc.findOne({ where: { id } });
   }
 
   async search(params){
-    const alunoDiscs = await this.AlunoDisc.findAll({ where: params });
-
-    return alunoDiscs;
+    return await this.AlunoDisc.findAll({ where: params });
   }
 
-  async delete(id){
-    const alunoDisc = await this.AlunoDisc.destroy({ where: { id } });
-
-    return alunoDisc;
+  async delete(alunoDisc){
+    return await this.AlunoDisc.destroy({ where: { id: alunoDisc.getId() } });
   }
 }
-  
+
 
 export default AlunoDiscRepository;

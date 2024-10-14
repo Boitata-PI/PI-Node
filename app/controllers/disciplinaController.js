@@ -1,9 +1,12 @@
 import Disciplina from "../models/Disciplina.js";
 import DisciplinaRepository from "../repositories/DisciplinaRepository.js";
+import UsuarioRepository from "../repositories/UsuarioRepository.js";
+
 
 class DisciplinaController {
   constructor(database) {
       this.DisciplinaRepository = new DisciplinaRepository(database.getConnection());
+      this.UsuarioRepository = new UsuarioRepository(database.getConnection());
   }
 
 
@@ -15,15 +18,21 @@ class DisciplinaController {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
       }
 
-      const disci = new Disciplina({nome, codProf});
+      const codProfExists = await this.UsuarioRepository.find(codProf, 'PROFESSOR');
 
-      const result = await this.DisciplinaRepository.create(disci);
-
-      if (!result) {
-        throw new Error("Disciplina não Cadastrado!");
+      if (!codProfExists) {
+        return res.status(404).json({ status: false, message: "Professor não encontrado!" });
       }
 
-      return res.status(200).json({ status: true, data: result, message: 'Disciplina Cadastrado!' });
+      const disciplina = new Disciplina({nome, codProf});
+
+      const result = await this.DisciplinaRepository.create(disciplina);
+
+      if (!result) {
+        throw new Error("Disciplina não Cadastrada!");
+      }
+
+      return res.status(200).json({ status: true, data: result, message: 'Disciplina Cadastrada!' });
     } 
     catch (error) {
       console.error(error);
@@ -35,22 +44,28 @@ class DisciplinaController {
   async update(req, res) {
     try{
       const { id } = req.params;
-      const disciSequelize = await this.DisciplinaRepository.find(id);
+      const disciplinaSequelize = await this.DisciplinaRepository.find(id);
 
-      if(!disciSequelize){
-        return res.status(404).json({ status: false, message: "Disciplina não encontrado!" });
+      if(!disciplinaSequelize){
+        return res.status(404).json({ status: false, message: "Disciplina não encontrada!" });
       }
 
-      const disciplina = new Disciplina(disciSequelize.get());
+      const codProfExists = await this.UsuarioRepository.find(codProf, 'PROFESSOR');
+
+      if (!codProfExists) {
+        return res.status(404).json({ status: false, message: "Professor não encontrado!" });
+      }
+
+      const disciplina = new Disciplina(disciplinaSequelize.get());
       disciplina.updateAttributes(req.body);
 
       const result = await this.DisciplinaRepository.update(disciplina);
 
       if(!result){
-        throw new Error("Disciplina não Atualizado!");
+        throw new Error("Disciplina não Atualizada!");
       }
 
-      return res.status(200).json({ status: true, data: disciplina, message: 'Disciplina Atualizado!' });
+      return res.status(200).json({ status: true, data: disciplina, message: 'Disciplina Atualizada!' });
     }
     catch(error){
       console.error(error);
@@ -63,7 +78,7 @@ class DisciplinaController {
     try {
       const result = await this.DisciplinaRepository.list();
 
-      return res.status(200).json({ status: true, data: result, message: 'Disciplina Listados!' });
+      return res.status(200).json({ status: true, data: result, message: 'Disciplinas Listadas!' });
     } 
     catch (error) {
       console.error(error);
@@ -79,7 +94,7 @@ class DisciplinaController {
       const result = await this.DisciplinaRepository.find(id);
 
       if(!result){
-        return res.status(404).json({ status: false, message: "Disciplina não encontrado!" });
+        return res.status(404).json({ status: false, message: "Disciplina não encontrada!" });
       }
 
       return res.status(200).json({ status: true, data: result, message: 'Pesquisa Única Concluída!' });
@@ -109,14 +124,18 @@ class DisciplinaController {
       var disciplinaSequelize = await this.DisciplinaRepository.find(id);
       
       if(!disciplinaSequelize){
-        return res.status(404).json({ status: false, message: "Disciplina não encontrado!" });
+        return res.status(404).json({ status: false, message: "Disciplina não encontrada!" });
       }
 
       const disciplina = new Disciplina(disciplinaSequelize.get()); 
 
       const result = await this.DisciplinaRepository.delete(disciplina);
 
-      return res.status(200).json({ status: true, data: disciplina, message: 'Disciplina Deletado!' });
+      if(!result){
+        throw new Error("Disciplina não Deletada!");
+      }
+
+      return res.status(200).json({ status: true, data: disciplina, message: 'Disciplina Deletada!' });
     }
     catch (error) {
       return res.json({ status: false, message: `Erro ao deletar Disciplina: ${error.message}`, stack: error.stack });

@@ -1,23 +1,21 @@
 import Disciplina from '../models/Disciplina.js';
-import getDisciplinaModel from '../database/migrations/Disciplina.js';
+import DisciplinaSequelize from '../database/migrations/DisciplinaSequelize.js';
 
 class DisciplinaRepository {
   constructor(sequelize) {
     this.sequelize = sequelize;
-    this.Disciplina = getDisciplinaModel(this.sequelize);
+    this.Disciplina = DisciplinaSequelize(this.sequelize);
   }
 
   async create(disciplina) {
-    const disciplinaData = await this.Disciplina.create({
+    return await this.Disciplina.create({
       nome: disciplina.getNome(),
       codProf: disciplina.getCodProf(),
     });
-
-    return disciplinaData;
   }
 
   async update(disciplina){
-    const disciplinaData = await this.Disciplina.update({
+    return await this.Disciplina.update({
       nome: disciplina.getNome(),
       codProf: disciplina.getCodProf(),
     }, {
@@ -25,34 +23,24 @@ class DisciplinaRepository {
         id: disciplina.getId()
       }
     });
-
-    return disciplinaData;
   }
 
   async list(){
-    const disciplinas = await this.Disciplina.findAll();
-
-    return disciplinas;
+    return await this.Disciplina.findAll();
   }
 
   async find(id){
-    const disciplina = await this.Disciplina.findOne({ where: { id } });
-
-    return disciplina;
+    return await this.Disciplina.findOne({ where: { id } });
   }
 
   async search(params){
-    const disciplinas = await this.Disciplina.findAll({ where: params });
-
-    return disciplinas;
+    return await this.Disciplina.findAll({ where: params });
   }
 
   async delete(Disciplina){
-    const disciplina = await this.Disciplina.destroy({ where: { id: Disciplina.getId() } });
-
-    return disciplina;
+    return await this.Disciplina.destroy({ where: { id: Disciplina.getId() } });
   }
 }
-  
+
 
 export default DisciplinaRepository;
