@@ -10,9 +10,7 @@ class DisciplinaRepository {
   async create(disciplina) {
     const disciplinaData = await this.Disciplina.create({
       nome: disciplina.getNome(),
-      ra: disciplina.getRA(),
-      senha: disciplina.getSenha(),
-      tipo: disciplina.getTipo()
+      codProf: disciplina.getCodProf(),
     });
 
     return disciplinaData;
@@ -21,9 +19,7 @@ class DisciplinaRepository {
   async update(disciplina){
     const disciplinaData = await this.Disciplina.update({
       nome: disciplina.getNome(),
-      ra: disciplina.getRA(),
-      senha: disciplina.getSenha(),
-      tipo: disciplina.getTipo()
+      codProf: disciplina.getCodProf(),
     }, {
       where: {
         id: disciplina.getId()
@@ -51,8 +47,8 @@ class DisciplinaRepository {
     return disciplinas;
   }
 
-  async delete(id){
-    const disciplina = await this.Disciplina.destroy({ where: { id } });
+  async delete(Disciplina){
+    const disciplina = await this.Disciplina.destroy({ where: { id: Disciplina.getId() } });
 
     return disciplina;
   }

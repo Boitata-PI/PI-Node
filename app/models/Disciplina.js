@@ -3,7 +3,6 @@ class Disciplina {
         this.updateAttributes(params);
     }
 
-
     updateAttributes(params){
         Object.assign(this, params);
     }

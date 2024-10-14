@@ -6,7 +6,7 @@ const getDisciplinaModel = (sequelize) => {
             type: Sequelize.INTEGER,
             references: {
               model: 'usuarios',
-              key: 'codProf',
+              key: 'id',
             }
         },
 
