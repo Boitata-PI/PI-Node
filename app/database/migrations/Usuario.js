@@ -11,6 +11,9 @@ const getUsuarioModel = (sequelize) => {
         ra:{
             type: Sequelize.STRING
         },
+        tipo:{
+            type: Sequelize.STRING
+        }
     });
     
     Usuario.sync();
