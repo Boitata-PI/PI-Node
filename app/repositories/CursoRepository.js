@@ -1,62 +1,46 @@
 import Curso from '../models/Curso.js';
-import getCursoModel from '../database/migrations/Curso.js';
+import CursoSequelize from '../database/migrations/CursoSequelize.js';
 
 class CursoRepository {
   constructor(sequelize) {
     this.sequelize = sequelize;
-    this.Curso = getCursoModel(this.sequelize);
+    this.Curso = CursoSequelize(this.sequelize);
   }
 
   async create(curso) {
-    const cursoData = await this.Curso.create({
+    return await this.Curso.create({
       nome: curso.getNome(),
-      ra: curso.getRA(),
-      senha: curso.getSenha(),
-      tipo: curso.getTipo()
+      codCord: curso.getCodCord()
     });
-
-    return cursoData;
   }
 
   async update(curso){
-    const cursoData = await this.Curso.update({
+    return await this.Curso.update({
       nome: curso.getNome(),
-      ra: curso.getRA(),
-      senha: curso.getSenha(),
-      tipo: curso.getTipo()
+      codCord: curso.getCodCord()
     }, {
       where: {
         id: curso.getId()
       }
     });
-
-    return cursoData;
   }
 
   async list(){
-    const cursos = await this.Curso.findAll();
-
-    return cursos;
+    return await this.Curso.findAll();
   }
 
   async find(id){
-    const curso = await this.Curso.findOne({ where: { id } });
-
-    return curso;
+    return await this.Curso.findOne({ where: { id } });
   }
 
   async search(params){
-    const cursos = await this.Curso.findAll({ where: params });
-
-    return cursos;
+    return await this.Curso.findAll({ where: params });
   }
 
-  async delete(id){
-    const curso = await this.Curso.destroy({ where: { id } });
-
-    return curso;
+  async delete(curso){
+    return await this.Curso.destroy({ where: { id: curso.getId() } });
   }
 }
-  
+
 
 export default CursoRepository;

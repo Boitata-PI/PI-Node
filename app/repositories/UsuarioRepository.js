@@ -1,77 +1,73 @@
 import Usuario from '../models/Usuario.js';
-import getUsuarioModel from '../database/migrations/Usuario.js';
+import UsuarioSequelize from '../database/migrations/UsuarioSequelize.js';
 
 class UsuarioRepository {
   constructor(sequelize) {
     this.sequelize = sequelize;
-    this.Usuario = getUsuarioModel(this.sequelize);
+    this.Usuario = UsuarioSequelize(this.sequelize);
   }
 
-  async create(user) {
-    const userData = await this.Usuario.create({
-      nome: user.getNome(),
-      ra: user.getRa(),
-      senha: user.getSenha(),
-      tipo: user.getTipo()
+  async create(usuario) {
+    return await this.Usuario.create({
+      nome: usuario.getNome(),
+      ra: usuario.getRa(),
+      senha: usuario.getSenha(),
+      tipo: usuario.getTipo()
     });
-
-    return userData;
   }
 
-  async update(user){
-    const userData = await this.Usuario.update({
-      nome: user.getNome(),
-      ra: user.getRa(),
-      senha: user.getSenha(),
-      tipo: user.getTipo()
+  async update(usuario){
+    return await this.Usuario.update({
+      nome: usuario.getNome(),
+      ra: usuario.getRa(),
+      senha: usuario.getSenha()
     }, {
       where: {
-        id: user.getId()
+        id: usuario.getId()
       }
     });
-
-    return userData;
   }
 
-  async list(){
-    const users = await this.Usuario.findAll();
+  async list(tipo = null){
+    if(tipo){
+      return await this.Usuario.findAll({ where: { tipo } });
+    }
 
-    return users;
+    return await this.Usuario.findAll();
   }
 
-  async find(id){
-    const user = await this.Usuario.findOne({ where: { id } });
+  async find(id, tipo = null){
+    if(tipo){
+      return await this.Usuario.findOne({ where: { id, tipo } });
+    }
 
-    return user;
+    return await this.Usuario.findOne({ where: { id } });
   }
 
-  async search(params){
-    const users = await this.Usuario.findAll({ where: params });
+  async search(params, tipo = null){
+    if(tipo){
+      return await this.Usuario.findAll({ where: { ...params, tipo } });
+    }
 
-    return users;
+    return await this.Usuario.findAll({ where: params });
+  }
+
+  async delete(usuario){
+    return await this.Usuario.destroy({ where: { id: usuario.getId(), tipo: usuario.getTipo() } });
   }
 
   async login(email, password) {
-    const user = await this.Usuario.findOne({ where: { email, password } });
-    return user;
+    return await this.Usuario.findOne({ where: { email, password } });
   }
 
   async logout(token) {
-    const user = await this.Usuario.destroy({ where: {token} });
-    return user;
+    return true;
   }
 
-  async delete(Aluno){
-    const user = await this.Usuario.destroy({ where: { id: Aluno.getId() } });
-
-    return user;
-  }
-
-  async getUserState(token) {
-    const user = await this.sequelize.models.Usuarios.findOne({ where: { token } });
-    return user;
+  async getResultSequelizeState(token) {
+    return await this.sequelize.models.resultSequelize.findOne({ where: { token } });
   }
 }
-  
+
 
 export default UsuarioRepository;
