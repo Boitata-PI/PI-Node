@@ -44,7 +44,7 @@ class DisciplinaController {
     } 
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao registrar Disciplina: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao registrar Disciplina: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -84,7 +84,7 @@ class DisciplinaController {
     }
     catch(error){
       console.error(error);
-      return res.json({ status: false, message: `Erro ao atualizar Disciplina: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao atualizar Disciplina: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -97,7 +97,7 @@ class DisciplinaController {
     } 
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao listar Disciplina: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao listar Disciplina: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -116,7 +116,7 @@ class DisciplinaController {
     }
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao buscar Disciplina: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao buscar Disciplina: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -128,7 +128,7 @@ class DisciplinaController {
     }
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao buscar Disciplina: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao buscar Disciplina: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -153,7 +153,7 @@ class DisciplinaController {
       return res.status(200).json({ status: true, data: disciplina, message: 'Disciplina Deletada!' });
     }
     catch (error) {
-      return res.json({ status: false, message: `Erro ao deletar Disciplina: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao deletar Disciplina: ${error.message}`, stack: error.stack });
     }
   }
 }

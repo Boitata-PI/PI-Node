@@ -15,6 +15,27 @@ class UsuarioRepository {
     });
   }
 
+  async createMany(usuarios) {
+    return await this.Usuario.bulkCreate(usuarios.map(usuario => ({
+      nome: usuario.getNome(),
+      ra: usuario.getRa(),
+      senha: usuario.getSenha(),
+      tipo: usuario.getTipo()
+    })));
+  }
+
+  async findOrCreate(usuario, params) {
+    return await this.Usuario.findOrCreate({
+      where: params,
+      defaults: {
+        ra: usuario.getRa(),
+        nome: usuario.getNome(),
+        senha: usuario.getSenha(),
+        tipo: usuario.getTipo()
+      }
+    }); 
+  }
+
   async update(usuario){
     return await this.Usuario.update({
       nome: usuario.getNome(),

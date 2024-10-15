@@ -12,7 +12,7 @@ class AlunoController {
       const { nome, ra, senha } = req.body;
       const tipo = "ALUNO";
 
-      if (!nome || !ra || !senha || !tipo) {
+      if (!nome || !ra || !senha) {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
       }
 
@@ -28,7 +28,7 @@ class AlunoController {
     } 
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao registrar Usuario: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao registrar Usuario: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -55,7 +55,7 @@ class AlunoController {
     }
     catch(error){
       console.error(error);
-      return res.json({ status: false, message: `Erro ao atualizar Aluno: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao atualizar Aluno: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -68,7 +68,7 @@ class AlunoController {
     } 
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao listar Alunos: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao listar Alunos: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -87,7 +87,7 @@ class AlunoController {
     }
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao buscar Aluno: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao buscar Aluno: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -100,7 +100,7 @@ class AlunoController {
     }
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao buscar Alunos: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao buscar Alunos: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -125,7 +125,7 @@ class AlunoController {
       return res.status(200).json({ status: true, data: aluno, message: 'Aluno Deletado!' });
     }
     catch (error) {
-      return res.json({ status: false, message: `Erro ao deletar Aluno: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao deletar Aluno: ${error.message}`, stack: error.stack });
     }
   }
 }
