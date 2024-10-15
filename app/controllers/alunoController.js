@@ -1,113 +1,131 @@
-import AlunoRepository from "../repositories/AlunoRepository";
+import Usuario from "../models/Usuario.js";
+import UsuarioRepository from "../repositories/UsuarioRepository.js";
 
 class AlunoController {
-  constructor() {
-      this.AlunoRepository = new AlunoRepository();
+  constructor(database) {
+      this.UsuarioRepository = new UsuarioRepository(database);
   }
+
 
   async store(req, res) {
-    const { nome, sexo, idade, cep, logradouro, bairro, cidade, estado } = req.body;
-
-    if (!nome || !sexo || !idade || !cep || !logradouro || !bairro || !cidade || !estado) {
-      return res.status(400).json({ message: "Dados incompletos" });
-    }
-
-    const Aluno = {
-      nome,
-      sexo,
-      idade,
-      cep,
-      logradouro,
-      bairro,
-      cidade,
-      estado
-    };
-
     try {
-      const result = await this.AlunoRepository.create(Aluno)
-      .then(function () {
-        console.log("Added document");
-        res.redirect("/index.php/clients/home");
-      });
-      return res.status(200).json(result);
-    } catch (error) {
-      return res.status(500).json({ status: false, message: `Erro ao registrar Aluno: ${error.message}` });
+      const { nome, ra, senha } = req.body;
+      const tipo = "ALUNO";
+
+      if (!nome || !ra || !senha || !tipo) {
+        return res.status(400).json({ status: false, message: "Dados Incompletos!" });
+      }
+
+      const aluno = new Usuario({nome, ra, senha, tipo});
+
+      const result = await this.UsuarioRepository.create(aluno);
+
+      if (!result) {
+        throw new Error("Aluno não Cadastrado!");
+      }
+
+      return res.status(200).json({ status: true, data: result, message: 'Aluno Cadastrado!' });
+    } 
+    catch (error) {
+      console.error(error);
+      return res.json({ status: false, message: `Erro ao registrar Usuario: ${error.message}`, stack: error.stack });
     }
   }
+
+
+  async update(req, res) {
+    try{
+      const { id } = req.params;
+      const alunoSequelize = await this.UsuarioRepository.find(id);
+
+      if(!alunoSequelize){
+        return res.status(404).json({ status: false, message: "Aluno não encontrado!" });
+      }
+
+      const aluno = new Usuario(alunoSequelize.get());
+      aluno.updateAttributes(req.body);
+
+      const result = await this.UsuarioRepository.update(aluno);
+
+      if(!result){
+        throw new Error("Aluno não Atualizado!");
+      }
+
+      return res.status(200).json({ status: true, data: aluno, message: 'Aluno Atualizado!' });
+    }
+    catch(error){
+      console.error(error);
+      return res.json({ status: false, message: `Erro ao atualizar Aluno: ${error.message}`, stack: error.stack });
+    }
+  }
+
 
   async list(req, res) {
     try {
-      const user = await this.db.getAuthState()
-      // .then(async (user) => {
-        console.log(user);
-        if (!user) {
-          return res.redirect("/index.php/user/login");
-        }else{
-          const result = await this.AlunoRepository.getAll();
-          return res.render("client/home", {title: "Alunos", Alunos: result});
-        }
-      // });
-    } catch (error) {
-      return res.status(500).json({ status: false, message: `Erro ao obter quantidade de Alunos: ${error.message}` });
+      const resultSequelize = await this.UsuarioRepository.list('ALUNO');
+
+      return res.status(200).json({ status: true, data: resultSequelize, message: 'Alunos Listados!' });
+    } 
+    catch (error) {
+      console.error(error);
+      return res.json({ status: false, message: `Erro ao listar Alunos: ${error.message}`, stack: error.stack });
     }
   }
+
+
+  async find(req, res) {
+    try {
+      const { id } = req.params;
+
+      const alunoSequelize = await this.UsuarioRepository.find(id, 'ALUNO');
+
+      if(!alunoSequelize){
+        return res.status(404).json({ status: false, message: "Aluno não encontrado!" });
+      }
+
+      return res.status(200).json({ status: true, data: alunoSequelize, message: 'Pesquisa Única Concluída!' });
+    }
+    catch (error) {
+      console.error(error);
+      return res.json({ status: false, message: `Erro ao buscar Aluno: ${error.message}`, stack: error.stack });
+    }
+  }
+
+
+  async search(req, res) {
+    try {
+      const resultSequelize = await this.UsuarioRepository.search(req.body, 'ALUNO');
+
+      return res.status(200).json({ status: true, data: resultSequelize, message: 'Pesquisa Concluída!' });
+    }
+    catch (error) {
+      console.error(error);
+      return res.json({ status: false, message: `Erro ao buscar Alunos: ${error.message}`, stack: error.stack });
+    }
+  }
+
 
   async delete(req, res) {
     try {
       const { id } = req.params;
-      const result = await this.AlunoRepository.delete(id)
-      .then(function () {
-        console.log("Deleted document");
-        res.redirect("/index.php/clients/home");
-      });
-      return res.status(200).json(result);
-    }
-    catch (error) {
-      return res.status(500).json({ status: false, message: `Erro ao deletar Aluno: ${error.message}` });
-    }
-  }
-
-  async edit(req, res) {
-    try {
-      const { id } = req.params;
-      const result = await this.AlunoRepository.getById(id);
-      console.log(result);
-      return res.render("client/editar", {title: "Editar Aluno", Aluno: result, id: id, layout: "editarlayout"});
-    } catch (error) {
-      return res.status(500).json({ status: false, message: `Erro ao obter Aluno: ${error.message}` });
-    }
-  }
-
-  async update(req, res) {
-    try{
-
-      const { nome, sexo, idade, cep, logradouro, bairro, cidade, estado } =
-        req.body;
-      const { id } = req.body;
-
-      console.log(req.body);
-
-      if (!nome || !sexo || !idade || !cep || !logradouro || !bairro || !cidade || !estado) {
-        return res.status(400).json({ message: "Dados incompletos" });
+      var alunoSequelize = await this.UsuarioRepository.find(id, 'ALUNO');
+      
+      if(!alunoSequelize){
+        return res.status(404).json({ status: false, message: "Aluno não encontrado!" });
       }
 
-      const Aluno = {
-        id,
-        nome,
-        telefone,
-        origem,
-        data_contato,
-        observacao
-      };
+      const aluno = new Usuario(alunoSequelize.get()); 
 
-      const result = await this.AlunoRepository.update(id, Aluno)
-      .then(function () {
-        console.log("Updated document");
-        res.redirect("/index.php/clients/home");
-      });
+      const result = await this.UsuarioRepository.delete(aluno);
 
-    }catch(error){
-      return res.status(500).json({ status: false, message: `Erro ao atualizar Aluno: ${error.message}` });
+      if(!result){
+        throw new Error("Aluno não Deletado!");
+      }
+
+      return res.status(200).json({ status: true, data: aluno, message: 'Aluno Deletado!' });
+    }
+    catch (error) {
+      return res.json({ status: false, message: `Erro ao deletar Aluno: ${error.message}`, stack: error.stack });
     }
   }
 }
