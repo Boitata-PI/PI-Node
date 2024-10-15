@@ -1,10 +1,9 @@
 import Usuario from '../models/Usuario.js';
-import UsuarioSequelize from '../database/migrations/UsuarioSequelize.js';
 
 class UsuarioRepository {
-  constructor(sequelize) {
-    this.sequelize = sequelize;
-    this.Usuario = UsuarioSequelize(this.sequelize);
+  constructor(database) {
+    this.models = database.getModels();
+    this.Usuario = database.getModels().Usuario;
   }
 
   async create(usuario) {

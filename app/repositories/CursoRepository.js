@@ -1,10 +1,9 @@
 import Curso from '../models/Curso.js';
-import CursoSequelize from '../database/migrations/CursoSequelize.js';
 
 class CursoRepository {
-  constructor(sequelize) {
-    this.sequelize = sequelize;
-    this.Curso = CursoSequelize(this.sequelize);
+  constructor(database) {
+    this.models = database.getModels();
+    this.Curso = database.getModels().Curso;
   }
 
   async create(curso) {

@@ -30,6 +30,14 @@ class Disciplina {
     getCodProf() {
         return this.codProf;
     }
+
+    setCodCurso(codCurso) {
+        this.codCurso = codCurso;
+    }
+
+    getCodCurso() {
+        return this.codCurso;
+    }
 }
 
 export default Disciplina;

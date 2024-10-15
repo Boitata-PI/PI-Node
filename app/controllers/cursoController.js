@@ -1,9 +1,11 @@
 import Curso from "../models/Curso.js";
 import CursoRepository from "../repositories/CursoRepository.js";
+import UsuarioRepository from "../repositories/UsuarioRepository.js";
 
 class CursoController {
   constructor(database) {
-      this.CursoRepository = new CursoRepository(database.getConnection());
+      this.CursoRepository = new CursoRepository(database);
+      this.UsuarioRepository = new UsuarioRepository(database);
   }
 
 
@@ -13,6 +15,12 @@ class CursoController {
 
       if (!nome || !codCord ) {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
+      }
+
+      if(codCord){
+        if(!await this.UsuarioRepository.find(codProf, 'PROFESSOR')){
+          return res.status(404).json({ status: false, message: "Professor não encontrado!" });
+        }
       }
 
       const curso = new Curso({nome, codCord});
@@ -35,10 +43,17 @@ class CursoController {
   async update(req, res) {
     try{
       const { id } = req.params;
+      const { codCord } = req.body;
       const cursoSequelize = await this.CursoRepository.find(id);
 
       if(!cursoSequelize){
         return res.status(404).json({ status: false, message: "Curso não encontrado!" });
+      }
+
+      if(codCord){
+        if(!await this.UsuarioRepository.find(codProf, 'PROFESSOR')){
+          return res.status(404).json({ status: false, message: "Professor não encontrado!" });
+        }
       }
 
       const curso = new Curso(cursoSequelize.get());
