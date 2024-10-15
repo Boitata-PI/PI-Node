@@ -1,42 +1,33 @@
 # ETAPAS
-O projeto está concluído:
+O projeto está em Desenvolvimento:
 
 - [x] Estrutura
-- [x] Front-End
-- [x] Create
-- [x] Read
-- [x] JWT
-- [x] Cache
+- [ ] 1° Sprint
 
-> Projeto de Cadastro de Clientes e Armazenamento de dados de API em Cache com Node.js e Handlebars
-> Padrão Factory
+> Projeto Integrador: Sistema para Armazenamento e Gerenciamento de P.Is realizados pelos alunos da FATEC Zona Leste
+> Padrão REST API
 
 # INICIANDO PROJETO</h1>
 ### (SEMPRE CLONE DA BRANCH DE HOMOLOGAÇÃO)
-- Gere o arquivo serviceAccount.json no Firebase e o coloque na raiz do projeto
+- Crie uma base de dados vazia 
 - Clone o arquivo .env.example e renomeie a cópia para .env
-- Configure o .env com suas informações do firebase
+- Configure o .env com as informações pedidas no exemplo
 
 ```
-git clone -b homologacao https://github.com/Boitata-PI/Cache-CEP-Node.git
-cd <projeto>
-npm i
-npm start
+git clone -b homologation https://github.com/Boitata-PI/PI-Node.git
+- execute os arquivos .bat para iniciar os servidores
 ```
-- htttp://127.0.0.1:3000
+- Front-End: http://localhost:8080
+- Back-End: http://localhost:8081
+- API: http://localhost:3000
 
 <br><br>
 
 # EXPLICAÇÕES
-- models: arquivos da estruturas das factorys
-- rotas: arquivos de roteamento da aplicação
-- db: arquivo .sql (caso MySQL)
-- controllers: controladores dos modelos
-- config: configuração das possíveis bases de dados
-- index.js: arquivo de inicialização da aplicação
-- app.js: inicialização das bibliotecas, rotas e operações
-- views/layout: arquivos de layout que serão utilizados em todas as páginas
-- views: paginas do projeto 
+- api: Pasta da API
+- app: Pasta do Back-End
+- assets: Pasta do Front-End
+
 
 <br><br>
 
@@ -44,8 +35,7 @@ npm start
 > SUBINDO SUAS ALTERAÇÕES PARA O GITHUB
 ## PRIMEIRA VEZ (quando ainda não existir a sua branch):
 ```
-git branch <seu_nome>
-git checkout <seu_nome>
+git checkout -b <seu_nome>
 git add *
 git commit -m "<seu_comentario>"
 git push -u origin <seu_nome>
@@ -56,7 +46,7 @@ git push -u origin <seu_nome>
 
 ## OUTRAS VEZES
 ```
-git add *
+git add .
 git commit -m "<seu_comentario>"
 git push
 ```
@@ -67,7 +57,7 @@ git push
 # PUXANDO AS ALTERAÇÕES DA BRANCH DE HOMOLOGAÇÃO
 Caso o projeto já exista na sua máquina e outra pessoa tiver feito alterações antes de você, execute:
 ```
-git pull https://github.com/Boitata-PI/Cache-CEP-Node.git homologacao
+git pull https://github.com/Boitata-PI/PI-Node.git homologation
 ```
 
 <br><br><br>
@@ -75,13 +65,10 @@ git pull https://github.com/Boitata-PI/Cache-CEP-Node.git homologacao
 # DOCUMENTAÇÃO
 ```
 npm i express --save
-npm i express-handlebars --save
 npm i nodemon --save-dev
 npm i body-parser --save
-npm i morgan --save
 npm i cors --save
-npm i node-cache --save
-npm i axios --save
+npm i sequelize --save
+npm i dotenv --save
+npm i mysql2 --save
 ```
-
-- Front-End: https://handlebarsjs.com/guide/
