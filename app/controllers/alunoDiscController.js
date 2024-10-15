@@ -34,8 +34,7 @@ class AlunoDiscController {
   }
 
   async getAlunos(jsonAlunos){
-    const alunosNovos = {};
-    const alunosExistentes = {};
+    const response = [];
     const tipo = 'ALUNO';
 
     for (const [index, jsonAluno] of jsonAlunos.entries()) {
@@ -48,31 +47,23 @@ class AlunoDiscController {
         return res.status(400).json({ status: false, message: "Um dos Alunos no Arquivo possui Dados Incompletos!" });
       }
 
-      const search = await this.UsuarioRepository.search({ ra }, 'ALUNO');
-
-      if(search.length > 0){
-        const firstElement = search[0];
-        alunosExistentes[index] = new Usuario(firstElement.get());
-
-        continue;
-      }
-
       nome = nome.toUpperCase();
 
       const senha = nome.split(' ')[0].toLowerCase() + ra.toString().substring(0, 3);
 
       const aluno = new Usuario({nome, ra, senha, tipo});
 
-      alunosNovos[index] = aluno;
+      const result = await this.UsuarioRepository.findOrCreate(aluno, { ra, tipo });
+
+      if (!result) {
+        throw new Error("Alunos não Cadastrados!");
+      }
+
+      var resultAluno = result[0];
+      aluno.setId(resultAluno.id);
+
+      response.push(aluno);
     };
-        
-    const result = await this.UsuarioRepository.createMany(Object.values(alunosNovos));
-
-    result.map((aluno) => {
-      aluno = new Usuario(aluno.get());
-    });
-
-    const response = Object.values(alunosExistentes).concat(result);
 
     return response;
   }
@@ -99,8 +90,6 @@ class AlunoDiscController {
           return res.status(400).json({ status: false, message: "Arquivo Excel Vazio!" });
         }
 
-        //return res.status(200).json({ status: true, data: jsonAlunos, message: 'Alunos Extraídos!' });
-
         const alunos = await this.getAlunos(jsonAlunos);
 
         const alunoDiscs = [];
@@ -113,6 +102,9 @@ class AlunoDiscController {
           if (!result) {
             throw new Error("AlunoDiscs não Cadastrados!");
           }
+
+          var resultAlunoDisc = result[0];
+          alunoDisc.setId(resultAlunoDisc.id);
 
           alunoDiscs.push(alunoDisc);
         }
