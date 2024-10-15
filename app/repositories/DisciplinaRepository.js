@@ -1,16 +1,16 @@
 import Disciplina from '../models/Disciplina.js';
-import DisciplinaSequelize from '../database/migrations/DisciplinaSequelize.js';
 
 class DisciplinaRepository {
-  constructor(sequelize) {
-    this.sequelize = sequelize;
-    this.Disciplina = DisciplinaSequelize(this.sequelize);
+  constructor(database) {
+    this.models = database.getModels();
+    this.Disciplina = database.getModels().Disciplina;
   }
 
   async create(disciplina) {
     return await this.Disciplina.create({
       nome: disciplina.getNome(),
       codProf: disciplina.getCodProf(),
+      codCurso: disciplina.getCodCurso()
     });
   }
 
@@ -18,6 +18,7 @@ class DisciplinaRepository {
     return await this.Disciplina.update({
       nome: disciplina.getNome(),
       codProf: disciplina.getCodProf(),
+      codCurso: disciplina.getCodCurso()
     }, {
       where: {
         id: disciplina.getId()

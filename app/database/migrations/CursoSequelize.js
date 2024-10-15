@@ -15,12 +15,20 @@ const CursoSequelize = (sequelize) => {
         },
     },
     {
-        tableName: 'cursos'
+        tableName: 'cursos',
+        hooks: {
+            beforeFind: (options) => {
+                if (!options.include) {
+                    options.include = Object.values(Curso.associations); 
+                }
+            }
+        }
     });
 
 
     Curso.associate = (models) => {
-        Curso.belongsTo(models.Usuario, { foreignKey: 'codCord' });
+        models.Curso.belongsTo(models.Usuario, { foreignKey: 'codCord' });
+        models.Curso.hasMany(models.Disciplina, { foreignKey: 'codCurso' });
     };
 
     

@@ -5,9 +5,9 @@ import DisciplinaRepository from "../repositories/DisciplinaRepository.js";
 
 class AlunoDiscController {
   constructor(database) {
-      this.UsuarioRepository = new UsuarioRepository(database.getConnection());
-      this.DisciplinaRepository = new DisciplinaRepository(database.getConnection());
-      this.AlunoDiscRepository = new AlunoDiscRepository(database.getConnection());
+      this.UsuarioRepository = new UsuarioRepository(database);
+      this.DisciplinaRepository = new DisciplinaRepository(database);
+      this.AlunoDiscRepository = new AlunoDiscRepository(database);
   }
 
 
@@ -19,18 +19,20 @@ class AlunoDiscController {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
       }
 
-      const codDiscExists = await this.DisciplinaRepository.find(codDisc);
-
-      const codAlunoExists = await this.UsuarioRepository.find(codAluno, 'ALUNO');
-
-      if (!codDiscExists || !codAlunoExists) {
-        return res.status(404).json({ status: false, message: "Disciplina ou Aluno não encontrados!" });
+      if(await this.AlunoDiscRepository.search({ codDisc, codAluno }).length > 0){
+        return res.status(409).json({ status: false, message: "AlunoDisc já Cadastrado!" });
       }
 
-      const alunoDiscExists = await this.AlunoDiscRepository.search({ codDisc, codAluno });
+      if(codDisc){
+        if(!await this.DisciplinaRepository.find(codDisc)){
+          return res.status(404).json({ status: false, message: "Disciplina não encontrada!" });
+        }
+      }
 
-      if (alunoDiscExists.length > 0) {
-        return res.status(400).json({ status: false, message: "AlunoDisc já Cadastrado!" });
+      if(codAluno){
+        if(!await this.UsuarioRepository.find(codAluno, 'ALUNO')){
+          return res.status(404).json({ status: false, message: "Aluno não encontrado!" });
+        }
       }
 
       const alunoDisc = new AlunoDisc({codDisc, codAluno});
@@ -53,10 +55,23 @@ class AlunoDiscController {
   async update(req, res) {
     try{
       const { id } = req.params;
+      const { codDisc, codAluno } = req.body;
       const AlunoDiscSequelize = await this.AlunoDiscRepository.find(id);
 
       if(!AlunoDiscSequelize){
         return res.status(404).json({ status: false, message: "AlunoDisc não encontrado!" });
+      }
+
+      if(codDisc){
+        if(!await this.DisciplinaRepository.find(codDisc)){
+          return res.status(404).json({ status: false, message: "Disciplina não encontrada!" });
+        }
+      }
+
+      if(codAluno){
+        if(!await this.UsuarioRepository.find(codAluno, 'ALUNO')){
+          return res.status(404).json({ status: false, message: "Aluno não encontrado!" });
+        }
       }
 
       const alunoDisc = new AlunoDisc(AlunoDiscSequelize.get());

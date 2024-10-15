@@ -1,30 +1,38 @@
 import Disciplina from "../models/Disciplina.js";
 import DisciplinaRepository from "../repositories/DisciplinaRepository.js";
 import UsuarioRepository from "../repositories/UsuarioRepository.js";
+import CursoRepository from "../repositories/CursoRepository.js";
 
 
 class DisciplinaController {
   constructor(database) {
-      this.DisciplinaRepository = new DisciplinaRepository(database.getConnection());
-      this.UsuarioRepository = new UsuarioRepository(database.getConnection());
+      this.DisciplinaRepository = new DisciplinaRepository(database);
+      this.UsuarioRepository = new UsuarioRepository(database);
+      this.CursoRepository = new CursoRepository(database);
   }
 
 
   async store(req, res) {
     try {
-      const { nome, codProf } = req.body;
+      const { nome, codProf, codCurso } = req.body;
 
-      if (!nome || !codProf ) {
+      if (!nome || !codProf || !codCurso) {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
       }
 
-      const codProfExists = await this.UsuarioRepository.find(codProf, 'PROFESSOR');
-
-      if (!codProfExists) {
-        return res.status(404).json({ status: false, message: "Professor não encontrado!" });
+      if(codProf){
+        if(!await this.UsuarioRepository.find(codProf, 'PROFESSOR')){
+          return res.status(404).json({ status: false, message: "Professor não encontrado!" });
+        }
       }
 
-      const disciplina = new Disciplina({nome, codProf});
+      if(codCurso){
+        if(!await this.CursoRepository.find(codCurso)){
+          return res.status(404).json({ status: false, message: "Curso não encontrado!" });
+        }
+      }
+
+      const disciplina = new Disciplina({nome, codProf, codCurso});
 
       const result = await this.DisciplinaRepository.create(disciplina);
 
@@ -44,16 +52,23 @@ class DisciplinaController {
   async update(req, res) {
     try{
       const { id } = req.params;
+      const { codProf, codCurso } = req.body;
       const disciplinaSequelize = await this.DisciplinaRepository.find(id);
 
       if(!disciplinaSequelize){
         return res.status(404).json({ status: false, message: "Disciplina não encontrada!" });
       }
 
-      const codProfExists = await this.UsuarioRepository.find(codProf, 'PROFESSOR');
+      if(codProf){
+        if(!await this.UsuarioRepository.find(codProf, 'PROFESSOR')){
+          return res.status(404).json({ status: false, message: "Professor não encontrado!" });
+        }
+      }
 
-      if (!codProfExists) {
-        return res.status(404).json({ status: false, message: "Professor não encontrado!" });
+      if(codCurso){
+        if(!await this.CursoRepository.find(codCurso)){
+          return res.status(404).json({ status: false, message: "Curso não encontrado!" });
+        }
       }
 
       const disciplina = new Disciplina(disciplinaSequelize.get());

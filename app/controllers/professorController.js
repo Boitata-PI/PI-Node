@@ -3,7 +3,7 @@ import UsuarioRepository from "../repositories/UsuarioRepository.js";
 
 class ProfessorController {
   constructor(database) {
-      this.UsuarioRepository = new UsuarioRepository(database.getConnection());
+      this.UsuarioRepository = new UsuarioRepository(database);
   }
 
 

@@ -10,18 +10,34 @@ const DisciplinaSequelize = (sequelize) => {
             }
         },
 
+        codCurso: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'cursos',
+              key: 'id',
+            }
+        },
+
         nome: {
             type: Sequelize.STRING
         }
     },
     {
-        tableName: 'disciplinas'
+        tableName: 'disciplinas',
+        hooks: {
+            beforeFind: (options) => {
+                if (!options.include) {
+                    options.include = Object.values(Disciplina.associations); 
+                }
+            }
+        }
     });
 
 
     Disciplina.associate = (models) => {
-        Disciplina.belongsTo(models.Usuario, { foreignKey: 'codProf' });
-        Disciplina.hasMany(models.AlunoDisc, { foreignKey: 'codDisc' });
+        models.Disciplina.belongsTo(models.Usuario, { foreignKey: 'codProf' });
+        models.Disciplina.belongsTo(models.Curso, { foreignKey: 'codCurso' });
+        models.Disciplina.hasMany(models.AlunoDisc, { foreignKey: 'codDisc' });
     };
 
     

@@ -16,14 +16,21 @@ const UsuarioSequelize = (sequelize) => {
         }
     },
     {
-        tableName: 'usuarios'
+        tableName: 'usuarios',
+        hooks: {
+            beforeFind: (options) => {
+                if (!options.include) {
+                    options.include = Object.values(Usuario.associations); 
+                }
+            }
+        }
     });
 
     
     Usuario.associate = (models) => {
-        Usuario.hasMany(models.Disciplina, { foreignKey: 'codProf' });
-        Usuario.hasMany(models.Curso, { foreignKey: 'codCord' });
-        Usuario.hasMany(models.AlunoDisc, { foreign: 'codAluno' });
+        models.Usuario.hasMany(models.Disciplina, { foreignKey: 'codProf' });
+        models.Usuario.hasMany(models.Curso, { foreignKey: 'codCord' });
+        models.Usuario.hasMany(models.AlunoDisc, { foreignKey: 'codAluno' });
     };
     
     

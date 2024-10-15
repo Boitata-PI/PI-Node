@@ -1,11 +1,9 @@
 import AlunoDisc from '../models/AlunoDisc.js';
-import Disciplina from '../database/migrations/DisciplinaSequelize.js';
-import AlunoDiscSequelize from '../database/migrations/AlunoDiscSequelize.js';
 
 class AlunoDiscRepository {
-  constructor(sequelize) {
-    this.sequelize = sequelize;
-    this.AlunoDisc = AlunoDiscSequelize(this.sequelize);
+  constructor(database) {
+    this.models = database.getModels();
+    this.AlunoDisc = database.getModels().AlunoDisc;
   }
 
   async create(alunoDisc) {
@@ -27,9 +25,7 @@ class AlunoDiscRepository {
   }
 
   async list(){
-    return await this.AlunoDisc.findAll({
-      include: [Disciplina],  // Inclui os posts relacionados
-    })
+    return await this.AlunoDisc.findAll();
   }
 
   async find(id){

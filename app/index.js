@@ -22,7 +22,7 @@ const app = express();
 const port = process.env.PORT || 8081;
 
 const corsOptions = {
-    origin: ['http://127.0.0.1:5500','http://localhost:5500', 'http://localhost:8088', 'http://127.0.0.1:8088', 'http://127.0.0.1:3000'],
+    origin: ['http://127.0.0.1:3000', 'http://localhost:3000', 'http://127.0.0.1:8080', 'http://localhost:8080'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: ['Content-Type', 'Authorization', 'X-API-KEY', 'X-Requested-With', 'X-Custom-Header'],
     credentials: true,
@@ -38,10 +38,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const database = new Database(process.env);
 
 try{
-    database.connect();
-    database.sync();
-    database.associate();
-    console.log(`Conexão ao banco de dados estabelecida`);
+    await database.connect();
+    console.log(`Conexão ao banco de dados estabelecida!`);
+
+    await database.sync();
+    console.log(`Sincronização com o banco de dados realizada!`);
 }
 catch(e){
     console.error('Erro ao conectar ao banco de dados: ', e);

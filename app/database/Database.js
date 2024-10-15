@@ -25,42 +25,53 @@ class Database
             }
         );
 
-        this.db = {};
+        this.models = {};
     }
 
-    migrate(){
-        readdirSync(__dirname)
-            .filter(file => file !== 'Database.js' && file.endsWith('.js'))
-            .forEach(async (file) => {
-                // Corrigindo o caminho para file:// no Windows
-                const modelPath = pathToFileURL(path.join(__dirname, file)).href;
-                const { default: defineModel } = await import(modelPath);
-                const model = defineModel(this.sequelize);  // Agora passando o sequelize corretamente para o modelo
-                this.db[model.name] = model;
-            });
+    async migrate(){
+        const modelFiles = readdirSync(__dirname + '/migrations')
+            .filter(file => file !== 'Database.js' && file.endsWith('.js'));
+
+        //console.log(modelFiles.length)
+
+        for (const file of modelFiles) {
+            const modelPath = pathToFileURL(path.join(__dirname + '/migrations/' + file)).href;
+            const { default: defineModel } = await import(modelPath);
+            const model = defineModel(this.sequelize); // Passando sequelize para o modelo
+
+            // Armazenando o modelo
+            this.models[model.name] = model;
+        }
     }
 
     associate(){
-        Object.keys(this.db).forEach(modelName => {
-            if (this.db[modelName].associate) {
-                this.db[modelName].associate(this.db);
+        Object.keys(this.models).forEach(modelName => {
+            if (this.models[modelName].associate) {
+                this.models[modelName].associate(this.models);
             }
         });
     }
 
-    connect(){
-        return this.sequelize.authenticate();
+    async connect(){
+        return await this.sequelize.authenticate();
     }
 
-    sync(){
-        this.migrate();
+    async sync(){
+        await this.migrate();
         this.associate();
 
-        return this.sequelize.sync();
+        //console.log(await this.models.Usuario.findAll())
+        //console.log(this.getModels());
+
+        return this.sequelize.sync({ alter: true });
     }
 
     getConnection(){
         return this.sequelize;
+    }
+
+    getModels(){
+        return this.models;
     }
 }
 
