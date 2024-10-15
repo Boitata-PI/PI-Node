@@ -8,6 +8,14 @@ class AlunoDisc {
         Object.assign(this, params);
     }
 
+    setId(id) {
+        this.id = id;
+    }
+
+    getId() {
+        return this.id;
+    }
+
     setCodDisc(codDisc) {
         this.codDisc = codDisc;
     }

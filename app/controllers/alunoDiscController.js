@@ -114,7 +114,7 @@ class AlunoDiscController {
             throw new Error("AlunoDiscs não Cadastrados!");
           }
 
-          alunoDiscs.push(result[0]);
+          alunoDiscs.push(alunoDisc);
         }
 
         return res.status(200).json({ status: true, data: alunoDiscs, message: 'Alunos Cadastrados!' });
