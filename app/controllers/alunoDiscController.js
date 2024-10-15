@@ -1,7 +1,9 @@
 import AlunoDisc from "../models/AlunoDisc.js";
+import Usuario from "../models/Usuario.js";
 import AlunoDiscRepository from "../repositories/AlunoDiscRepository.js";
 import UsuarioRepository from "../repositories/UsuarioRepository.js";
 import DisciplinaRepository from "../repositories/DisciplinaRepository.js";
+import xlsx from 'xlsx';
 
 class AlunoDiscController {
   constructor(database) {
@@ -11,22 +13,97 @@ class AlunoDiscController {
   }
 
 
+  excelToJson(buffer) {
+    const workbook = xlsx.read(buffer, { type: 'buffer' });
+
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+
+    return xlsx.utils.sheet_to_json(sheet);
+  }
+
+  async getAlunos(jsonAlunos){
+    const alunosNovos = {};
+    const alunosExistentes = {};
+    const tipo = 'ALUNO';
+
+    for (const [index, jsonAluno] of jsonAlunos.entries()) {
+      const { nome, ra } = jsonAluno;
+
+      if (!nome || !ra) {
+        return res.status(400).json({ status: false, message: "Um dos Alunos no Arquivo possui Dados Incompletos!" });
+      }
+
+      const search = await this.UsuarioRepository.search({ ra }, 'ALUNO');
+
+      if(search.length > 0){
+        const firstElement = search[0];
+        alunosExistentes[index] = new Usuario(firstElement.get());
+
+        continue;
+      }
+
+      const nomeUpper = nome.toUpperCase();
+
+      const senha = nome.split(' ')[0].toLowerCase() + ra.toString().substring(0, 3);
+
+      const aluno = new Usuario({nomeUpper, ra, senha, tipo});
+
+      alunosNovos[index] = aluno;
+    };
+        
+    const result = await this.UsuarioRepository.createMany(Object.values(alunosNovos));
+
+    const response = Object.values(alunosExistentes).concat(result);
+
+    return response;
+  }
+
+
   async store(req, res) {
     try {
       const { codDisc, codAluno } = req.body;
 
-      if (!codDisc || !codAluno ) {
+      if (!codDisc && !req.file) {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
-      }
-
-      if(await this.AlunoDiscRepository.search({ codDisc, codAluno }).length > 0){
-        return res.status(409).json({ status: false, message: "AlunoDisc já Cadastrado!" });
       }
 
       if(codDisc){
         if(!await this.DisciplinaRepository.find(codDisc)){
           return res.status(404).json({ status: false, message: "Disciplina não encontrada!" });
         }
+      }
+
+      if (req.file) {
+        const jsonAlunos = this.excelToJson(req.file.buffer);
+
+        if(!jsonAlunos.length){
+          return res.status(400).json({ status: false, message: "Arquivo Excel Vazio!" });
+        }
+
+        const alunos = await this.getAlunos(jsonAlunos);
+
+        const alunoDiscs = [];
+
+        console.log(alunos.length)
+
+        for (const aluno of alunos) {
+          const alunoDisc = new AlunoDisc({codDisc, codAluno: aluno.getId()});
+          
+          const result = await this.AlunoDiscRepository.findOrCreate(alunoDisc, { codDisc, codAluno: aluno.getId() });
+
+          if (!result) {
+            throw new Error("AlunoDiscs não Cadastrados!");
+          }
+
+          alunoDiscs.push(result[0]);
+        }
+
+        return res.status(200).json({ status: true, data: alunoDiscs, message: 'Alunos Cadastrados!' });
+      }
+
+      if (!codAluno ) {
+        return res.status(400).json({ status: false, message: "Dados Incompletos!" });
       }
 
       if(codAluno){
@@ -37,7 +114,7 @@ class AlunoDiscController {
 
       const alunoDisc = new AlunoDisc({codDisc, codAluno});
 
-      const result = await this.AlunoDiscRepository.create(alunoDisc);
+      const result = await this.AlunoDiscRepository.findOrCreate(alunoDisc, { codDisc, codAluno });
 
       if (!result) {
         throw new Error("AlunoDisc não Cadastrado!");
@@ -47,7 +124,7 @@ class AlunoDiscController {
     } 
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao registrar AlunoDisc: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao registrar AlunoDisc: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -87,7 +164,7 @@ class AlunoDiscController {
     }
     catch(error){
       console.error(error);
-      return res.json({ status: false, message: `Erro ao atualizar AlunoDisc: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao atualizar AlunoDisc: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -100,7 +177,7 @@ class AlunoDiscController {
     } 
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao listar AlunoDisc: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao listar AlunoDisc: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -119,7 +196,7 @@ class AlunoDiscController {
     }
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao buscar AlunoDisc: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao buscar AlunoDisc: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -131,7 +208,7 @@ class AlunoDiscController {
     }
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao buscar AlunoDisc: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao buscar AlunoDisc: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -156,7 +233,7 @@ class AlunoDiscController {
       return res.status(200).json({ status: true, data: alunoDisc, message: 'AlunoDisc Deletado!' });
     }
     catch (error) {
-      return res.json({ status: false, message: `Erro ao deletar AlunoDisc: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao deletar AlunoDisc: ${error.message}`, stack: error.stack });
     }
   }
 }

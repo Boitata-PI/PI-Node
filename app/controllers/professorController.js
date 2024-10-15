@@ -28,7 +28,7 @@ class ProfessorController {
     } 
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao registrar Usuario: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao registrar Usuario: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -55,7 +55,7 @@ class ProfessorController {
     }
     catch(error){
       console.error(error);
-      return res.json({ status: false, message: `Erro ao atualizar Professor: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao atualizar Professor: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -68,7 +68,7 @@ class ProfessorController {
     } 
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao listar Professor: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao listar Professor: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -87,7 +87,7 @@ class ProfessorController {
     }
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao buscar Professor: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao buscar Professor: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -99,7 +99,7 @@ class ProfessorController {
     }
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao buscar Professor: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao buscar Professor: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -124,7 +124,7 @@ class ProfessorController {
       return res.status(200).json({ status: true, data: professor, message: 'Professor Deletado!' });
     }
     catch (error) {
-      return res.json({ status: false, message: `Erro ao deletar Professor: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao deletar Professor: ${error.message}`, stack: error.stack });
     }
   }
 }

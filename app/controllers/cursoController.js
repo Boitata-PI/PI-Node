@@ -35,7 +35,7 @@ class CursoController {
     } 
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao registrar Curso: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao registrar Curso: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -69,7 +69,7 @@ class CursoController {
     }
     catch(error){
       console.error(error);
-      return res.json({ status: false, message: `Erro ao atualizar Curso: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao atualizar Curso: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -82,7 +82,7 @@ class CursoController {
     } 
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao listar Curso: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao listar Curso: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -101,7 +101,7 @@ class CursoController {
     }
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao buscar Curso: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao buscar Curso: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -113,7 +113,7 @@ class CursoController {
     }
     catch (error) {
       console.error(error);
-      return res.json({ status: false, message: `Erro ao buscar Curso: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao buscar Curso: ${error.message}`, stack: error.stack });
     }
   }
 
@@ -138,7 +138,7 @@ class CursoController {
       return res.status(200).json({ status: true, data: curso, message: 'Curso Deletado!' });
     }
     catch (error) {
-      return res.json({ status: false, message: `Erro ao deletar Curso: ${error.message}`, stack: error.stack });
+      return res.status(500).json({ status: false, message: `Erro ao deletar Curso: ${error.message}`, stack: error.stack });
     }
   }
 }

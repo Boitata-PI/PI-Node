@@ -13,6 +13,23 @@ class AlunoDiscRepository {
     });
   }
 
+  async createMany(alunoDiscs) {
+    return await this.AlunoDisc.bulkCreate(alunoDiscs.map(alunoDisc => ({
+      codDisc: alunoDisc.getCodDisc(),
+      codAluno: alunoDisc.getCodAluno()
+    })));
+  }
+
+  async findOrCreate(alunoDisc, params) {
+    return await this.AlunoDisc.findOrCreate({
+      where: params,
+      defaults: {
+        codDisc: alunoDisc.getCodDisc(),
+        codAluno: alunoDisc.getCodAluno()
+      }
+    });
+  }
+
   async update(alunoDisc){
     return await this.AlunoDisc.update({
       codDisc: alunoDisc.getCodDisc(),

@@ -1,8 +1,11 @@
 import express from 'express';
+import multer from 'multer';
 
 //Controllers
 import AlunoDiscController from '../controllers/alunoDiscController.js';
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 class AlunoDiscRoutes {
     constructor(database) {
         this.router = express.Router();
@@ -13,7 +16,7 @@ class AlunoDiscRoutes {
     
 
     setupRoutes() {
-        this.router.post('/store', (req, res) => this.AlunoDiscController.store(req, res));
+        this.router.post('/store', upload.single('alunos'), (req, res) => this.AlunoDiscController.store(req, res));
 
         this.router.put('/:id/update', (req, res) => this.AlunoDiscController.update(req, res));
 
