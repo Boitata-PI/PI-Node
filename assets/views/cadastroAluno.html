@@ -43,7 +43,7 @@
     <p>Adicione manualmente ou importe um arquivo</p>
 
     <div class="form-container">
-        <form>
+        <form id="regForm">
             <label for="rm">RM:</label>
             <input type="text" id="rm" name="rm" placeholder="Insira o RM">
 
@@ -52,12 +52,17 @@
 
             <button type="submit" class="submit-btn">Cadastrar</button>
 
-            <div class="buttons">
-                <button type="button" class="attach-btn">Anexo</button>
-                <hr>
-                <label for="arquivo">Selecione um arquivo:</label>
-                <input class="submit-btn" type="file" id="arquivo" name="arquivo">
-            </div>
+            
+
+        </form>
+        <form id="anexForm">
+          <div class="buttons">
+              <button type="submit" class="attach-btn">Anexo</button>
+              <hr>
+              <label for="arquivo">Selecione um arquivo:</label>
+              <input class="submit-btn" type="file" id="arquivo" name="arquivo">
+          </div>
+
         </form>
     </div>
 </main>
@@ -71,5 +76,7 @@
   
   <!-- Link para o JS externo -->
   <script src="/public/js/scripts.js"></script>
+
+  <script src="/public/js/requisitions/cadastroAluno.js"></script>
 </body>
 </html>
