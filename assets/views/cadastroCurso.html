@@ -41,7 +41,7 @@
     <h1>Adicionar Curso</h1>
 
     <div class="form-container">
-        <form>
+        <form id="regForm">
             <label for="name">Nome do Curso:</label>
             <input type="text" id="namecurso" name="namecurso" placeholder="Insira o nome do Curso">
 
@@ -58,9 +58,9 @@
             <label for="coordenador">Nome do Coordenador:</label>
             <select id="coordenador" name="coordenador">
               <option value="">Selecione o Coordenador</option>
-              <option value="coordenador1">Nome do Coordenador 1</option>
+              <!-- <option value="coordenador1">Nome do Coordenador 1</option>
               <option value="coordenador2">Nome do Coordenador 2</option>
-              <option value="coordenador3">Nome do Coordenador 3</option>
+              <option value="coordenador3">Nome do Coordenador 3</option> -->
             </select>
 
             <button type="submit" class="submit-btn">Cadastrar</button>
@@ -77,5 +77,8 @@
   
   <!-- Link para o JS externo -->
   <script src="/public/js/scripts.js"></script>
+
+  <script src="/public/js/requisitions/cadastroCurso.js"></script>
+  
 </body>
 </html>

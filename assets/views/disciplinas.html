@@ -39,7 +39,7 @@
   <!-- Container de Disciplinas -->
   <div class="turma-container">
     <h2>Disciplinas</h2>
-    <div class="turma-card">
+    <!-- <div class="turma-card">
       <div class="turma-info">
         <h3>Matemática <span>(06302)</span></h3>
         <div class="tags">
@@ -50,11 +50,11 @@
       <div class="ver-mais">
         <a class="btn-branco" href="/pagDesenvolvimento"><button class="ver-mais-btn">VER MAIS</button></a>
       </div>
-    </div>
+    </div> -->
   </div>
 
     <!-- Botão para adicionar tarefa -->
-    <a class="btn-branco" href="/cadastroDisciplina"><div class="add-task-btn">+</div></a>
+    <a class="btn-branco" id="addButton" href="/cadastroDisciplina"><div class="add-task-btn">+</div></a>
   </div>
 
   <!-- Link para o JS do Bootstrap -->
@@ -66,5 +66,7 @@
   
   <!-- Link para o JS externo -->
   <script src="/public/js/scripts.js"></script>
+
+  <script src="/public/js/requisitions/disciplinas.js"></script>
 </body>
 </html>

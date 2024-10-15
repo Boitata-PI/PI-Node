@@ -41,17 +41,15 @@
     <h1>Adicionar Disciplina</h1>
 
     <div class="form-container">
-        <form>
+        <form id="regForm">
             <label for="name">Nome da Disciplina:</label>
             <input type="text" id="nameDisciplina" name="nameDisciplina" placeholder="Insira o nome da Disciplina">
 
 
-            <label for="name">Periodo:</label>
-            <input type="text" id="periodo" name="periodo" placeholder="Periodo">
-
-
-            <label for="name">Sobre:</label>
-            <input type="text" id="sobre" name="sobre" placeholder="Fale sobre a Disciplina">
+            <label for="coordenador">Professor Responsável:</label>
+            <select id="coordenador" name="coordenador">
+              <option value="">Selecione o Professor Responsável</option>
+            </select>
 
 
             <button type="submit" class="submit-btn">Cadastrar</button>
@@ -68,5 +66,7 @@
   
   <!-- Link para o JS externo -->
   <script src="/public/js/scripts.js"></script>
+
+  <script src="/public/js/requisitions/cadastroDisciplina.js"></script>
 </body>
 </html>
