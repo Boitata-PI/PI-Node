@@ -15,8 +15,8 @@ O projeto está em Desenvolvimento:
 
 ```
 git clone -b homologation https://github.com/Boitata-PI/PI-Node.git
-- execute os arquivos .bat para iniciar os servidores
 ```
+- Execute os arquivos .bat para iniciar os servidores
 - Front-End: http://localhost:8080
 - Back-End: http://localhost:8081
 - API: http://localhost:3000
