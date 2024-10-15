@@ -1,9 +1,12 @@
 class Usuario
 {
-    constructor(nome, senha, ra) {
-        this.nome = nome,
-        this.senha = senha,
-        this.ra = ra
+    constructor(params) {
+        this.updateAttributes(params);
+    }
+
+
+    updateAttributes(params){
+        Object.assign(this, params);
     }
 
 
@@ -23,6 +26,14 @@ class Usuario
         return this.nome
     }
 
+    getRa() {
+        return this.ra
+    }
+
+    setRa(ra) {
+        this.ra = ra
+    }
+
     setSenha(senha) {
         this.senha = senha
     }
@@ -31,12 +42,12 @@ class Usuario
         return this.senha
     }
 
-    getRA() {
-        return this.ra
+    getTipo() {
+        return this.tipo
     }
 
-    setRA(ra) {
-        this.ra = ra
+    setTipo(tipo) {
+        this.tipo = tipo
     }
 }
 

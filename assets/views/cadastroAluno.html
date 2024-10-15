@@ -38,31 +38,34 @@
   </section>
 
 
-  <section class="cardcontainer">
-      <div class="card-container">
-        <a class="nav-link" href="/menuCadastro">
-          <div class="card">
-            Cadastrar
-          </div>
-        </a>
-        <a class="nav-link" href="/cursos">
-          <div class="card">
-              Curso
-            </div>
-          </a>  
-    </div>
-  </section>
+  <main class="login-container">
+    <h1>Adicionar Aluno</h1>
+    <p>Adicione manualmente ou importe um arquivo</p>
 
-  
-  <section class="cardcontainer">
-    <div class="card-container"> 
-      <a class="nav-link" href="/turmas">
-        <div class="card">
-          Turmas
-        </div>
-      </a>
-  </div>
-</section>
+    <div class="form-container">
+        <form id="regForm">
+            <label for="rm">RM:</label>
+            <input type="text" id="rm" name="rm" placeholder="Insira o RM">
+
+            <label for="name">Nome completo:</label>
+            <input type="text" id="name" name="name" placeholder="Insira o nome completo">
+
+            <button type="submit" class="submit-btn">Cadastrar</button>
+
+            
+
+        </form>
+        <form id="anexForm">
+          <div class="buttons">
+              <button type="submit" class="attach-btn">Anexo</button>
+              <hr>
+              <label for="arquivo">Selecione um arquivo:</label>
+              <input class="submit-btn" type="file" id="arquivo" name="arquivo">
+          </div>
+
+        </form>
+    </div>
+</main>
 
   <!-- Link para o JS do Bootstrap -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -73,5 +76,7 @@
   
   <!-- Link para o JS externo -->
   <script src="/public/js/scripts.js"></script>
+
+  <script src="/public/js/requisitions/cadastroAluno.js"></script>
 </body>
 </html>

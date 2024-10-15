@@ -37,32 +37,36 @@
     </nav>
   </section>
 
+  <main class="login-container">
+    <h1>Adicionar Curso</h1>
 
-  <section class="cardcontainer">
-      <div class="card-container">
-        <a class="nav-link" href="/menuCadastro">
-          <div class="card">
-            Cadastrar
-          </div>
-        </a>
-        <a class="nav-link" href="/cursos">
-          <div class="card">
-              Curso
-            </div>
-          </a>  
+    <div class="form-container">
+        <form id="regForm">
+            <label for="name">Nome do Curso:</label>
+            <input type="text" id="namecurso" name="namecurso" placeholder="Insira o nome do Curso">
+
+
+            <label for="periodo">Periodo:</label>
+            <select id="periodo" name="periodo">
+              <option value="">Selecione o Periodo</option>
+              <option value="coordenador1">Manhã </option>
+              <option value="coordenador2">Tarde</option>
+              <option value="coordenador3">Noite</option>
+            </select>
+
+
+            <label for="coordenador">Nome do Coordenador:</label>
+            <select id="coordenador" name="coordenador">
+              <option value="">Selecione o Coordenador</option>
+              <!-- <option value="coordenador1">Nome do Coordenador 1</option>
+              <option value="coordenador2">Nome do Coordenador 2</option>
+              <option value="coordenador3">Nome do Coordenador 3</option> -->
+            </select>
+
+            <button type="submit" class="submit-btn">Cadastrar</button>
+        </form>
     </div>
-  </section>
-
-  
-  <section class="cardcontainer">
-    <div class="card-container"> 
-      <a class="nav-link" href="/turmas">
-        <div class="card">
-          Turmas
-        </div>
-      </a>
-  </div>
-</section>
+</main>
 
   <!-- Link para o JS do Bootstrap -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -73,5 +77,8 @@
   
   <!-- Link para o JS externo -->
   <script src="/public/js/scripts.js"></script>
+
+  <script src="/public/js/requisitions/cadastroCurso.js"></script>
+  
 </body>
 </html>
