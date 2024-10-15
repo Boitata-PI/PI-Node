@@ -120,25 +120,35 @@ class AlunoDiscController {
         return res.status(200).json({ status: true, data: alunoDiscs, message: 'Alunos Cadastrados!' });
       }
 
+      if (!codAluno && (!nome || !ra)) {
+        return res.status(400).json({ status: false, message: "Dados Incompletos!" });
+      }
+
       if(codAluno){
         if(!await this.UsuarioRepository.find(codAluno, 'ALUNO')){
           return res.status(404).json({ status: false, message: "Aluno não encontrado!" });
         }
 
+        const alunoDisc = new AlunoDisc({codDisc, codAluno});
 
-      }
+        const result = await this.AlunoDiscRepository.findOrCreate(alunoDisc, { codDisc, codAluno });
 
-      if (!codAluno && (!nome || !ra)) {
-        return res.status(400).json({ status: false, message: "Dados Incompletos!" });
+        if (!result) {
+          throw new Error("AlunoDisc não Cadastrado!");
+        }
+
+        return res.status(200).json({ status: true, data: result, message: 'AlunoDisc Cadastrado!' });
       }
 
       const aluno = new Usuario({ ra, nome, tipo: 'ALUNO', senha: nome.split(' ')[0].toLowerCase() + ra.toString().substring(0, 3) });
 
-      const alunoReal = await this.UsuarioRepository.findOrCreate(aluno, { ra, tipo: 'ALUNO' });
+      var alunoReal = await this.UsuarioRepository.findOrCreate(aluno, { ra, tipo: 'ALUNO' });
+
+      alunoReal = new Usuario(alunoReal[0].get());
 
       const alunoDisc = new AlunoDisc({codDisc, codAluno: alunoReal.getId()});
 
-      const result = await this.AlunoDiscRepository.findOrCreate(alunoDisc, { codDisc, codAluno });
+      const result = await this.AlunoDiscRepository.findOrCreate(alunoDisc, { codDisc, codAluno: alunoReal.getId() });
 
       if (!result) {
         throw new Error("AlunoDisc não Cadastrado!");
