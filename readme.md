@@ -2,7 +2,7 @@
 O projeto está em Desenvolvimento:
 
 - [x] Estrutura
-- [ ] 1° Sprint
+- [x] 1° Sprint
 
 > Projeto Integrador: Sistema para Armazenamento e Gerenciamento de P.Is realizados pelos alunos da FATEC Zona Leste
 > Padrão REST API
