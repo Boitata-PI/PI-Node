@@ -15,11 +15,22 @@ class AlunoDiscController {
 
   excelToJson(buffer) {
     const workbook = xlsx.read(buffer, { type: 'buffer' });
-
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
 
-    return xlsx.utils.sheet_to_json(sheet);
+    const jsonData = xlsx.utils.sheet_to_json(sheet, { header: 1 });
+    jsonData.shift(); 
+    const headers = jsonData.shift();
+
+    const formattedData = jsonData.map(row => {
+        const rowData = {};
+        headers.forEach((header, index) => {
+            rowData[header] = row[index]; 
+        });
+        return rowData; 
+    });
+
+    return formattedData;
   }
 
   async getAlunos(jsonAlunos){
@@ -28,9 +39,12 @@ class AlunoDiscController {
     const tipo = 'ALUNO';
 
     for (const [index, jsonAluno] of jsonAlunos.entries()) {
-      const { nome, ra } = jsonAluno;
+      const { RA, ALUNO } = jsonAluno;
 
-      if (!nome || !ra) {
+      var ra = parseInt(RA);
+      var nome = ALUNO;
+
+      if (!ra || !nome) {
         return res.status(400).json({ status: false, message: "Um dos Alunos no Arquivo possui Dados Incompletos!" });
       }
 
@@ -43,16 +57,20 @@ class AlunoDiscController {
         continue;
       }
 
-      const nomeUpper = nome.toUpperCase();
+      nome = nome.toUpperCase();
 
       const senha = nome.split(' ')[0].toLowerCase() + ra.toString().substring(0, 3);
 
-      const aluno = new Usuario({nomeUpper, ra, senha, tipo});
+      const aluno = new Usuario({nome, ra, senha, tipo});
 
       alunosNovos[index] = aluno;
     };
         
     const result = await this.UsuarioRepository.createMany(Object.values(alunosNovos));
+
+    result.map((aluno) => {
+      aluno = new Usuario(aluno.get());
+    });
 
     const response = Object.values(alunosExistentes).concat(result);
 
@@ -62,9 +80,9 @@ class AlunoDiscController {
 
   async store(req, res) {
     try {
-      const { codDisc, codAluno } = req.body;
+      const { codDisc, codAluno, nome, ra } = req.body;
 
-      if (!codDisc && !req.file) {
+      if (!codDisc) {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
       }
 
@@ -81,11 +99,11 @@ class AlunoDiscController {
           return res.status(400).json({ status: false, message: "Arquivo Excel Vazio!" });
         }
 
+        //return res.status(200).json({ status: true, data: jsonAlunos, message: 'Alunos Extraídos!' });
+
         const alunos = await this.getAlunos(jsonAlunos);
 
         const alunoDiscs = [];
-
-        console.log(alunos.length)
 
         for (const aluno of alunos) {
           const alunoDisc = new AlunoDisc({codDisc, codAluno: aluno.getId()});
@@ -102,17 +120,23 @@ class AlunoDiscController {
         return res.status(200).json({ status: true, data: alunoDiscs, message: 'Alunos Cadastrados!' });
       }
 
-      if (!codAluno ) {
-        return res.status(400).json({ status: false, message: "Dados Incompletos!" });
-      }
-
       if(codAluno){
         if(!await this.UsuarioRepository.find(codAluno, 'ALUNO')){
           return res.status(404).json({ status: false, message: "Aluno não encontrado!" });
         }
+
+
       }
 
-      const alunoDisc = new AlunoDisc({codDisc, codAluno});
+      if (!codAluno && (!nome || !ra)) {
+        return res.status(400).json({ status: false, message: "Dados Incompletos!" });
+      }
+
+      const aluno = new Usuario({ ra, nome, tipo: 'ALUNO', senha: nome.split(' ')[0].toLowerCase() + ra.toString().substring(0, 3) });
+
+      const alunoReal = await this.UsuarioRepository.findOrCreate(aluno, { ra, tipo: 'ALUNO' });
+
+      const alunoDisc = new AlunoDisc({codDisc, codAluno: alunoReal.getId()});
 
       const result = await this.AlunoDiscRepository.findOrCreate(alunoDisc, { codDisc, codAluno });
 
