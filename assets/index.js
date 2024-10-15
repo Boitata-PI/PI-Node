@@ -23,6 +23,9 @@ app.get('/', (req, res) => res.sendFile(__dirname + '/views/login.html'));
 app.get('/index', (req, res) => res.sendFile(__dirname + '/views/index.html'));
 
 
+app.get('/cursos', (req, res) => res.sendFile(__dirname + '/views/cursos.html'));
+
+
 app.get('/alunos', (req, res) => res.sendFile(__dirname + '/views/alunos.html'));
 
 

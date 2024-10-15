@@ -231,8 +231,16 @@ margin: 0;
 .form-container {
   background-color: white;
   padding: 30px;
+  width: 50%;
+  margin: 0 auto;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .form-container {
+      width: 100%;
+  }
 }
 
 form {
@@ -246,6 +254,14 @@ label {
 }
 
 input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+select {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -272,17 +288,24 @@ input {
 }
 
 .attach-btn, .import-btn {
-  background-color: #e0e0e0;
+  background-color: #09332F;
   border: none;
+  color: #fff;
   padding: 10px;
+  width: 40%;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.attach-btn:hover, .import-btn:hover {
-  background-color: #ccc;
+@media (max-width: 768px) {
+  .attach-btn, .import-btn {
+    width: 40%;
+  }
 }
 
+.attach-btn:hover, .import-btn:hover {
+  background-color: #1f645d;
+}
 
 
 /* Container card */
