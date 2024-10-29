@@ -15,8 +15,8 @@ O projeto está em Desenvolvimento:
 
 ```
 git clone -b homologation https://github.com/Boitata-PI/PI-Node.git
-- execute os arquivos .bat para iniciar os servidores
 ```
+- Execute os arquivos .bat para iniciar os servidores
 - Front-End: http://localhost:8080
 - Back-End: http://localhost:8081
 - API: http://localhost:3000
@@ -57,7 +57,7 @@ git push
 # PUXANDO AS ALTERAÇÕES DA BRANCH DE HOMOLOGAÇÃO
 Caso o projeto já exista na sua máquina e outra pessoa tiver feito alterações antes de você, execute:
 ```
-git pull https://github.com/Boitata-PI/PI-Node.git homologation
+git pull origin homologation
 ```
 
 <br><br><br>
