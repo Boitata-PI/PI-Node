@@ -57,7 +57,7 @@ git push
 # PUXANDO AS ALTERAÇÕES DA BRANCH DE HOMOLOGAÇÃO
 Caso o projeto já exista na sua máquina e outra pessoa tiver feito alterações antes de você, execute:
 ```
-git pull https://github.com/Boitata-PI/PI-Node.git homologation
+git pull origin homologation
 ```
 
 <br><br><br>
