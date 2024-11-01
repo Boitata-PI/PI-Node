@@ -13,14 +13,14 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <router-link class="nav-link" to="/turmas">Curso</router-link>
+            <router-link class="nav-link" to="/cursos">Curso</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/cursos">Turmas</router-link>
+            <router-link class="nav-link" to="/turmas">Turmas</router-link>
           </li>
         </ul>
       </div>
-      <div class="user-icon"><router-link class="nav-link" to="/registro"></router-link></div>
+      <router-link class="nav-link" to="/registro"><div class="user-icon"></div></router-link>
     </nav>
   </section>
 

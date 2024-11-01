@@ -8,20 +8,20 @@
   </div>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg">
-    <button class="navbar-toggler" type="button" @click="openNav">&#9776;</button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <router-link class="nav-link" to="/turmas">Curso</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link" to="/cursos">Turmas</router-link>
-        </li>
-      </ul>
-    </div>
-    <div class="user-icon"><router-link class="nav-link" to="/registro"></router-link></div>
-  </nav>
+    <nav class="navbar navbar-expand-lg">
+      <button class="navbar-toggler" type="button" @click="openNav">&#9776;</button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <router-link class="nav-link" to="/cursos">Curso</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/turmas">Turmas</router-link>
+          </li>
+        </ul>
+      </div>
+      <router-link class="nav-link" to="/registro"><div class="user-icon"></div></router-link>
+    </nav>
 </section>
 
 
