@@ -1,16 +1,11 @@
-const inputRM = document.getElementById("RM");
-const inputName = document.getElementById("nome");
-const inputPassword = document.getElementById("password");
-const inputConfPass = document.getElementById("confPass");
-
-const register = async (event) => {
+export const register = async (event, rm, nome, senha) => {
 
     event.preventDefault();
 
     const reg = {
-        ra: inputRM.value,
-        nome: inputName.value,
-        senha: inputPassword.value
+        ra: rm,
+        nome: nome,
+        senha: senha
     };
 
     try {
@@ -29,6 +24,3 @@ const register = async (event) => {
     }
 
 }
-
-const regForm = document.getElementById("regForm");
-regForm.addEventListener("submit", register);

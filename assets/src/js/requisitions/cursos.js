@@ -1,4 +1,4 @@
-const fetchTurmas = async () => {
+export const fetchTurmas = async () => {
   try {
     
     const response = await fetch("http://localhost:8081/curso/search", {
@@ -21,12 +21,12 @@ const fetchTurmas = async () => {
   }
 };
 
-const createElement = (tag) => {
+export const createElement = (tag) => {
   const element = document.createElement(tag);
   return element;
 };
 
-const createRow = (turma) => {
+export const createRow = (turma) => {
   const { id, nome } = turma;
 
   const container = document.getElementsByClassName("turma-container")[0];
@@ -86,4 +86,3 @@ const createRow = (turma) => {
   container.appendChild(turmaCard);
 };
 
-fetchTurmas();

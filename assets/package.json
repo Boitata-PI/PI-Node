@@ -1,30 +1,26 @@
 {
-  "name": "uniWorks_front",
-  "version": "1.0.0",
-  "description": "Frontend UniWorks",
-  "main": "index.js",
+  "name": "pi-views",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Boitata-PI/PI-Node.git"
-  },
-  "author": "Boitata",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Boitata-PI/PI-Node/issues"
-  },
-  "homepage": "https://github.com/Boitata-PI/PI-Node#readme",
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "jquery": "^3.7.1",
-    "public": "^0.1.5"
+    "path": "^0.12.7",
+    "url": "^0.11.4",
+    "vue": "^3.5.12",
+    "vue-router": "^4.4.5"
   },
   "devDependencies": {
-    "nodemon": "^3.1.7"
+    "@vitejs/plugin-vue": "^5.1.4",
+    "vite": "^5.4.10"
   }
 }
