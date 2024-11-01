@@ -64,7 +64,7 @@ class ProfessorController {
     try {
       const resultSequelize = await this.UsuarioRepository.list('PROFESSOR');
 
-      return res.status(200).json({ status: true, data: resultSequelize, message: 'Professor Listados!' });
+      return res.status(200).json({ status: true, data: resultSequelize, message: 'Professores Listados!' });
     } 
     catch (error) {
       console.error(error);

@@ -199,7 +199,7 @@ class AlunoDiscController {
     try {
       const resultSequelize = await this.AlunoDiscRepository.list();
 
-      return res.status(200).json({ status: true, data: resultSequelize, message: 'AlunoDisc Listados!' });
+      return res.status(200).json({ status: true, data: resultSequelize, message: 'AlunoDiscs Listados!' });
     } 
     catch (error) {
       console.error(error);
