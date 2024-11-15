@@ -15,7 +15,7 @@ class AlunoRoutes {
 
 
     setupRoutes() {
-        this.router.post('/store', (req, res) => this.AlunoController.store(req, res));
+        this.router.post('/store', jwtVerify, (req, res) => this.AlunoController.store(req, res));
 
         this.router.put('/:id/update', jwtVerify, (req, res) => this.AlunoController.update(req, res));
 
