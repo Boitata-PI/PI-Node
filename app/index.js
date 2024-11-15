@@ -67,7 +67,7 @@ const authRoutes = new AuthRoutes(database);
 
 
 //INICIANDO ROTAS
-app.get('/', (req, res) => res.json({success: true, message: 'BackEnd UniWorks Ativo!'}));
+app.get('/', (req, res) => res.json({status: true, message: 'BackEnd UniWorks Ativo!'}));
 
 app.use('/aluno', alunoRoutes.getRouter());
 
@@ -82,7 +82,7 @@ app.use('/disciplina', disciplinaRoutes.getRouter());
 app.use('/professor', professorRoutes.getRouter());
 
 //FALLBACK
-app.use((req, res) => res.status(404).json({success: false, message: 'Not Found - Verify HTTP Request'}));
+app.use((req, res) => res.status(404).json({status: false, message: 'Not Found - Verify HTTP Request'}));
 
 
 

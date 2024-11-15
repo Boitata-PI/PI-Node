@@ -13,6 +13,16 @@ class CursoRepository {
     });
   }
 
+  async findOrCreate(curso, params) {
+    return await this.Curso.findOrCreate({
+      where: params,
+      defaults: {
+        nome: curso.getNome(),
+        codCord: curso.getCodCord()
+      }
+    }); 
+  }
+
   async update(curso){
     return await this.Curso.update({
       nome: curso.getNome(),

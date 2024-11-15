@@ -1,12 +1,19 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import e from 'express';
 
 dotenv.config();
 
-const jwtValidate = (token) => {
+const extractToken = (authHeader) => {
+  return authHeader.replace('Bearer ', '');
+};
+
+const jwtValidate = (authHeader) => {
   var returnVal = false;
 
-  if (!token) return res.status(401).json({ auth: false, message: 'No token provided.' });
+  if (!authHeader) return res.status(401).json({ status: false, message: 'No token provided.' });
+
+  const token = extractToken(authHeader);
 
   jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
     if (error) {

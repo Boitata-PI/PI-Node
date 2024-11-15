@@ -27,7 +27,7 @@ class AuthController {
           const isMatch = await bcrypt.compare(senha, usuario.senha);
 
           if (!isMatch) {
-            return res.status(400).json({ message: 'Senha incorreta' });
+            return res.status(400).json({ message: 'Credenciais Incorretas!' });
           }
 
           const payload = {userId: usuario.id, tipo: usuario.tipo, nome: usuario.nome};
@@ -46,7 +46,7 @@ class AuthController {
   }
 
   async logout(req, res) {
-    return res.json({ auth: false, token: null });
+    return res.json({ status: true, token: null });
   }
 
   async checkAuth(req, res) {
