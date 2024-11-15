@@ -49,7 +49,8 @@ class AlunoDiscController {
 
       nome = nome.toUpperCase();
 
-      const senha = nome.split(' ')[0].toLowerCase() + ra.toString().substring(0, 3);
+      const senhaString = nome.split(' ')[0].toLowerCase() + ra.toString().substring(0, 3);
+      const senha = await bcrypt.hash(senhaString, 10);
 
       const aluno = new Usuario({nome, ra, senha, tipo});
 

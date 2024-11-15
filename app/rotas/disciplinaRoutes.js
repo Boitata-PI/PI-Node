@@ -3,6 +3,9 @@ import express from 'express';
 //Controllers
 import DisciplinaController from '../controllers/disciplinaController.js';
 
+//Middlewares
+import jwtVerify from '../middlewares/jwtVerify.js';
+
 class DisciplinaRoutes {
     constructor(database) {
         this.router = express.Router();
@@ -13,17 +16,17 @@ class DisciplinaRoutes {
     
 
     setupRoutes() {
-        this.router.post('/store', (req, res) => this.DisciplinaController.store(req, res));
+        this.router.post('/store', jwtVerify, (req, res) => this.DisciplinaController.store(req, res));
 
-        this.router.put('/:id/update', (req, res) => this.DisciplinaController.update(req, res));
+        this.router.put('/:id/update', jwtVerify, (req, res) => this.DisciplinaController.update(req, res));
 
-        this.router.get('/list', (req, res) => this.DisciplinaController.list(req, res));
+        this.router.get('/list', jwtVerify, (req, res) => this.DisciplinaController.list(req, res));
 
-        this.router.get('/:id/find', (req, res) => this.DisciplinaController.find(req, res));
+        this.router.get('/:id/find', jwtVerify, (req, res) => this.DisciplinaController.find(req, res));
 
-        this.router.post('/search', (req, res) => this.DisciplinaController.search(req, res));
+        this.router.post('/search', jwtVerify, (req, res) => this.DisciplinaController.search(req, res));
 
-        this.router.delete('/:id/delete', (req, res) => this.DisciplinaController.delete(req, res));
+        this.router.delete('/:id/delete', jwtVerify, (req, res) => this.DisciplinaController.delete(req, res));
     }
 
     getRouter(){

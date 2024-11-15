@@ -51,9 +51,9 @@ try{
     await database.sync();
     console.log(`Sincronização com o banco de dados realizada!`);
 }
-catch(e){
-    console.error('Erro ao conectar ao banco de dados: ', e);
-    throw e;
+catch(error){
+    console.error('Erro ao conectar ao banco de dados: ', error);
+    throw error;
 }
 
 

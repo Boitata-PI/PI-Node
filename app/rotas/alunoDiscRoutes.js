@@ -4,6 +4,9 @@ import multer from 'multer';
 //Controllers
 import AlunoDiscController from '../controllers/alunoDiscController.js';
 
+//Middlewares
+import jwtVerify from '../middlewares/jwtVerify.js';
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 class AlunoDiscRoutes {
@@ -16,17 +19,17 @@ class AlunoDiscRoutes {
     
 
     setupRoutes() {
-        this.router.post('/store', upload.single('alunos'), (req, res) => this.AlunoDiscController.store(req, res));
+        this.router.post('/store', jwtVerify, upload.single('alunos'), (req, res) => this.AlunoDiscController.store(req, res));
 
-        this.router.put('/:id/update', (req, res) => this.AlunoDiscController.update(req, res));
+        this.router.put('/:id/update', jwtVerify, (req, res) => this.AlunoDiscController.update(req, res));
 
-        this.router.get('/list', (req, res) => this.AlunoDiscController.list(req, res));
+        this.router.get('/list', jwtVerify, (req, res) => this.AlunoDiscController.list(req, res));
 
-        this.router.get('/:id/find', (req, res) => this.AlunoDiscController.find(req, res));
+        this.router.get('/:id/find', jwtVerify, (req, res) => this.AlunoDiscController.find(req, res));
 
-        this.router.post('/search', (req, res) => this.AlunoDiscController.search(req, res));
+        this.router.post('/search', jwtVerify, (req, res) => this.AlunoDiscController.search(req, res));
 
-        this.router.delete('/:id/delete', (req, res) => this.AlunoDiscController.delete(req, res));
+        this.router.delete('/:id/delete', jwtVerify, (req, res) => this.AlunoDiscController.delete(req, res));
     }
 
     getRouter(){

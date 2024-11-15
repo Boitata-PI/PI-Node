@@ -39,8 +39,7 @@ class UsuarioRepository {
   async update(usuario){
     return await this.Usuario.update({
       nome: usuario.getNome(),
-      ra: usuario.getRa(),
-      senha: usuario.getSenha()
+      ra: usuario.getRa()
     }, {
       where: {
         id: usuario.getId()

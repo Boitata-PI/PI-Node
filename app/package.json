@@ -19,10 +19,12 @@
   },
   "homepage": "https://github.com/Boitata-PI/PI-Node#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "mysql2": "^3.11.0",
