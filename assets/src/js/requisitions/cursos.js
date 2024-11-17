@@ -1,4 +1,4 @@
-const fetchTurmas = async () => {
+export const fetchDisciplinas = async () => {
   try {
     
     const response = await fetch("http://localhost:8081/curso/search", {
@@ -11,9 +11,9 @@ const fetchTurmas = async () => {
       }),
     });
     const result = await response.json();
-    const turmas = result.data;
-    console.log(turmas);
-    turmas.forEach((turma) => {
+    const Disciplinas = result.data;
+    console.log(Disciplinas);
+    Disciplinas.forEach((turma) => {
       createRow(turma);
     });
   } catch (error) {
@@ -21,12 +21,12 @@ const fetchTurmas = async () => {
   }
 };
 
-const createElement = (tag) => {
+export const createElement = (tag) => {
   const element = document.createElement(tag);
   return element;
 };
 
-const createRow = (turma) => {
+export const createRow = (turma) => {
   const { id, nome } = turma;
 
   const container = document.getElementsByClassName("turma-container")[0];
@@ -85,5 +85,3 @@ const createRow = (turma) => {
 
   container.appendChild(turmaCard);
 };
-
-fetchTurmas();
