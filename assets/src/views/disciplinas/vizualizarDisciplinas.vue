@@ -42,9 +42,9 @@ data() {
 mounted() {
   // Simulando a obtenção da disciplina (pode vir de uma API)
   this.disciplina = {
-    codigo: '101',
-    nome: 'Matemática Avançada',
-    professor: 'Carlos Oliveira',
+    codigo: '110',
+    nome: 'PI',
+    professor: 'Cristina',
   };
 },
 methods: {

@@ -25,25 +25,25 @@
           <!--Links Gerais-->
 
           <li class="nav-item">
-            <router-link class="nav-link" to="/vizualizarAlunos">Alunos</router-link>
+            <router-link class="nav-link" to="/menuAlunos">Alunos</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/vizualizarCursos">Curso</router-link>
+            <router-link class="nav-link" to="/menuCursos">Curso</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/vizualizarDisciplinas">Disciplinas</router-link>
+            <router-link class="nav-link" to="/menuDisciplinas">Disciplinas</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/vizualizarGrupos">Grupos</router-link>
+            <router-link class="nav-link" to="/menuGrupos">Grupos</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/vizualizarProfessores">Professores</router-link>
+            <router-link class="nav-link" to="/menuProfessores">Professores</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/vizualizarRelatorios">Relatórios</router-link>
+            <router-link class="nav-link" to="/menuRelatorios">Relatórios</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/vizualizarTarefas">Tarefas</router-link>
+            <router-link class="nav-link" to="/menuTarefas">Tarefas</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/index">Dashboard</router-link>

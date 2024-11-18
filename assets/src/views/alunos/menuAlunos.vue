@@ -1,77 +1,59 @@
-<script setup>
-
-import AlunoItem from '@/components/alunoItem/alunoItem.vue';
-
-</script>
-
-
 <template>
-  <section>
-    <!-- Container de tarefas -->
-    <div id="main">
-      <div class="tasks-container">
-        <h4>Alunos da Turma</h4>
-        <!-- Exemplo de lista de alunos -->
-        <AlunoItem v-for="aluno in alunos" :key="aluno.id" :aluno="aluno" />
+  <div class="container mt-5">
+    <h4>Alunos</h4>
 
-        <div class="container mt-5">
-          <div class="group-item">
-            <h5>Victor</h5>
-            <p>rem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas pellentesque ipsum felis, non tristique
-              auguerhoncus at.</p>
-          </div>
-          <div class="group-item">
-            <h5>Roma</h5>
-            <p>rem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas pellentesque ipsum felis, non tristique
-              auguerhoncus at.</p>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Botão para adicionar tarefa -->
-      <router-link class="btn-branco" to="/cadastroAlunos">
-        <div class="add-task-btn">+</div>
+    <!-- Grid de alunos -->
+    <div class="alunos-grid">
+      <router-link
+        v-for="(aluno, index) in alunos"
+        :key="index"
+        :to="{ name: 'AlunoDetalhes', params: { id: aluno.id } }"
+        class="group-item card shadow"
+      >
+        <h5>{{ aluno.nome }}</h5>
+        <p>RA: {{ aluno.ra }}</p>
       </router-link>
     </div>
-  </section>
+
+    <!-- Botão para adicionar aluno -->
+    <router-link class="btn-branco" to="/cadastroAlunos">
+      <div class="add-task-btn">+</div>
+    </router-link>
+  </div>
 </template>
 
 <script>
-
-
 export default {
-  name: 'Alunos',
+  name: 'menuAlunos',
   data() {
     return {
-      alunos: []
-    }
-  },
-  methods: {
-    async fetchAlunos() {
-      try {
-        console.log(sessionStorage.getItem("codDisc"));
-
-        const response = await fetch("http://localhost:8081/alunoDisc/search", {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            codDisc: sessionStorage.getItem("codDisc"),
-          })
-        });
-        const result = await response.json();
-        this.alunos = result.data.map((item) => item.Usuario);
-
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  },
-  mounted() {
-    this.fetchAlunos();
+      alunos: [
+        { id: 1, nome: 'João Silva', ra: '20231001' },
+        { id: 2, nome: 'Maria Oliveira', ra: '20231002' },
+        { id: 3, nome: 'Carlos Santos', ra: '20231003' },
+        { id: 4, nome: 'Ana Beatriz', ra: '20231004' }
+      ]
+    };
   }
 };
-
 </script>
+
+<style scoped>
+.alunos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.group-item {
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  background-color: #fff;
+  transition: box-shadow 0.3s ease;
+}
+
+.group-item:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+</style>

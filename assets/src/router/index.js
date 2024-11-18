@@ -59,6 +59,16 @@ import VizualizarTarefasView from '@/views/tarefas/vizualizarTarefas.vue';
 import EditarTarefasView from '@/views/tarefas/editarTarefas.vue';
 
 
+// Detalhes
+import DisciplinaDetalhes from '@/components/DisciplinaDetalhes.vue'; // Nova página de detalhes
+import CursoDetalhes from '@/components/CursoDetalhes.vue'; // Nova página de
+import AlunoDetalhes from '@/components/AlunoDetalhes.vue'; // Nova página
+// import GrupoDetalhes from '@/components/GrupoDetalhes.vue'; // Nova página de detal
+// import ProfessorDetalhes from '@/components/ProfessorDetalhes.vue'; // Nova página
+// import RelatorioDetalhes from '@/components/RelatorioDetalhes.vue'; // Nova página
+// import TarefaDetalhes from '@/components/TarefaDetalhes.vue'; // Nova página
+
+
 const routes = [
   //Rotas Padrão DashBoard e Login
   { path: '/', name: 'login', component: LoginView },
@@ -126,6 +136,27 @@ const routes = [
 
   // Fallback para páginas não encontradas
   { path: '/:catchAll(.*)', redirect: '/404' },
+
+
+  //ROTAS DINAMICAS ID's
+  {
+    path: '/disciplina/:id',
+    name: 'DisciplinaDetalhes',
+    component: DisciplinaDetalhes,
+    props: true 
+  },
+  {
+    path: "/curso/:id",
+    name: "CursoDetalhes",
+    component: CursoDetalhes,
+    props: true,
+  },
+  {
+    path: '/aluno/:id',
+    name: 'AlunoDetalhes',
+    component: AlunoDetalhes,
+    props: true
+  },
 ];
 
 const router = createRouter({

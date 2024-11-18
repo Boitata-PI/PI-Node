@@ -4,9 +4,7 @@
     <div class="tasks-container">
       <h4>Relatórios</h4>
       <!-- Exemplo de lista de curso -->
-      <DisciplinaItem v-for="disciplina in disciplina" :key="disciplina.id" :disciplina="disciplina" />
-
-      <div class="container mt-5">
+       <div class="container mt-5">
           <div class="group-item">
             <h5>Victor</h5>
             <p>rem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas pellentesque ipsum felis, non tristique
@@ -31,7 +29,6 @@
 
 
 <script>
-import DisciplinaItem from '@/components/disciplinaItem/disciplinaItem.vue';
 
 export default {
   name: 'menuTurma'
