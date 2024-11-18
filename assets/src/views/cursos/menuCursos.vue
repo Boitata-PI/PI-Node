@@ -4,16 +4,22 @@
 
     <!-- Grid de cursos -->
     <div class="cursos-grid">
-      <router-link 
+      <router-link
         v-for="(curso, index) in cursos" 
         :key="index" 
         :to="{ name: 'CursoDetalhes', params: { id: curso.id } }"
         class="curso-item"
       >
-        {{ curso.nome }}
+        <h5>{{ curso.nome }}</h5>
+        <p>{{ curso.coordenador }}</p>
       </router-link>
     </div>
   </div>
+
+     <!-- Botão para adicionar cursos -->
+     <router-link class="btn-add" to="/cadastroCursos">
+      <div class="add-task-btn">+</div>
+    </router-link>
 </template>
 
 <script>
@@ -22,9 +28,10 @@ export default {
   data() {
     return {
       cursos: [
-        { id: 1, nome: "Engenharia de Software" },
+        { id: 1, nome: "Engenharia de Software", coordenador: "Vendramel" },
         { id: 2, nome: "Ciência da Computação" },
         { id: 3, nome: "Sistemas de Informação" },
+
       ],
     };
   },
