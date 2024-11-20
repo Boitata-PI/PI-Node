@@ -1,4 +1,4 @@
-export const fetchTurmas = async () => {
+export const fetchDisciplinas = async () => {
   try {
     
     const response = await fetch("http://localhost:8081/curso/search", {
@@ -11,9 +11,9 @@ export const fetchTurmas = async () => {
       }),
     });
     const result = await response.json();
-    const turmas = result.data;
-    console.log(turmas);
-    turmas.forEach((turma) => {
+    const Disciplinas = result.data;
+    console.log(Disciplinas);
+    Disciplinas.forEach((turma) => {
       createRow(turma);
     });
   } catch (error) {
@@ -85,4 +85,3 @@ export const createRow = (turma) => {
 
   container.appendChild(turmaCard);
 };
-

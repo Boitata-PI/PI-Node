@@ -1,4 +1,4 @@
-const cadDisc = async (event) => {
+export const cadDisc = async (event) => {
   event.preventDefault();
 
   const reg = {
@@ -23,10 +23,7 @@ const cadDisc = async (event) => {
   }
 };
 
-const regForm = document.getElementById("regForm");
-regForm.addEventListener("submit", cadDisc);
-
-const fetchProfessor = async () => {
+export const fetchProfessor = async () => {
   try {
     const response = await fetch("http://localhost:8081/professor/list");
     const result = await response.json();
@@ -41,7 +38,7 @@ const fetchProfessor = async () => {
   }
 };
 
-const insertSelect = (professor) => {
+export const insertSelect = (professor) => {
   const { nome, id } = professor;
 
   const select = document.getElementById("coordenador");
@@ -52,5 +49,3 @@ const insertSelect = (professor) => {
 
   select.appendChild(option);
 };
-
-fetchProfessor();

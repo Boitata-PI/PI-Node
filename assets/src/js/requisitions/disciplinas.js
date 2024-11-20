@@ -1,4 +1,4 @@
-const fetchTurmas = async () => {
+const fetchDisciplinas = async () => {
   try {
     console.log(sessionStorage.getItem("codCurso"));
 
@@ -12,9 +12,9 @@ const fetchTurmas = async () => {
       }),
     });
     const result = await response.json();
-    const turmas = result.data;
-    console.log(turmas);
-    turmas.forEach((turma) => {
+    const Disciplinas = result.data;
+    console.log(Disciplinas);
+    Disciplinas.forEach((turma) => {
       createRow(turma);
     });
   } catch (error) {
@@ -87,4 +87,4 @@ const createRow = (turma) => {
   container.appendChild(turmaCard);
 };
 
-fetchTurmas();
+fetchDisciplinas();

@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
+import Navbar from './components/Navbar.vue';
 import router from './router';
 
 // Importa o CSS do Bootstrap
@@ -18,17 +19,13 @@ import 'bootstrap';
 
 // Importa o Js global
 
-import './js/requisitions/alunos'
+//import './js/requisitions/alunos'
 // import './js/requisitions/cadastroAluno'
 // import './js/requisitions/cadastroCurso'
 // import './js/requisitions/cadastroDisciplina'
 // import './js/requisitions/registro'
- import './js/requisitions/disciplinas'
- import './js/requisitions/cursos'
-
- import './js/requisitions/turmas'
-
-import './js/scripts'
+// import './js/requisitions/disciplinas'
+// import './js/requisitions/cursos'
 
 
 const app = createApp(App);
