@@ -10,8 +10,7 @@
     </div>
 
     <!-- Conteúdo das Abas -->
-    <div class="tab-content">
-      <div class="tab-content">
+    <div>
         <div v-if="activeTab === 'Ações'">
           <div class="button-container">
             <!-- Botão Editar -->
@@ -38,7 +37,9 @@
       </div>
       <div v-if="activeTab === 'Coordenador'">
         <h4>Coordenador</h4>
-        <p>{{ curso.coordenador }}</p>
+        <ul>
+          <li>{{ curso.coordenador }}</li>
+        </ul>
       </div>
       <div v-if="activeTab === 'Professores'">
         <h4>Professores</h4>
@@ -52,7 +53,6 @@
         <h4>Descrição</h4>
         <p>{{ curso.descricao }}</p>
       </div>
-    </div>
   </div>
 </template>
 
@@ -177,23 +177,45 @@ p {
 }
 
 ul {
-  list-style-type: none;
-  padding: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 ul li {
-  font-size: 16px;
-  color: #605e5c;
-  margin-bottom: 8px;
+    font-size: 16px;
+    color: #323130;
+    background-color: #f9f9f9;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+ul li:hover {
+    background-color: #e6f7f1;
+    transform: translateY(-2px);
 }
 
 ul li::before {
-  content: "•";
-  color: #155c55;
-  font-weight: bold;
-  display: inline-block;
-  width: 1em;
-  margin-left: -1em;
+    content: '';
+    width: 30px; 
+    height: 30px; 
+    background-color: #28a745; 
+    border-radius: 2px; 
+    display: inline-block;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    ul li {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
 }
 
 /* Botões Editar e Excluir */

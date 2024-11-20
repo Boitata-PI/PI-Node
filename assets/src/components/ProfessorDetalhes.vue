@@ -1,10 +1,13 @@
 <template>
     <div class="container mt-5">
-        <h2>Detalhes da Disciplina: {{ disciplina.nome }}</h2>
+        <h2>Detalhes do Professor: {{ professor.nome }}</h2>
 
         <!-- Abas -->
         <div class="tabs">
-            <button v-for="(tab, index) in tabs" :key="index" :class="{ active: activeTab === tab }"
+            <button 
+                v-for="(tab, index) in tabs" 
+                :key="index" 
+                :class="{ active: activeTab === tab }"
                 @click="activeTab = tab">
                 {{ tab }}
             </button>
@@ -15,41 +18,32 @@
             <div v-if="activeTab === 'Ações'">
                 <div class="button-container">
                     <!-- Botão Editar -->
-                    <router-link to="/editarDisciplinas">
+                    <router-link to="/editarProfessores">
                         <button class="action-btn edit-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                                viewBox="0 0 16 16">
-                                <path
-                                    d="M15.502 1.94a1.5 1.5 0 0 1 0 2.121L14.121 5.44l-3.293-3.293 1.38-1.38a1.5 1.5 0 0 1 2.121 0l1.173 1.173ZM1 13.293V16h2.707L13.44 6.268l-3.293-3.293L1 13.293Z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a1.5 1.5 0 0 1 0 2.121L14.121 5.44l-3.293-3.293 1.38-1.38a1.5 1.5 0 0 1 2.121 0l1.173 1.173ZM1 13.293V16h2.707L13.44 6.268l-3.293-3.293L1 13.293Z" />
                             </svg>
                             Editar
                         </button>
                     </router-link>
 
                     <!-- Botão Excluir -->
-                    <button @click="deleteDisciplina" class="action-btn delete-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                            viewBox="0 0 16 16">
-                            <path
-                                d="M5.5 5.5A.5.5 0 0 1 6 5h4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-7ZM3 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5V4H3v-.5Zm5-1.5a1 1 0 0 1 1 1H7a1 1 0 0 1 1-1Zm-2.5 1a.5.5 0 0 1-.5.5h-3A.5.5 0 0 1 2 3.5v-1A.5.5 0 0 1 2.5 2h3a.5.5 0 0 1 .5.5v1Z" />
+                    <button @click="deleteProfessor" class="action-btn delete-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 5h4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-7ZM3 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5V4H3v-.5Zm5-1.5a1 1 0 0 1 1 1H7a1 1 0 0 1 1-1Zm-2.5 1a.5.5 0 0 1-.5.5h-3A.5.5 0 0 1 2 3.5v-1A.5.5 0 0 1 2.5 2h3a.5.5 0 0 1 .5.5v1Z" />
                         </svg>
                         Excluir
                     </button>
                 </div>
             </div>
-            <div v-if="activeTab === 'Tarefas'">
+            <div v-if="activeTab === 'Disciplinas'">
                 <ul>
-                    <li v-for="(tarefa, index) in disciplina.tarefas" :key="index">{{ tarefa }}</li>
+                    <li v-for="(disciplina, index) in professor.disciplinas" :key="index">{{ disciplina }}</li>
                 </ul>
             </div>
             <div v-if="activeTab === 'Alunos'">
                 <ul>
-                    <li v-for="(aluno, index) in disciplina.alunos" :key="index">{{ aluno }}</li>
-                </ul>
-            </div>
-            <div v-if="activeTab === 'Grupos'">
-                <ul>
-                    <li v-for="(grupo, index) in disciplina.grupos" :key="index">{{ grupo }}</li>
+                    <li v-for="(aluno, index) in professor.alunos" :key="index">{{ aluno }}</li>
                 </ul>
             </div>
         </div>
@@ -58,59 +52,55 @@
 
 <script>
 export default {
-    name: 'DisciplinaDetalhes',
+    name: 'ProfessorDetalhes',
     props: ['id'],
     data() {
         return {
-            tabs: ['Ações', 'Tarefas', 'Alunos', 'Grupos'], // Abas
+            tabs: ['Ações', 'Disciplinas', 'Alunos'], // Abas específicas para professores
             activeTab: 'Ações', // Aba ativa por padrão
-            disciplinas: [
+            professores: [
                 {
                     id: 1,
-                    nome: 'PI',
-                    tarefas: ['Estudo de Caso', 'Apresentação do Projeto'],
-                    alunos: ['João', 'Maria', 'Carlos'],
-                    grupos: ['Grupo 1', 'Grupo 2']
+                    nome: 'Cristina',
+                    disciplinas: ['Projeto Integrado', 'Gestão de Projetos'],
+                    alunos: ['João', 'Maria', 'Carlos']
                 },
                 {
                     id: 2,
-                    nome: 'PI',
-                    tarefas: ['Estudo de Caso', 'Apresentação do Projeto'],
-                    alunos: ['João', 'Maria', 'Carlos'],
-                    grupos: ['Grupo 1', 'Grupo 2']
+                    nome: 'João',
+                    disciplinas: ['Matemática', 'Álgebra Linear'],
+                    alunos: ['Ana', 'Lucas', 'Beatriz']
                 },
                 {
                     id: 3,
-                    nome: 'PI',
-                    tarefas: ['Estudo de Caso', 'Apresentação do Projeto'],
-                    alunos: ['João', 'Maria', 'Carlos'],
-                    grupos: ['Grupo 1', 'Grupo 2']
+                    nome: 'Ana',
+                    disciplinas: ['Física I', 'Física II'],
+                    alunos: ['Pedro', 'Mariana', 'Ricardo']
                 },
                 {
                     id: 4,
-                    nome: 'Matemática',
-                    tarefas: ['Lista de Exercícios', 'Prova Parcial'],
-                    alunos: ['Ana', 'Lucas', 'Beatriz'],
-                    grupos: ['Grupo A', 'Grupo B']
+                    nome: 'Carlos',
+                    disciplinas: ['Química Geral', 'Química Orgânica'],
+                    alunos: ['Tiago', 'Fernanda', 'Clara']
                 }
             ],
-            disciplina: {}
+            professor: {}
         };
     },
 
     methods: {
-        async deleteDisciplina() {
+        async deleteProfessor() {
             try {
-                alert(`Disciplina ${this.disciplina.nome} excluída com sucesso!`);
-                this.$router.push('/menuDisciplinas');
+                alert(`Professor ${this.professor.nome} excluído com sucesso!`);
+                this.$router.push('/menuProfessores');
             } catch (error) {
-                console.error('Erro ao excluir disciplina:', error);
-                alert('Erro ao tentar excluir a disciplina.');
+                console.error('Erro ao excluir professor:', error);
+                alert('Erro ao tentar excluir o professor.');
             }
-        },
+        }
     },
     created() {
-        this.disciplina = this.disciplinas.find((d) => d.id == this.id);
+        this.professor = this.professores.find((p) => p.id == this.id);
     }
 };
 </script>
@@ -146,13 +136,6 @@ h2 {
     font-size: 28px;
     color: #155c55;
     margin-bottom: 20px;
-}
-
-h4 {
-    font-size: 20px;
-    color: #323130;
-    margin-bottom: 10px;
-    text-align: center;
 }
 
 /* Abas */
@@ -217,7 +200,6 @@ ul li:hover {
     transform: translateY(-2px);
 }
 
-
 ul li::before {
     content: '';
     width: 30px; 
@@ -225,33 +207,6 @@ ul li::before {
     background-color: #28a745; 
     border-radius: 2px; 
     display: inline-block;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    ul li {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .container {
-        padding: 20px 30px;
-    }
-
-    h2 {
-        font-size: 22px;
-    }
-
-    h4 {
-        font-size: 18px;
-    }
-
-    ul li {
-        font-size: 14px;
-    }
 }
 
 /* Botões Editar e Excluir */
@@ -295,12 +250,5 @@ ul li::before {
 
 .delete-btn:hover {
     background-color: #c82333;
-}
-
-/* Estilo dos ícones dentro dos botões */
-.action-btn svg {
-    width: 20px;
-    height: 20px;
-    fill: white;
 }
 </style>

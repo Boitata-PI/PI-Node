@@ -13,8 +13,10 @@
       <div class="tab-content">
         <div v-if="activeTab === 'Detalhes'">
           <h4>Informações Gerais</h4>
-          <p><strong>Matrícula:</strong> {{ aluno.matricula }}</p>
-          <p><strong>Email:</strong> {{ aluno.email }}</p>
+          <ul>
+            <li><strong>Matrícula:</strong> {{ aluno.matricula }}</li>
+            <li><strong>Email:</strong> {{ aluno.email }}</li>
+          </ul>
         </div>
   
         <div v-if="activeTab === 'Disciplinas'">
@@ -66,7 +68,7 @@
     props: ['id'],
     data() {
       return {
-        tabs: ['Ações', 'Disciplinas', 'Notas', 'Detalhes'], // Abas
+        tabs: ['Ações', 'Disciplinas', 'Detalhes'], // Abas
         activeTab: 'Ações', // Aba ativa por padrão
         alunos: [
           {
@@ -75,11 +77,6 @@
             matricula: '20231001',
             email: 'joao.silva@example.com',
             disciplinas: ['Matemática', 'Física', 'Química'],
-            notas: [
-              { disciplina: 'Matemática', nota: '8.5' },
-              { disciplina: 'Física', nota: '9.0' },
-              { disciplina: 'Química', nota: '7.5' }
-            ]
           },
           {
             id: 2,
@@ -87,11 +84,6 @@
             matricula: '20231002',
             email: 'maria.oliveira@example.com',
             disciplinas: ['História', 'Geografia', 'Biologia'],
-            notas: [
-              { disciplina: 'História', nota: '8.0' },
-              { disciplina: 'Geografia', nota: '8.7' },
-              { disciplina: 'Biologia', nota: '9.5' }
-            ]
           },
           {
             id: 3,
@@ -99,11 +91,6 @@
             matricula: '20231003',
             email: 'carlos.oliveira@example.com',
             disciplinas: ['História', 'Geografia', 'Biologia'],
-            notas: [
-              { disciplina: 'História', nota: '8.0' },
-              { disciplina: 'Geografia', nota: '8.7' },
-              { disciplina: 'Biologia', nota: '9.5' }
-            ]
           },
           {
             id: 4,
@@ -111,11 +98,6 @@
             matricula: '20231004',
             email: 'ana.beatriz@example.com',
             disciplinas: ['História', 'Geografia', 'Biologia'],
-            notas: [
-              { disciplina: 'História', nota: '8.0' },
-              { disciplina: 'Geografia', nota: '8.7' },
-              { disciplina: 'Biologia', nota: '9.5' }
-            ]
           }
         ],
         aluno: {}
@@ -216,26 +198,49 @@
   }
   
   ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-  }
-  
-  ul li {
-      font-size: 16px;
-      color: #605e5c;
-      margin-bottom: 8px;
-  }
-  
-  ul li::before {
-      content: '•';
-      color: #155c55;
-      font-weight: bold;
-      display: inline-block;
-      width: 1em;
-      margin-left: -1em;
-  }
-  
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    font-size: 16px;
+    color: #323130;
+    background-color: #f9f9f9;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+ul li:hover {
+    background-color: #e6f7f1;
+    transform: translateY(-2px);
+}
+
+
+ul li::before {
+    content: '';
+    width: 30px; 
+    height: 30px; 
+    background-color: #28a745; 
+    border-radius: 2px; 
+    display: inline-block;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    ul li {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}
+
+
   /* Responsividade */
   @media (max-width: 768px) {
       .container {

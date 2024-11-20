@@ -64,7 +64,7 @@ import DisciplinaDetalhes from '@/components/DisciplinaDetalhes.vue'; // Nova p�
 import CursoDetalhes from '@/components/CursoDetalhes.vue'; // Nova página de
 import AlunoDetalhes from '@/components/AlunoDetalhes.vue'; // Nova página
 // import GrupoDetalhes from '@/components/GrupoDetalhes.vue'; // Nova página de detal
-// import ProfessorDetalhes from '@/components/ProfessorDetalhes.vue'; // Nova página
+import ProfessorDetalhes from '@/components/ProfessorDetalhes.vue'; // Nova página
 // import RelatorioDetalhes from '@/components/RelatorioDetalhes.vue'; // Nova página
 // import TarefaDetalhes from '@/components/TarefaDetalhes.vue'; // Nova página
 
@@ -155,6 +155,12 @@ const routes = [
     path: '/aluno/:id',
     name: 'AlunoDetalhes',
     component: AlunoDetalhes,
+    props: true
+  },
+  {
+    path: '/professor/:id',
+    name: 'ProfessorDetalhes',
+    component: ProfessorDetalhes,
     props: true
   },
 ];
