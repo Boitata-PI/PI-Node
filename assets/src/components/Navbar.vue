@@ -9,7 +9,7 @@
       <router-link to="/menuDisciplinas">Disciplinas</router-link>
       <router-link to="/menuGrupos">Grupos</router-link>
       <router-link to="/menuProfessores">Professores</router-link>
-      <router-link to="/menuRelatorios">Relatorios</router-link>
+      <router-link to="/pagDesenvolvimento">Relatorios</router-link>
       <router-link to="/menuTarefas">Tarefas</router-link>
       <router-link to="/index">Dashboard</router-link>
     </div>
@@ -40,7 +40,7 @@
             <router-link class="nav-link" to="/menuProfessores">Professores</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/menuRelatorios">Relatórios</router-link>
+            <router-link class="nav-link" to="/pagDesenvolvimento">Relatórios</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/menuTarefas">Tarefas</router-link>

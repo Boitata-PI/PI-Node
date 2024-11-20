@@ -1,36 +1,41 @@
 <template>
-  <!-- Container de tarefas -->
-  <div class="container mt-5">
-    <h4>Tarefas</h4>
-    <div class="group-item" v-for="(item, index) in tarefas" :key="index" @click="abrirModal(item.nome)">
-      <h5>{{ item.nome }}</h5>
-      <p>{{ item.descricao }}</p>
+  <div class="container mt-5 menu-tarefas">
+    <!-- Navegação por status -->
+    <div class="status-tabs">
+      <button 
+        v-for="(tab, index) in abas" 
+        :key="index" 
+        :class="{ active: tab === abaAtiva }" 
+        @click="abaAtiva = tab"
+      >
+        {{ tab }}
+      </button>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="groupModal" tabindex="-1" aria-labelledby="groupModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="groupModalLabel">{{ modalTitle }}</h5>
-            <button type="button" class="btn-close" @click="fecharModal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <router-link class="btn-branco" to="/vizualizarTarefas" @click.native="fecharModal">
-              <button class="btn">Detalhes</button>
-            </router-link>
-            <button class="btn">Tarefas</button>
-            <button class="btn">Alunos</button>
-            <button class="btn">Grupos</button>
+    <!-- Lista de Tarefas -->
+    <div class="tarefas-lista">
+      <router-link 
+        v-for="(tarefa, index) in tarefasFiltradas" 
+        :key="index" 
+        :to="{ name: 'TarefaDetalhes', params: { id: tarefa.id } }"
+        class="tarefa-item"
+      >
+        <div class="tarefa-header">
+          <div>
+            <h5>{{ tarefa.titulo }}</h5>
+            <p>{{ tarefa.descricao }}</p>
           </div>
         </div>
-      </div>
+        <div class="tarefa-footer">
+          <p><strong>Prazo de entrega:</strong> {{ tarefa.prazo }}</p>
+          <p>{{ tarefa.materia }}</p>
+        </div>
+      </router-link>
+      <!-- Mensagem quando não houver tarefas -->
+      <p v-if="tarefasFiltradas.length === 0" class="sem-tarefas">
+        Nenhuma tarefa encontrada nesta aba.
+      </p>
     </div>
-
-    <!-- Botão para adicionar tarefa -->
-    <router-link class="btn-branco" to="/cadastroTarefas">
-      <div class="add-task-btn">+</div>
-    </router-link>
   </div>
 </template>
 
@@ -39,44 +44,160 @@ export default {
   name: 'menuTarefas',
   data() {
     return {
+      abaAtiva: 'Em breve', // Aba ativa
+      abas: ['Em breve', 'Em atraso', 'Concluída'], // Abas disponíveis
       tarefas: [
-        { nome: 'LittleHost - Grupo 01', descricao: 'Lorem ipsum dolor sit amet...' },
-        { nome: 'BAE Guard - Grupo 02', descricao: 'Lorem ipsum dolor sit amet...' }
-      ],
-      modalTitle: '',
-      modalInstance: null
+        {
+          id: 1,
+          titulo: 'Projeto Web/App',
+          descricao: 'Prazo de entrega às 23:59',
+          prazo: '25 de nov. - segunda-feira',
+          materia: 'Técnicas Avançadas de Programação Web e Mobile - A929-N-ADS AMS-111-20240',
+          status: 'Em breve',
+        },
+        {
+          id: 2,
+          titulo: 'Apresentação - System Calls',
+          descricao: 'Prazo de entrega às 23:59',
+          prazo: '29 de nov. - sexta-feira',
+          materia: 'O.C.S.O. - A929-N-ADS AMS-111-20240',
+          status: 'Em breve',
+        },
+        // Tarefas em atraso
+        {
+          id: 3,
+          titulo: 'Revisão de Algoritmos',
+          descricao: 'Prazo de entrega expirado.',
+          prazo: '22 de nov. - quarta-feira',
+          materia: 'Estrutura de Dados - A929-N-ADS AMS-111-20240',
+          status: 'Em atraso',
+        },
+        {
+          id: 4,
+          titulo: 'Trabalho Final de Banco de Dados',
+          descricao: 'Prazo de entrega expirado.',
+          prazo: '20 de nov. - segunda-feira',
+          materia: 'Banco de Dados Avançado - A929-N-ADS AMS-111-20240',
+          status: 'Em atraso',
+        },
+        // Tarefas concluídas
+        {
+          id: 5,
+          titulo: 'Implementação de API',
+          descricao: 'Entregue antes do prazo.',
+          prazo: '18 de nov. - sábado',
+          materia: 'Desenvolvimento Back-End - A929-N-ADS AMS-111-20240',
+          status: 'Concluída',
+        },
+        {
+          id: 6,
+          titulo: 'Design de Interface',
+          descricao: 'Entregue antes do prazo.',
+          prazo: '15 de nov. - quarta-feira',
+          materia: 'UX/UI Design - A929-N-ADS AMS-111-20240',
+          status: 'Concluída',
+        }
+      ]
     };
   },
-  methods: {
-    abrirModal(titulo) {
-      this.modalTitle = titulo;
-      this.modalInstance = new bootstrap.Modal(document.getElementById('groupModal'));
-      this.modalInstance.show();
-    },
-    fecharModal() {
-      if (this.modalInstance) {
-        this.modalInstance.hide();
-        this.limparBackdrop(); // Garantir limpeza do backdrop
-      }
-    },
-    limparBackdrop() {
-      // Remove manualmente o backdrop e a classe modal-open
-      const backdrop = document.querySelector('.modal-backdrop');
-      if (backdrop) {
-        backdrop.remove();
-      }
-      document.body.classList.remove('modal-open');
+  computed: {
+    tarefasFiltradas() {
+      return this.tarefas.filter((tarefa) => tarefa.status === this.abaAtiva);
     }
-  },
-  mounted() {
-    // Garantir que o modal esteja fechado ao mudar de rota
-    this.$router.afterEach(() => {
-      this.fecharModal();
-    });
   }
 };
 </script>
 
 <style scoped>
-/* Adicione seus estilos aqui */
+/* Layout principal */
+.menu-tarefas {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo das abas */
+.status-tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #444;
+}
+
+.status-tabs button {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  color: #155c55;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.status-tabs button.active {
+  color: #155c55;
+  font-weight: bold;
+  border-bottom: 2px solid #155c55;
+}
+
+.status-tabs button:hover {
+  color: #0f7e73;
+}
+
+/* Lista de tarefas */
+.tarefas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tarefa-item {
+  background-color: #fcfcfc;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.tarefa-header {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.logo-tarefa {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.tarefa-header h5 {
+  font-size: 18px;
+  margin: 0;
+  color: #155c55;
+}
+
+.tarefa-header p {
+  font-size: 14px;
+  color: #000;
+}
+
+.tarefa-footer {
+  font-size: 14px;
+  color: #000;
+}
+
+.tarefa-footer strong {
+  color: #155c55;
+}
+
+a{
+    text-decoration: none;
+}
+
 </style>

@@ -60,13 +60,13 @@ import EditarTarefasView from '@/views/tarefas/editarTarefas.vue';
 
 
 // Detalhes
-import DisciplinaDetalhes from '@/components/DisciplinaDetalhes.vue'; // Nova página de detalhes
-import CursoDetalhes from '@/components/CursoDetalhes.vue'; // Nova página de
-import AlunoDetalhes from '@/components/AlunoDetalhes.vue'; // Nova página
-// import GrupoDetalhes from '@/components/GrupoDetalhes.vue'; // Nova página de detal
-import ProfessorDetalhes from '@/components/ProfessorDetalhes.vue'; // Nova página
+import DisciplinaDetalhes from '@/components/DisciplinaDetalhes.vue';
+import CursoDetalhes from '@/components/CursoDetalhes.vue';
+import AlunoDetalhes from '@/components/AlunoDetalhes.vue';
+import GrupoDetalhes from '@/components/GrupoDetalhes.vue';
+import ProfessorDetalhes from '@/components/ProfessorDetalhes.vue';
 // import RelatorioDetalhes from '@/components/RelatorioDetalhes.vue'; // Nova página
-// import TarefaDetalhes from '@/components/TarefaDetalhes.vue'; // Nova página
+import TarefaDetalhes from '@/components/TarefaDetalhes.vue';
 
 
 const routes = [
@@ -99,11 +99,11 @@ const routes = [
   // { path: '/relatorios', name: 'relatorios', component: RelatoriosView },
   // { path: '/grupos', name: 'grupos', component: GruposView },
 
-   //Aluno Crud
-   { path: '/cadastroAlunos', name: 'cadastroAluno', component: CadastroAlunosView },
-   { path: '/vizualizarAlunos', name: 'vizualizarAlunos', component: VizualizarAlunosView },
-   { path: '/editarAlunos', name: 'editarAlunos', component: EditarAlunosView },
-  
+  //Aluno Crud
+  { path: '/cadastroAlunos', name: 'cadastroAluno', component: CadastroAlunosView },
+  { path: '/vizualizarAlunos', name: 'vizualizarAlunos', component: VizualizarAlunosView },
+  { path: '/editarAlunos', name: 'editarAlunos', component: EditarAlunosView },
+
   //Cursos Crud 
   { path: '/cadastroCursos', name: 'cadastroCursos', component: CadastroCursosView },
   { path: '/vizualizarCursos', name: 'vizualizarCursos', component: VizualizarCursosView },
@@ -143,7 +143,7 @@ const routes = [
     path: '/disciplina/:id',
     name: 'DisciplinaDetalhes',
     component: DisciplinaDetalhes,
-    props: true 
+    props: true
   },
   {
     path: "/curso/:id",
@@ -161,6 +161,18 @@ const routes = [
     path: '/professor/:id',
     name: 'ProfessorDetalhes',
     component: ProfessorDetalhes,
+    props: true
+  },
+  {
+    path: '/grupo/:id',
+    name: 'GrupoDetalhes',
+    component: GrupoDetalhes,
+    props: true
+  },
+  {
+    path: '/tarefa/:id',
+    name: 'TarefaDetalhes',
+    component: TarefaDetalhes,
     props: true
   },
 ];
