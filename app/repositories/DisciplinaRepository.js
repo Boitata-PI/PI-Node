@@ -14,6 +14,17 @@ class DisciplinaRepository {
     });
   }
 
+  async findOrCreate(disciplina, params) {
+    return await this.Disciplina.findOrCreate({
+      where: params,
+      defaults: {
+        nome: disciplina.getNome(),
+        codProf: disciplina.getCodProf(),
+        codCurso: disciplina.getCodCurso()
+      }
+    }); 
+  }
+
   async update(disciplina){
     return await this.Disciplina.update({
       nome: disciplina.getNome(),

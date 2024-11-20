@@ -1,5 +1,6 @@
 import Usuario from "../models/Usuario.js";
 import UsuarioRepository from "../repositories/UsuarioRepository.js";
+import bcrypt from 'bcryptjs';
 
 class AlunoController {
   constructor(database) {
@@ -9,12 +10,14 @@ class AlunoController {
 
   async store(req, res) {
     try {
-      const { nome, ra, senha } = req.body;
+      const { nome, ra } = req.body;
       const tipo = "ALUNO";
 
-      if (!nome || !ra || !senha) {
+      if (!nome || !ra || !req.body.senha) {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
       }
+
+      const senha = await bcrypt.hash(req.body.senha, 10);
 
       const aluno = new Usuario({nome, ra, senha, tipo});
 

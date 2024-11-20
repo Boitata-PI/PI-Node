@@ -19,8 +19,8 @@ app.get('/api', (req, res) => {
     try{
         return res.status(200).json({success: true, data: {id: 200}, message: 'Success'});
     }
-    catch(e){
-        return res.status(500).json({success: false, message: 'Error: ' + e});
+    catch(error){
+        return res.status(500).json({success: false, message: 'Error: ' + error.message});
     }
 });
 

@@ -52,6 +52,17 @@ class Database
         });
     }
 
+    async seed(){
+        const seedFiles = readdirSync(__dirname + '/seeders')
+            .filter(file => file !== 'Database.js' && file.endsWith('.js'));
+
+        for (const file of seedFiles) {
+            const seedPath = pathToFileURL(path.join(__dirname + '/seeders/' + file)).href;
+            const { default: seed } = await import(seedPath);
+            seed(this);
+        }
+    }
+
     async connect(){
         return await this.sequelize.authenticate();
     }
@@ -59,6 +70,7 @@ class Database
     async sync(){
         await this.migrate();
         this.associate();
+        await this.seed();
 
         //console.log(await this.models.Usuario.findAll())
         //console.log(this.getModels());
