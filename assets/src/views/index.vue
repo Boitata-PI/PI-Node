@@ -1,34 +1,16 @@
 <template>
   <section class="card-section">
     <div class="card-container">
-      <router-link class="nav-link" to="/menuAlunos">
-        <div class="card">
-          <h3>Alunos</h3>
-          <p>Confira todos os alunos presentes no sistema.</p>
-        </div>
-      </router-link>
       <router-link class="nav-link" to="/menuCursos">
         <div class="card">
           <h3>Cursos</h3>
           <p>Acompanhe os cursos disponíveis no sistema.</p>
         </div>
       </router-link>
-    </div>
-  </section>
-
-
-  <section class="card-section">
-    <div class="card-container">
       <router-link class="nav-link" to="/menuDisciplinas">
         <div class="card">
           <h3>Disciplina</h3>
           <p>Confira as disciplinas da sua turma.</p>
-        </div>
-      </router-link>
-      <router-link class="nav-link" to="/menuGrupos">
-        <div class="card">
-          <h3>Grupos</h3>
-          <p>Confira os grupos que já estão formados.</p>
         </div>
       </router-link>
       <router-link class="nav-link" to="/menuProfessores">

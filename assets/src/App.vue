@@ -1,7 +1,7 @@
 <!-- App.vue -->
 <template>
   <div id="app">
-    <Navbar />
+    <Navbar v-if="!$route.meta.hideNavbar" />
     <router-view />
   </div>
 </template>
@@ -11,8 +11,11 @@ import Navbar from './components/Navbar.vue';
 
 export default {
   name: 'App',
-  components: {
-    Navbar,
+  components: { Navbar },
+  computed: {
+    isLoginPage() {
+      return this.$route.name === "login"; // ou `this.$route.path === '/login'`
+    },
   },
 };
 </script>

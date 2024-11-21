@@ -44,7 +44,12 @@
             </div>
             <div v-if="activeTab === 'Alunos'">
                 <ul>
-                    <li v-for="(aluno, index) in disciplina.alunos" :key="index">{{ aluno }}</li>
+                    <li v-for="(aluno, index) in disciplina.alunos" :key="index">
+                        <!-- Assuma que o aluno é um objeto com 'nome' e 'id' -->
+                        <router-link :to="{ name: 'AlunoDetalhes', params: { id: aluno.id } }">
+                            {{ aluno.nome }}
+                        </router-link>
+                    </li>
                 </ul>
             </div>
             <div v-if="activeTab === 'Grupos'">
@@ -69,14 +74,22 @@ export default {
                     id: 1,
                     nome: 'PI',
                     tarefas: ['Estudo de Caso', 'Apresentação do Projeto'],
-                    alunos: ['João', 'Maria', 'Carlos'],
+                    alunos: [
+                        { id: 1, nome: 'João' },
+                        { id: 3, nome: 'Maria' },
+                        { id: 2, nome: 'Carlos' }
+                    ],
                     grupos: ['Grupo 1', 'Grupo 2']
                 },
                 {
                     id: 2,
                     nome: 'PI',
                     tarefas: ['Estudo de Caso', 'Apresentação do Projeto'],
-                    alunos: ['João', 'Maria', 'Carlos'],
+                    alunos: [
+                        { id: 1, nome: 'João' },
+                        { id: 3, nome: 'Maria' },
+                        { id: 103, nome: 'Carlos' }
+                    ],
                     grupos: ['Grupo 1', 'Grupo 2']
                 },
                 {
@@ -90,7 +103,11 @@ export default {
                     id: 4,
                     nome: 'Matemática',
                     tarefas: ['Lista de Exercícios', 'Prova Parcial'],
-                    alunos: ['Ana', 'Lucas', 'Beatriz'],
+                    alunos: [
+                        { id: 201, nome: 'Ana' },
+                        { id: 202, nome: 'Lucas' },
+                        { id: 203, nome: 'Beatriz' }
+                    ],
                     grupos: ['Grupo A', 'Grupo B']
                 }
             ],
@@ -220,10 +237,10 @@ ul li:hover {
 
 ul li::before {
     content: '';
-    width: 30px; 
-    height: 30px; 
-    background-color: #28a745; 
-    border-radius: 2px; 
+    width: 30px;
+    height: 30px;
+    background-color: #28a745;
+    border-radius: 2px;
     display: inline-block;
 }
 

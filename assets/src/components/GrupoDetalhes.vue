@@ -45,9 +45,9 @@
                     <li v-for="(membro, index) in grupo.membros" :key="index">{{ membro }}</li>
                 </ul>
             </div>
-            <div v-if="activeTab === 'Projetos'">
+            <div v-if="activeTab === 'Tarefas'">
                 <ul>
-                    <li v-for="(projeto, index) in grupo.projetos" :key="index">{{ projeto }}</li>
+                    <li v-for="(tarefa, index) in grupo.tarefas" :key="index">{{ tarefa }}</li>
                 </ul>
             </div>
         </div>
@@ -60,32 +60,32 @@ export default {
     props: ['id'],
     data() {
         return {
-            tabs: ['Ações','Membros', 'Projetos'], // Abas específicas para grupos
+            tabs: ['Ações','Membros', 'Tarefas'], // Abas específicas para grupos
             activeTab: 'Ações', // Aba ativa por padrão
             grupos: [
                 {
                     id: 1,
-                    nome: 'Grupo de Desenvolvimento Web',
+                    nome: 'Desenvolvimento Web',
                     membros: ['Alice', 'Carlos', 'Joana'],
-                    projetos: ['Site E-commerce', 'Dashboard de Analytics']
+                    tarefas: ['Site E-commerce', 'Dashboard de Analytics']
                 },
                 {
                     id: 2,
-                    nome: 'Grupo de Data Science',
-                    membros: ['Lucas', 'Maria', 'Pedro'],
-                    projetos: ['Análise de Sentimentos', 'Modelagem Preditiva']
+                    nome: 'Data Science',
+                    membros: ['Lucas', 'Maria', 'Carlos'],
+                    tarefas: ['Análise de Sentimentos', 'Modelagem Preditiva']
                 },
                 {
                     id: 3,
-                    nome: 'Grupo de Redes e Infraestrutura',
+                    nome: 'Redes e Infraestrutura',
                     membros: ['André', 'Fernanda', 'João'],
-                    projetos: ['Configuração de Servidores', 'Monitoramento de Rede']
+                    tarefas: ['Configuração de Servidores', 'Monitoramento de Rede']
                 },
                 {
                     id: 4,
-                    nome: 'Grupo de Inteligência Artificial',
+                    nome: 'Inteligência Artificial',
                     membros: ['Roberta', 'Rafael', 'Clara'],
-                    projetos: ['Chatbot IA', 'Sistema de Recomendação']
+                    tarefas: ['Chatbot IA', 'Sistema de Recomendação']
                 }
             ],
             grupo: {}

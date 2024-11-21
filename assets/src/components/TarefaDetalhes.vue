@@ -10,10 +10,11 @@
     <div class="tarefa-card">
       <div class="informacoes">
         <p><strong>Prazo:</strong> <span class="data">{{ tarefa.prazo }}</span></p>
-        <p><strong>Matéria:</strong> <span>{{ tarefa.materia }}</span></p>
+        <p><strong>Disciplina:</strong> <span>{{ tarefa.materia }}</span></p>
+        <p><strong>Instruções: <span>{{ tarefa.instrucoes }}</span></strong></p>
       </div>
 
-      <h4>Instruções:</h4>
+      <h4>Arquivos:</h4>
       <ul>
         <li v-for="(instrucao, index) in tarefa.instrucoes" :key="index">
           {{ instrucao }}
@@ -38,11 +39,10 @@ export default {
         titulo: 'Projeto Web/App',
         prazo: '25 de nov. - segunda-feira',
         materia: 'Técnicas Avançadas de Programação Web e Mobile - A929-N-ADS AMS-111-20240',
-        instrucoes: [
-          'Bootstrap/Tailwind',
-          'Node.js (Express, Express-handlebars e body-parser)',
-          'Firebase Firestore'
-        ]
+        instrucoes: '',
+        arquivos: [
+          
+        ],
       }
     };
   },

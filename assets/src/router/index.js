@@ -15,7 +15,6 @@ import MenuGruposView from '@/views/grupos/menuGrupos.vue';
 
 // Páginas de Erro e Desenvolvimento
 import PagDesenvolvimentoView from '@/views/pagDesenvolvimento.vue';
-import RegistroView from '@/views/registro.vue';
 import Error403View from '@/views/errors/error403View.vue';
 import Error404View from '@/views/errors/error404View.vue';
 import Error500View from '@/views/errors/error500View.vue';
@@ -71,7 +70,7 @@ import TarefaDetalhes from '@/components/TarefaDetalhes.vue';
 
 const routes = [
   //Rotas Padrão DashBoard e Login
-  { path: '/', name: 'login', component: LoginView },
+  { path: '/', name: 'login', component: LoginView, meta:{hideNavbar: true} },
   { path: '/index', name: 'index', component: IndexView },
 
   //Menus Gerais
@@ -85,7 +84,6 @@ const routes = [
 
   //Páginas em Desenvolvimento e Erros
   { path: '/pagDesenvolvimento', name: 'pagDesenvolvimento', component: PagDesenvolvimentoView },
-  { path: '/registro', name: 'registro', component: RegistroView },
   { path: '/403', name: 'error403', component: Error403View },
   { path: '/404', name: 'error404', component: Error404View },
   { path: '/500', name: 'error500', component: Error500View },
@@ -166,7 +164,7 @@ const routes = [
   {
     path: '/grupo/:id',
     name: 'GrupoDetalhes',
-    component: GrupoDetalhes,
+    component: () => import('@/components/GrupoDetalhes.vue'),
     props: true
   },
   {

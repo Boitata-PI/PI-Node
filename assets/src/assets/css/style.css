@@ -325,12 +325,17 @@ select {
 }
 
 body .uwy.userway_p1 .userway_buttons_wrapper
-{
-  top: 42% !important;
-  right: auto;
-  bottom: 70%;
-  left: 99% !important;
-  transform: translate(-100%);
+
+  {
+    position: fixed !important;
+    max-width: 95vw !important;
+    min-height: 40px !important;
+    min-width: 40px !important;
+    left: 2% !important;
+    top: 46% !important;
+    transform: translate(-30%) !important;
+    z-index: 2147483647 !important;
+    margin: 10px !important;
 }
 
 

@@ -4,10 +4,8 @@
     <div id="mySidenav" class="sidenav">
       <!--Links Gerais sidenav-->
       <a href="javascript:void(0)" class="closebtn" @click="closeNav">&times;</a>
-      <router-link to="/menuAlunos">Alunos</router-link>
       <router-link to="/menuCursos">Curso</router-link>
       <router-link to="/menuDisciplinas">Disciplinas</router-link>
-      <router-link to="/menuGrupos">Grupos</router-link>
       <router-link to="/menuProfessores">Professores</router-link>
       <router-link to="/pagDesenvolvimento">Relatorios</router-link>
       <router-link to="/menuTarefas">Tarefas</router-link>
@@ -25,16 +23,10 @@
           <!--Links Gerais-->
 
           <li class="nav-item">
-            <router-link class="nav-link" to="/menuAlunos">Alunos</router-link>
-          </li>
-          <li class="nav-item">
             <router-link class="nav-link" to="/menuCursos">Curso</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/menuDisciplinas">Disciplinas</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/menuGrupos">Grupos</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/menuProfessores">Professores</router-link>
