@@ -78,7 +78,7 @@ class CursoController {
     try {
       const resultSequelize = await this.CursoRepository.list();
 
-      return res.status(200).json({ status: true, data: resultSequelize, message: 'Curso Listados!' });
+      return res.status(200).json({ status: true, data: resultSequelize, message: 'Cursos Listados!' });
     } 
     catch (error) {
       console.error(error);

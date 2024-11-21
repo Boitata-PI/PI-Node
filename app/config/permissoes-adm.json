@@ -1,0 +1,44 @@
+{
+    "alunos": {
+        "create": true,
+        "read": true,
+        "list": true,
+        "update": true,
+        "delete": true
+    },
+    "cursos": {
+        "create": true,
+        "read": true,
+        "list": true,
+        "update": true,
+        "delete": true
+    },
+    "disciplinas": {
+        "create": true,
+        "read": true,
+        "list": true,
+        "update": true,
+        "delete": true
+    },
+    "grupos": {
+        "create": true,
+        "read": true,
+        "list": true,
+        "update": true,
+        "delete": true
+    },
+    "professores": {
+        "create": true,
+        "read": true,
+        "list": true,
+        "update": true,
+        "delete": true
+    },
+    "tarefas": {
+        "create": true,
+        "read": true,
+        "list": true,
+        "update": true,
+        "delete": true
+    }
+}

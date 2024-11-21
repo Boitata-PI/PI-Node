@@ -9,12 +9,14 @@ class ProfessorController {
 
   async store(req, res) {
     try {
-      const { nome, ra, senha } = req.body;
+      const { nome, ra } = req.body;
       const tipo = "PROFESSOR";
 
-      if (!nome || !ra || !senha || !tipo) {
+      if (!nome || !ra || !tipo) {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
       }
+
+      const senha = await bcrypt.hash(req.body.senha, 10);
 
       const professor = new Usuario({nome, ra, senha, tipo});
 
@@ -64,7 +66,7 @@ class ProfessorController {
     try {
       const resultSequelize = await this.UsuarioRepository.list('PROFESSOR');
 
-      return res.status(200).json({ status: true, data: resultSequelize, message: 'Professor Listados!' });
+      return res.status(200).json({ status: true, data: resultSequelize, message: 'Professores Listados!' });
     } 
     catch (error) {
       console.error(error);
