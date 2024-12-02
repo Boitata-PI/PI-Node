@@ -42,12 +42,16 @@
           </li>
         </ul>
       </div>
+      <button class="nav-link" @click.prevent="logout()">Sair</button>
       <router-link class="nav-link" to="/"><div class="user-icon"></div></router-link>
     </nav>
   </div>
 </template>
 
 <script>
+
+import { logout } from "../js/requisitions/auth";
+
 export default {
   name: "Navbar",
   methods: {
@@ -59,6 +63,7 @@ export default {
       document.getElementById("mySidenav").style.width = "0";
       document.getElementById("main").style.marginLeft = "0";
     },
+    logout
   },
 };
 </script>
@@ -74,6 +79,10 @@ export default {
 .nav-link {
   color: #fff !important;
   font-weight: bold;
+}
+
+button.nav-link{
+  margin-right: 15px;
 }
 
 .navbar-toggler {

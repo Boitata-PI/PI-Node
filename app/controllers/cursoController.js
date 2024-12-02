@@ -51,7 +51,7 @@ class CursoController {
       }
 
       if(codCord){
-        if(!await this.UsuarioRepository.find(codProf, 'PROFESSOR')){
+        if(!await this.UsuarioRepository.find(codCord, 'PROFESSOR')){
           return res.status(404).json({ status: false, message: "Professor não encontrado!" });
         }
       }

@@ -39,6 +39,7 @@
 </template>
 
 <script>
+
 export default {
 data() {
   return {
@@ -68,8 +69,8 @@ methods: {
       console.error('Erro ao excluir:', error);
       alert('Erro ao tentar excluir o curso.');
     }
-  },
-},
+  }
+}
 };
 </script>
 

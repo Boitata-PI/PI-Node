@@ -1,6 +1,7 @@
 <template>
     <div class="container mt-5">
         <h2>Detalhes da Disciplina: {{ disciplina.nome }}</h2>
+        <h4>{{  }}</h4>
 
         <!-- Abas -->
         <div class="tabs">

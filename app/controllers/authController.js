@@ -13,7 +13,7 @@ class AuthController {
       const { ra, senha } = req.body;
 
       if (!ra || !senha) {
-        return res.status(400).json({ status: false, message: "Dados Incompletos!" });
+        return res.status(400).json({ status: false, message: "Dados Incompletos!"});
       }
 
       await this.UsuarioRepository.search({ ra })
@@ -33,7 +33,14 @@ class AuthController {
           const payload = {userId: usuario.id, tipo: usuario.tipo, nome: usuario.nome};
           const token = signJWT(payload);
 
-          return res.status(200).json({ status: true, data: { usuario, token }, message: 'Usuário Logado!' });
+          res.cookie("token", token, {
+            httpOnly: true, 
+            //secure: true,
+            sameSite: "strict", 
+            maxAge: 3600000,
+          });
+
+          return res.status(200).json({ status: true, data: { usuario }, message: 'Usuário Logado!' });
         })
         .catch((error) => {
           throw new Error(error);
@@ -46,12 +53,13 @@ class AuthController {
   }
 
   async logout(req, res) {
-    return res.json({ status: true, token: null });
+    res.clearCookie('token')
+    return res.json({ status: true });
   }
 
   async checkAuth(req, res) {
     try{
-      const token = req.headers['authorization'];
+      const token = req.cookies.token;
 
       if (!token) return res.status(401).json({ status: false, message: 'Token não Encontrado!' });
 

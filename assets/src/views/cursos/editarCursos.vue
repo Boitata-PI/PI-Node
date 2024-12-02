@@ -1,7 +1,7 @@
 <template>
     <main class="form-container">
       <h1>Editar Curso</h1>
-      <form @submit.prevent="updateCurso" id="editForm">
+      <form @submit.prevent="handleUpdate()" id="editForm">
         <label for="name">Nome do Curso:</label>
         <input type="text" v-model="curso.nome" id="namecurso" name="namecurso" placeholder="Insira o nome do Curso" required />
   
@@ -13,9 +13,11 @@
         </select>
   
         <label for="coordenador">Nome do Coordenador:</label>
-        <select v-model="curso.coordenador" id="coordenador" name="coordenador" required>
+        <select v-model="curso.codCord" id="coordenador" name="coordenador" required>
           <option value="" disabled selected>Selecione o Coordenador</option>
-          <!-- Coordenadores serão preenchidos dinamicamente -->
+          <option v-for="professor in professores" :key="professor.id" :value="professor.id">
+            {{ professor.nome }}
+          </option>
         </select>
   
         <button type="submit" class="submit-btn">Salvar Alterações</button>
@@ -24,37 +26,34 @@
   </template>
   
   <script>
+
+  import { findCursos, updateCursos } from "../../js/requisitions/cursos";
+  import { listProfessor } from "../../js/requisitions/users";
+
   export default {
+
     data() {
       return {
-        curso: {
-          codigo: '',
-          nome: '',
-          periodo: '',
-          coordenador: '',
-        },
-      };
-    },
-    mounted() {
-      // Simulando a obtenção do curso. Aqui você pode substituir por uma chamada API ou método para pegar o curso a partir do código.
-      this.curso = {
-        codigo: '101',
-        nome: 'Desenvolvimento Web',
-        periodo: 'Noite',
-        coordenador: 'Carlos Oliveira',
+        curso: {},
+        professores: {}
       };
     },
     methods: {
-      async updateCurso() {
+      findCursos,
+      updateCursos,
+      async handleUpdate() {
         try {
-          // Lógica para atualizar o curso (pode ser via API ou outras ações)
-          alert(`Curso ${this.curso.nome} atualizado com sucesso!`);
-          this.$router.push('/cursos');
+          await updateCursos(this.curso.id);
+          this.$router.push("/index");
         } catch (error) {
-          console.error('Erro ao atualizar o curso:', error);
-          alert('Erro ao tentar atualizar o curso.');
+          console.error("Erro ao atualizar o curso:", error);
         }
       },
+      
+    },
+    async mounted() {
+      this.curso = await findCursos(localStorage.getItem("curso"));
+      this.professores = await listProfessor()
     },
   };
   </script>

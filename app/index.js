@@ -2,6 +2,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import Database from './database/Database.js';
 
@@ -38,10 +39,11 @@ const corsOptions = {
     optionsSuccessStatus: 204
 };
 
-
+app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 
 //CONECTANDO AO BANCO
 const database = new Database(process.env);

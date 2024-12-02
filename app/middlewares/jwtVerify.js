@@ -3,7 +3,8 @@ import jwtValidate from '../helpers/jwt/jwtValidate.js';
 
 const jwtVerify = (req, res, next) => {
   try{
-    const token = req.headers['authorization'];
+    const token = req.cookies.token;
+    console.log("Token: "+token)
     if (!token) return res.status(401).json({ status: false, message: 'No token provided.' });
 
     const {error, decoded} = jwtValidate(token);

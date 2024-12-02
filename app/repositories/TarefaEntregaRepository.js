@@ -52,4 +52,4 @@ class TarefaEntregaRepository {
 }
 
 
-export default tarefaEntregaRepository;
+export default TarefaEntregaRepository;
