@@ -3,47 +3,29 @@
       <h1>Editar Disciplina</h1>
       <form @submit.prevent="updateDisciplina" id="editForm">
         <label for="name">Nome da Disciplina:</label>
-        <input type="text" v-model="disciplina.nome" id="namedisciplina" name="namedisciplina" placeholder="Insira o nome da Disciplina" required />
-  
-        <label for="periodo">Período:</label>
-        <select v-model="disciplina.periodo" id="periodo" name="periodo" required>
-          <option value="manha" selected>Manhã</option>
-          <option value="tarde">Tarde</option>
-          <option value="noite">Noite</option>
-        </select>
-  
-        <label for="coordenador">Nome do Professor:</label>
-        <select v-model="disciplina.coordenador" id="coordenador" name="coordenador" required>
-          <option value="" disabled selected>Selecione o Professor</option>
-          <!-- Coordenadores serão preenchidos dinamicamente -->
-        </select>
-  
-        <button type="submit" class="submit-btn">Salvar Alterações</button>
-      </form>
-    </main>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        disciplina: {
-          codigo: '',
-          nome: '',
-          periodo: '',
-          coordenador: '',
-        },
-      };
-    },
-    mounted() {
-      // Simulando a obtenção da disciplina. Aqui você pode substituir por uma chamada API ou método para pegar a disciplina a partir do código.
-      this.disciplina = {
-        codigo: '101',
-        nome: 'Matemática Avançada',
-        periodo: 'Manhã',
-        coordenador: 'Carlos Oliveira',
-      };
-    },
+      <input type="text" v-model="disciplina.nome" id="nameDisciplina" name="nameDisciplina" placeholder="Insira o nome da Disciplina" required />
+
+      <label for="professor">Nome do Professor:</label>
+      <select v-model="disciplina.professor" id="professor" name="professor" required>
+        <option value="" disabled selected>Selecione o Professor</option>
+        <!-- Professores serão preenchidos dinamicamente -->
+      </select>
+
+      <button type="submit" class="submit-btn">Editar</button>
+    </form>
+  </main>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      disciplina: {
+        nome: '',
+        professor: '',
+      },
+    };
+  },
     methods: {
       async updateDisciplina() {
         try {

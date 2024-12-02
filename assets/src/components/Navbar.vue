@@ -4,12 +4,13 @@
     <div id="mySidenav" class="sidenav">
       <!--Links Gerais sidenav-->
       <a href="javascript:void(0)" class="closebtn" @click="closeNav">&times;</a>
+      <router-link to="/index">Dashboard</router-link>
       <router-link to="/menuCursos">Curso</router-link>
       <router-link to="/menuDisciplinas">Disciplinas</router-link>
       <router-link to="/menuProfessores">Professores</router-link>
       <router-link to="/pagDesenvolvimento">Relatorios</router-link>
       <router-link to="/menuTarefas">Tarefas</router-link>
-      <router-link to="/index">Dashboard</router-link>
+
     </div>
 
     <!-- Navbar -->
@@ -21,7 +22,9 @@
         <ul class="navbar-nav mr-auto">
 
           <!--Links Gerais-->
-
+          <li class="nav-item">
+            <router-link class="nav-link" to="/index">Dashboard</router-link>
+          </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/menuCursos">Curso</router-link>
           </li>
@@ -37,13 +40,12 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/menuTarefas">Tarefas</router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/index">Dashboard</router-link>
-          </li>
         </ul>
       </div>
       <button class="nav-link" @click.prevent="logout()">Sair</button>
-      <router-link class="nav-link" to="/"><div class="user-icon"></div></router-link>
+      <router-link class="nav-link" to="/">
+        <div class="user-icon"></div>
+      </router-link>
     </nav>
   </div>
 </template>
@@ -81,7 +83,7 @@ export default {
   font-weight: bold;
 }
 
-button.nav-link{
+button.nav-link {
   margin-right: 15px;
 }
 

@@ -5,9 +5,9 @@
       <label for="name">Nome da Disciplina:</label>
       <input type="text" v-model="disciplina.nome" id="nameDisciplina" name="nameDisciplina" placeholder="Insira o nome da Disciplina" required />
 
-      <label for="coordenador">Professor Responsável:</label>
-      <select v-model="disciplina.professor" id="coordenador" name="coordenador" required>
-        <option value="" disabled selected>Selecione o Professor Responsável</option>
+      <label for="professor">Nome do Professor:</label>
+      <select v-model="disciplina.professor" id="professor" name="professor" required>
+        <option value="" disabled selected>Selecione o Professor</option>
         <!-- Professores serão preenchidos dinamicamente -->
       </select>
 
@@ -24,11 +24,6 @@ export default {
         nome: '',
         professor: '',
       },
-      professores: [
-        { id: 1, nome: 'Carlos Oliveira' },
-        { id: 2, nome: 'Ana Lima' },
-        // Adicione mais professores aqui
-      ],
     };
   },
   methods: {

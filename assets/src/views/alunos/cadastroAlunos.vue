@@ -8,8 +8,8 @@
     <br>
 
       <form @submit.prevent="cadAlunoForm" id="regForm">
-        <label for="rm">RM:</label>
-        <input v-model="ra" type="text" id="rm" name="rm" placeholder="Insira o RM" required />
+        <label for="rm">Registro Aluno:</label>
+        <input v-model="ra" type="text" id="rm" name="rm" placeholder="Insira o RA" required />
 
         <label for="name">Nome completo:</label>
         <input v-model="nome" type="text" id="name" name="name" placeholder="Insira o nome completo" required />

@@ -11,48 +11,47 @@
 
     <!-- Conteúdo das Abas -->
     <div>
-        <div v-if="activeTab === 'Ações'">
-          <div class="button-container">
-            <!-- Botão Editar -->
-              <button @click="editButton()" class="action-btn edit-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                  <path
-                    d="M15.502 1.94a1.5 1.5 0 0 1 0 2.121L14.121 5.44l-3.293-3.293 1.38-1.38a1.5 1.5 0 0 1 2.121 0l1.173 1.173ZM1 13.293V16h2.707L13.44 6.268l-3.293-3.293L1 13.293Z" />
-                </svg>
-                Editar
-              </button>
+      <div v-if="activeTab === 'Ações'">
+        <div class="button-container">
+          <!-- Botão Editar -->
+          <button @click="editButton()" class="action-btn edit-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+              <path
+                d="M15.502 1.94a1.5 1.5 0 0 1 0 2.121L14.121 5.44l-3.293-3.293 1.38-1.38a1.5 1.5 0 0 1 2.121 0l1.173 1.173ZM1 13.293V16h2.707L13.44 6.268l-3.293-3.293L1 13.293Z" />
+            </svg>
+            Editar
+          </button>
 
-            <!-- Botão Excluir -->
-            <button @click="handleDelete()" class="action-btn delete-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                <path
-                  d="M5.5 5.5A.5.5 0 0 1 6 5h4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-7ZM3 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5V4H3v-.5Zm5-1.5a1 1 0 0 1 1 1H7a1 1 0 0 1 1-1Zm-2.5 1a.5.5 0 0 1-.5.5h-3A.5.5 0 0 1 2 3.5v-1A.5.5 0 0 1 2.5 2h3a.5.5 0 0 1 .5.5v1Z" />
-              </svg>
-              Excluir
-            </button>
-          </div>
+          <!-- Botão Excluir -->
+          <button @click="handleDelete()" class="action-btn delete-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 5h4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-7ZM3 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5V4H3v-.5Zm5-1.5a1 1 0 0 1 1 1H7a1 1 0 0 1 1-1Zm-2.5 1a.5.5 0 0 1-.5.5h-3A.5.5 0 0 1 2 3.5v-1A.5.5 0 0 1 2.5 2h3a.5.5 0 0 1 .5.5v1Z" />
+            </svg>
+            Excluir
+          </button>
         </div>
       </div>
-      <div v-if="activeTab === 'Coordenador'">
-        <h4>Coordenador</h4>
-        <ul>
-          <li>{{ curso.Usuario.nome }}</li>
-        </ul>
-      </div>
-      <div v-if="activeTab === 'Disciplinas'">
-        <h4>Disciplinas</h4>
-        <ul>
-          <li v-for="(disciplinas, index) in curso.Disciplinas" :key="index">
-            {{ disciplinas.nome }}
-            <br>
-            {{ professores[disciplinas.codProf] }}
-          </li>
-        </ul>
-      </div>
-      <div v-if="activeTab === 'Descrição'">
-        <h4>Descrição</h4>
-        <p>{{ curso.descricao }}</p>
-      </div>
+    </div>
+    <div v-if="activeTab === 'Coordenador'">
+      <ul>
+        <li>{{ curso.Usuario.nome }}</li>
+      </ul>
+    </div>
+    <div v-if="activeTab === 'Disciplinas'">
+      <RouterLink to="/cadastroDisciplinas">
+        <button class="confirm-btn edit-btn">
+          + Adicionar
+        </button>
+      </RouterLink>
+      <ul>
+        <li v-for="(disciplinas, index) in curso.Disciplinas" :key="index">
+          {{ disciplinas.nome }}
+          <br>
+          {{ professores[disciplinas.codProf] }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -65,7 +64,7 @@ export default {
   name: "CursoDetalhes",
   data() {
     return {
-      tabs: ["Ações", "Coordenador", "Disciplinas", "Descrição"], // Abas
+      tabs: ["Ações", "Coordenador", "Disciplinas"], // Abas
       activeTab: "Ações", // Aba ativa por padrão
       curso: {},
       professores: {}
@@ -73,31 +72,34 @@ export default {
   },
 
   methods: {
-      async handleDelete() {
-        try {
-          await deleteCursos(this.curso.id);
-          this.$router.push("/index");
-        } catch (error) {
-          console.error("Erro ao excluir o curso:", error);
-        }
-      },
-      findCursos,
-      findProfessor,
-      async fetchProfessores(){
-        for (const disciplina of this.curso.Disciplinas) {
-          if (!this.professores[disciplina.codProf]) {
-            const professor = await this.findProfessor(disciplina.codProf);
-            this.professores[disciplina.codProf] = professor.nome;
-          }
-        }
-      },
-      editButton(){
-        localStorage.setItem("curso",this.$route.params.id)
-        this.$router.push("/editarCursos")
+    async handleDelete() {
+      try {
+        await deleteCursos(this.curso.id);
+        this.$router.push("/index");
+      } catch (error) {
+        console.error("Erro ao excluir o curso:", error);
       }
     },
+    findCursos,
+    findProfessor,
+    async fetchProfessores() {
+      for (const disciplina of this.curso.Disciplinas) {
+        if (!this.professores[disciplina.codProf]) {
+          const professor = await this.findProfessor(disciplina.codProf);
+          this.professores[disciplina.codProf] = professor.nome;
+        }
+      }
+    },
+    editButton() {
+      localStorage.setItem("curso", this.$route.params.id)
+      this.$router.push("/editarCursos")
+    },
+    cadastrarButton() {
+      /*Coloca o codigo para direcionar o BTN do adicionar aqui*/
+    }
+  },
   async mounted() {
-    
+
     this.curso = await this.findCursos(this.$route.params.id)
     this.fetchProfessores()
 
@@ -173,45 +175,45 @@ p {
 }
 
 ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 ul li {
-    font-size: 16px;
-    color: #323130;
-    background-color: #f9f9f9;
-    padding: 10px 15px;
-    margin-bottom: 8px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 16px;
+  color: #323130;
+  background-color: #f9f9f9;
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 ul li:hover {
-    background-color: #e6f7f1;
-    transform: translateY(-2px);
+  background-color: #e6f7f1;
+  transform: translateY(-2px);
 }
 
 ul li::before {
-    content: '';
-    width: 30px; 
-    height: 30px; 
-    background-color: #28a745; 
-    border-radius: 2px; 
-    display: inline-block;
+  content: '';
+  width: 30px;
+  height: 30px;
+  background-color: #28a745;
+  border-radius: 2px;
+  display: inline-block;
 }
 
 /* Responsividade */
 @media (max-width: 768px) {
-    ul li {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
+  ul li {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
 }
 
 /* Botões Editar e Excluir */
@@ -224,6 +226,19 @@ ul li::before {
 
 .action-btn {
   padding: 12px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.confirm-btn {
+  padding: 2px 10px;
+  margin-bottom: 10px;
   border-radius: 10px;
   font-size: 16px;
   cursor: pointer;

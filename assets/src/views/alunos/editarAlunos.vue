@@ -5,7 +5,7 @@
         <h1>Editar Aluno</h1>
         <br>
         <form @submit.prevent="editarAlunoForm" id="editForm">
-          <!-- Campo de Registro Aluno (RM) -->
+          <!-- Campo de Registro Aluno (RA) -->
           <label for="rm">Registro Aluno:</label>
           <input v-model="ra" type="text" id="rm" name="rm" placeholder="Atualize o RM" required />
   
@@ -15,7 +15,7 @@
   
           <!-- Botões de ação -->
           <div class="button-group">
-            <button type="submit" class="submit-btn">Salvar Alterações</button>
+            <button type="submit" class="submit-btn">Editar</button>
             <button type="button" class="cancel-btn" @click="cancelEdit">Cancelar</button>
           </div>
         </form>
