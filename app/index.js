@@ -13,6 +13,8 @@ import ProfessorRoutes from './rotas/professorRoutes.js';
 import DisciplinaRoutes from './rotas/disciplinaRoutes.js';
 import CursoRoutes from './rotas/cursoRoutes.js';
 import AlunoDiscRoutes from './rotas/alunoDiscRoutes.js';
+import GrupoRoutes from './rotas/grupoRoutes.js';
+import AlunoGrupoRoutes from './rotas/alunoGrupoRoutes.js';
 import TarefaRoutes from './rotas/tarefaRoutes.js';
 import TarefaEntregaRoutes from './rotas/tarefaEntregaRoutes.js';
 
@@ -68,6 +70,8 @@ const cursoRoutes = new CursoRoutes(database);
 const disciplinaRoutes = new DisciplinaRoutes(database);
 const alunoDiscRoutes = new AlunoDiscRoutes(database);
 const authRoutes = new AuthRoutes(database);
+const grupoRoutes = new GrupoRoutes(database);
+const alunoGrupoRoutes = new AlunoGrupoRoutes(database);
 const tarefaRoutes = new TarefaRoutes(database);
 const tarefaEntregaRoutes = new TarefaEntregaRoutes(database);
 
@@ -86,6 +90,10 @@ app.use('/curso', cursoRoutes.getRouter());
 app.use('/disciplina', disciplinaRoutes.getRouter());
 
 app.use('/professor', professorRoutes.getRouter());
+
+app.use('/grupo', grupoRoutes.getRouter());
+
+app.use('/alunoGrupo', alunoGrupoRoutes.getRouter());
 
 app.use('/tarefa', tarefaRoutes.getRouter());
 
