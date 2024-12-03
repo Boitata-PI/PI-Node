@@ -37,17 +37,17 @@ class Database
         for (const file of modelFiles) {
             const modelPath = pathToFileURL(path.join(__dirname + '/migrations/' + file)).href;
             const { default: defineModel } = await import(modelPath);
-            const model = defineModel(this.sequelize); // Passando sequelize para o modelo
+            const model = await defineModel(this.sequelize); // Passando sequelize para o modelo
 
             // Armazenando o modelo
             this.models[model.name] = model;
         }
     }
 
-    associate(){
-        Object.keys(this.models).forEach(modelName => {
+    async associate(){
+        Object.keys(this.models).forEach(async modelName => {
             if (this.models[modelName].associate) {
-                this.models[modelName].associate(this.models);
+                await this.models[modelName].associate(this.models);
             }
         });
     }
@@ -59,7 +59,7 @@ class Database
         for (const file of seedFiles) {
             const seedPath = pathToFileURL(path.join(__dirname + '/seeders/' + file)).href;
             const { default: seed } = await import(seedPath);
-            seed(this);
+            await seed(this);
         }
     }
 
