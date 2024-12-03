@@ -17,9 +17,9 @@ class AuthRoutes {
     setupRoutes() {
         this.router.post('/login', guestVerify, (req, res, next) => this.AuthController.login(req, res, next));
 
-        this.router.post('/checkAuth', (req, res) => this.AuthController.checkAuth(req, res));
+        this.router.get('/checkAuth', (req, res) => this.AuthController.checkAuth(req, res));
 
-        this.router.post('/logout', jwtVerify, (req, res) => this.AuthController.logout(req, res));
+        this.router.get('/logout', jwtVerify, (req, res) => this.AuthController.logout(req, res));
     }
 
     getRouter(){

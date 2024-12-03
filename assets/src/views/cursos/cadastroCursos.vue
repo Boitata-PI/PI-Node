@@ -1,23 +1,39 @@
 <template>
   <main class="form-container">
     <h1>Adicionar Curso</h1>
-    <form @submit.prevent="cadCurso" id="regForm">
+    <form @submit.prevent="handleCadastro()" id="regForm">
       <label for="name">Nome do Curso:</label>
-      <input type="text" id="namecurso" name="namecurso" placeholder="Insira o nome do Curso" required />
+      <input type="text" v-model="curso.nome" id="namecurso" name="namecurso" placeholder="Insira o nome do Curso" required />
+
+      <label for="coordenador">Nome do Coordenador:</label>
+      <select v-model="curso.codCord" id="coordenador" name="coordenador" required>
+        <option value="" disabled selected>Selecione o Coordenador</option>
+        <option v-for="professor in professores" :key="professor.id" :value="professor.id">
+          {{ professor.nome }}
+        </option>
+      </select>
 
       <label for="periodo">Período:</label>
-      <select id="periodo" name="periodo" required>
-        <option value="" disabled selected>Selecione o Período</option>
-        <option value="manha">Manhã</option>
+      <select v-model="curso.periodo" id="periodo" name="periodo" placeholder="Selecione o período" required>
+        <option value="manha" selected>Manhã</option>
         <option value="tarde">Tarde</option>
         <option value="noite">Noite</option>
       </select>
 
-      <label for="coordenador">Nome do Coordenador:</label>
-      <select id="coordenador" name="coordenador" required>
-        <option value="" disabled selected>Selecione o Coordenador</option>
-        <!-- Coordenadores serão preenchidos dinamicamente -->
+      <label for="modalidade">Modalidade:</label>
+      <select v-model="curso.modalidade" id="modalidade" name="modalidade" placeholder="Selecione a modalidade" required>
+        <option value="manha" selected>Semestral</option>
+        <option value="tarde">Anual</option>
       </select>
+
+      <label for="tgprofessor">Professor TG:</label>
+      <div class="radio-group">
+        <input type="radio" id="sim" name="tgprofessor" value="sim">
+        <label for="sim">Sim</label>
+
+        <input type="radio" id="nao" name="tgprofessor" value="nao">
+        <label for="nao">Não</label>
+      </div>
 
       <button type="submit" class="submit-btn">Cadastrar</button>
     </form>
@@ -25,12 +41,31 @@
 </template>
 
 <script>
+
+import { cadCursos } from "../../js/requisitions/cursos";
+import { listProfessor } from "../../js/requisitions/users";
+
 export default {
-  methods: {
-    async cadCurso() {
-      // Lógica para cadastro do curso
-    },
+  data() {
+    return {
+      curso: {},
+      professores: {}
+    };
   },
+  methods: {
+    cadCursos,
+    async handleCadastro() {
+      try {
+        await cadCursos(this.curso);
+        this.$router.push("/index");
+      } catch (error) {
+        console.error("Erro ao cadastrar o curso:", error);
+      }
+    }
+  },
+  async mounted() {
+    this.professores = await listProfessor();
+  }
 };
 </script>
 
@@ -86,5 +121,21 @@ button:hover {
 button:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+}
+
+/* Estilo para os inputs de rádio */
+.radio-group {
+  display: flex;
+  justify-content: center; /* Centraliza os botões */
+  margin-bottom: 20px; /* Espaço inferior */
+}
+
+.radio-group input[type="radio"] {
+  margin-right: 5px; /* Espaço entre o input e o label */
+}
+
+.radio-group label {
+  display: inline-block; /* Mantém os labels lado a lado */
+  margin-right: 15px; /* Espaço entre os labels */
 }
 </style>

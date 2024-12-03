@@ -29,7 +29,7 @@ const UsuarioSeeder = async (database) => {
 
     usuarios.forEach(async (usuario) => {
         await usuarioRepository.findOrCreate(usuario, { ra: usuario.getRa(), tipo: usuario.getTipo() })
-            .then(async (data) => {
+            .then((data) => {
                 //console.log(data);
                 console.log(`Usuário ${usuario.getNome()} cadastrado!`);
             })

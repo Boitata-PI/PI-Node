@@ -1,6 +1,7 @@
 <template>
     <div class="container mt-5">
         <h2>Detalhes da Disciplina: {{ disciplina.nome }}</h2>
+        <h4>{{ }}</h4>
 
         <!-- Abas -->
         <div class="tabs">
@@ -38,11 +39,21 @@
                 </div>
             </div>
             <div v-if="activeTab === 'Tarefas'">
+                <RouterLink to="/cadastroTarefas">
+                    <button class="confirm-btn edit-btn">
+                        + Adicionar
+                    </button>
+                </RouterLink>
                 <ul>
                     <li v-for="(tarefa, index) in disciplina.tarefas" :key="index">{{ tarefa }}</li>
                 </ul>
             </div>
             <div v-if="activeTab === 'Alunos'">
+                <RouterLink to="/cadastroAlunos">
+                    <button class="confirm-btn edit-btn">
+                        + Adicionar
+                    </button>
+                </RouterLink>
                 <ul>
                     <li v-for="(aluno, index) in disciplina.alunos" :key="index">
                         <!-- Assuma que o aluno é um objeto com 'nome' e 'id' -->
@@ -53,6 +64,11 @@
                 </ul>
             </div>
             <div v-if="activeTab === 'Grupos'">
+                <RouterLink to="/cadastroGrupos">
+                    <button class="confirm-btn edit-btn">
+                        + Adicionar
+                    </button>
+                </RouterLink>
                 <ul>
                     <li v-for="(grupo, index) in disciplina.grupos" :key="index">{{ grupo }}</li>
                 </ul>
@@ -133,18 +149,7 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos Globais */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f3f2f1;
-    color: #323130;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+
 
 /* Container */
 .container {
@@ -280,29 +285,42 @@ ul li::before {
 }
 
 .action-btn {
-    padding: 12px 30px;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    text-align: center;
-    display: inline-block;
-    font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.confirm-btn {
+  padding: 2px 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .action-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
 .edit-btn {
-    background-color: #28a745;
-    color: white;
+  background-color: #28a745;
+  color: white;
 }
 
 .edit-btn:hover {
-    background-color: #218838;
+  background-color: #218838;
 }
 
 .delete-btn {

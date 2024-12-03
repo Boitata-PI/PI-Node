@@ -4,25 +4,58 @@
       <h2>Entrar</h2>
   
       <!-- Formulário de Login -->
-      <form>
+      <form @submit.prevent="handleLogin">
         <div class="form-group">
-          <input class="form-control" placeholder="RM" />
+          <input class="form-control" placeholder="RA" v-model="formData.ra" />
         </div>
         <div class="form-group">
-          <input class="form-control" placeholder="Senha" type="password" />
+          <input class="form-control" placeholder="Senha" type="password" v-model="formData.senha" />
         </div>
         <div class="form-group text-right">
           <router-link to="/registro">Esqueceu sua senha? Contate a adiministração</router-link>
         </div>
-        <router-link to="/index" class="btn btn-block">Entrar</router-link>
+        <button type="submit" to="/index" class="btn btn-block">Entrar</button>
       </form>
     </div>
   </section>
   </template>
   
   <script>
+
+  import { login, checkAuthLogin } from "../js/requisitions/auth.js";
+
   export default {
-    name: 'LoginView'
+    name: 'LoginView',
+    data() {
+      return {
+        formData: {
+          ra: "",
+          senha: "",
+        },
+      };
+    },
+    methods: {
+      async handleLogin() {
+        try {
+          await login(this.formData.ra, this.formData.senha, this.$router);
+        } catch (error) {
+          console.error("Erro ao tentar logar:", error);
+          alert("Erro ao tentar logar. Verifique os dados e tente novamente.");
+        }
+      },
+
+      async handleCheck() {
+        const status = await checkAuthLogin(this.$router);
+        if (status == '200') {
+          window.location.href = "/index"
+        }
+      },
+    },
+    async mounted(){
+
+      this.handleCheck()
+
+    }
   };
   </script>
   

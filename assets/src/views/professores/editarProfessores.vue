@@ -7,15 +7,15 @@
       <form @submit.prevent="editarProfessorForm" id="editForm">
         <!-- Campo de Registro Professor (RM) -->
         <label for="rm">Registro Professor:</label>
-        <input v-model="ra" type="text" id="rm" name="rm" placeholder="Atualize o RM" required />
+        <input v-model="ra" type="text" id="rm" name="rm" placeholder="Insira o RM" required />
 
         <!-- Campo de Nome Completo -->
         <label for="name">Nome completo:</label>
-        <input v-model="nome" type="text" id="name" name="name" placeholder="Atualize o nome completo" required />
+        <input v-model="nome" type="text" id="name" name="name" placeholder="Insira o nome completo" required />
 
         <!-- Botões de ação -->
         <div class="button-group">
-          <button type="submit" class="submit-btn">Salvar Alterações</button>
+          <button type="submit" class="submit-btn">Editar</button>
           <button type="button" class="cancel-btn" @click="cancelEdit">Cancelar</button>
         </div>
       </form>

@@ -3,16 +3,23 @@
   <main class="form-container">
     <h1>Cadastrar Tarefa</h1>
     <form @submit.prevent="createTarefa" id="createForm">
-      <label for="titulo">Título da Tarefa:</label>
-      <input type="text" v-model="tarefa.titulo" id="titulo" name="titulo" placeholder="Insira o título da tarefa"
-        required />
+      <label for="nome">Nome da Tarefa:</label>
+      <input type="text" v-model="tarefa.nome" id="nome" name="nome" placeholder="Insira o nome da tarefa" required />
 
-      <label for="descricao">Descrição:</label>
-      <textarea v-model="tarefa.descricao" id="descricao" name="descricao" placeholder="Descrição da tarefa"
-        required></textarea>
+      <label for="dataVencimento">Data de Vencimento:</label>
+      <input type="date" v-model="tarefa.dataVencimento" id="dataVencimento" name="dataVencimento" required />
 
-      <label for="prazo">Prazo de Conclusão:</label>
-      <input type="date" v-model="tarefa.prazo" id="prazo" name="prazo" required />
+      <label for="dataFechamento">Data de Fechamento:</label>
+      <input type="date" v-model="tarefa.dataFechamento" id="dataFechamento" name="dataFechamento" required />
+
+      <label for="instrucoes">Instruções:</label>
+      <textarea v-model="tarefa.instrucoes" id="instrucoes" name="instrucoes" placeholder="Instruções para a tarefa" required></textarea>
+
+      <label for="pontos">Pontos:</label>
+      <input type="number" v-model="tarefa.pontos" id="pontos" name="pontos" placeholder="Insira a quantidade de pontos" min="0" max="10" required />
+
+      <label for="arquivos">Arquivos de Apoio:</label>
+      <input type="file" @change="handleFileUpload" id="arquivos" name="arquivos" multiple />
 
       <button type="submit" class="submit-btn">Salvar Tarefa</button>
     </form>
@@ -24,9 +31,12 @@ export default {
   data() {
     return {
       tarefa: {
-        titulo: '',
-        descricao: '',
-        prazo: '',
+        nome: '',
+        dataVencimento: '',
+        dataFechamento: '',
+        instrucoes: '',
+        pontos: '',
+        arquivos: [], // Para armazenar arquivos
       },
     };
   },
@@ -34,12 +44,15 @@ export default {
     async createTarefa() {
       try {
         // Lógica para criar tarefa (ex: envio para API)
-        alert(`Tarefa "${this.tarefa.titulo}" criada com sucesso!`);
+        alert(`Tarefa "${this.tarefa.nome}" criada com sucesso!`);
         this.$router.push('/tarefas');
       } catch (error) {
         console.error('Erro ao criar tarefa:', error);
         alert('Erro ao tentar criar a tarefa.');
       }
+    },
+    handleFileUpload(event) {
+      this.tarefa.arquivos = Array.from(event.target.files); // Armazena os arquivos selecionados
     },
   },
 };

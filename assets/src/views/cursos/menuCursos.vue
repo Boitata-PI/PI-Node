@@ -11,7 +11,7 @@
         class="curso-item"
       >
         <h5>{{ curso.nome }}</h5>
-        <p>{{ curso.coordenador }}</p>
+        <!-- <p>{{ curso.Usuario.nome }}</p> -->
       </router-link>
     </div>
   </div>
@@ -23,18 +23,25 @@
 </template>
 
 <script>
+
+import { searchCursos } from "../../js/requisitions/cursos.js";
+
 export default {
   name: "menuCursos",
   data() {
     return {
-      cursos: [
-        { id: 1, nome: "Engenharia de Software", coordenador: "Vendramel" },
-        { id: 2, nome: "Ciência da Computação" },
-        { id: 3, nome: "Sistemas de Informação" },
-
-      ],
+      cursos: [],
     };
   },
+  methods: {
+    searchCursos
+  },
+  async mounted (){
+    
+    this.cursos = await this.searchCursos()
+    
+    console.log(this.cursos);
+  }
 };
 </script>
 

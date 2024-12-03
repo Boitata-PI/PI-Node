@@ -1,5 +1,9 @@
-export const fetchDisciplinas = async () => {
+export const searchCursos = async (codCord) => {
   try {
+
+    const userData = JSON.parse(localStorage.getItem("userData"))
+
+    console.log("ID: " + userData.id);
     
     const response = await fetch("http://localhost:8081/curso/search", {
       method: "post",
@@ -7,81 +11,96 @@ export const fetchDisciplinas = async () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        codCord: 2,
+        codCord: userData.id,
       }),
+      credentials: 'include'
     });
     const result = await response.json();
-    const Disciplinas = result.data;
-    console.log(Disciplinas);
-    Disciplinas.forEach((turma) => {
-      createRow(turma);
-    });
+    const cursos = result.data;
+    console.log(cursos);
+    return cursos
   } catch (error) {
     console.error(error);
   }
 };
 
-export const createElement = (tag) => {
-  const element = document.createElement(tag);
-  return element;
-};
+export const findCursos = async (id) => {
 
-export const createRow = (turma) => {
-  const { id, nome } = turma;
+  try{
 
-  const container = document.getElementsByClassName("turma-container")[0];
+    const response = await fetch("http://localhost:8081/curso/"+id+"/find",{
+      credentials: 'include'
+    })
+    const result = await response.json()
+    const cursos = result.data;
+    console.log("Cursos: ", cursos)
+    return cursos
 
-  const turmaCard = createElement("div");
-  turmaCard.classList.add("turma-card");
+  }catch (error){
+    console.error(error)
+  }
 
-  const turmaInfo = createElement("div");
-  turmaInfo.classList.add("turma-info");
+}
 
-  const h3 = createElement("h3");
-  h3.textContent = nome + " ";
+export const updateCursos = async (id) => {
 
-  const span = createElement("span");
-  span.textContent = "(06302)";
+  const reg = {
+    codCord: document.getElementById("coordenador").value,
+    nome: document.getElementById("namecurso").value,
+  }
 
-  const tags = createElement("div");
-  tags.classList.add("tags");
+  try {
 
-  const tag1 = createElement("div");
-  tag1.classList.add("tag");
-  tag1.textContent = "MANHÃ";
+    await fetch("http://localhost:8081/curso/"+id+"/update",{
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reg),
+      credentials: 'include'
+    });
+    
+  } catch (error) {
+    
+  }
 
-  const tag2 = createElement("div");
-  tag2.classList.add("tag");
-  tag2.textContent = "1º SEMESTRE";
+}
 
-  const verMais = createElement("div");
-  verMais.classList.add("ver-mais");
+export const deleteCursos = async (id) => {
 
-  const a = createElement("a");
-  a.classList.add("btn-branco");
-  a.addEventListener("click", () => {
-    sessionStorage.setItem("codCurso", id);
-    window.location.href = "/disciplinas";
-  });
+  try {
 
-  const btn = createElement("button");
-  btn.classList.add("ver-mais-btn");
-  btn.textContent = "VER MAIS";
+    await fetch("http://localhost:8081/curso/"+id+"/delete",{
+      method: "DELETE",
+      credentials: 'include'
+    });
+    
+  } catch (error) {
+    
+  }
 
-  a.appendChild(btn);
-  verMais.appendChild(a);
+}
 
-  h3.appendChild(span);
+export const cadCursos = async (curso) => {
 
-  turmaInfo.appendChild(h3);
+  const reg = {
+    codCord: curso.codCord,
+    nome: curso.nome,
+  }
 
-  tags.appendChild(tag1);
-  tags.appendChild(tag2);
+  try {
 
-  turmaInfo.appendChild(tags);
-
-  turmaCard.appendChild(turmaInfo);
-  turmaCard.appendChild(verMais);
-
-  container.appendChild(turmaCard);
-};
+    await fetch("http://localhost:8081/curso/store",{
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reg),
+      credentials: 'include'
+    });
+    
+  } catch (error) {
+    
+  }
+      
+}

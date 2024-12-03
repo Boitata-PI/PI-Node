@@ -67,10 +67,11 @@ import ProfessorDetalhes from '@/components/ProfessorDetalhes.vue';
 // import RelatorioDetalhes from '@/components/RelatorioDetalhes.vue'; // Nova página
 import TarefaDetalhes from '@/components/TarefaDetalhes.vue';
 
+import { checkAuth } from "../js/requisitions/auth";
 
 const routes = [
   //Rotas Padrão DashBoard e Login
-  { path: '/', name: 'login', component: LoginView, meta:{hideNavbar: true} },
+  { path: '/', name: 'login', component: LoginView, meta:{hideNavbar: true, noRequiresAuth: true} },
   { path: '/index', name: 'index', component: IndexView },
 
   //Menus Gerais
@@ -179,5 +180,19 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 });
+
+const auth = await checkAuth()
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.noRequiresAuth)) {
+    next();
+  } else {
+     if (auth) {
+       next();
+     } else {
+       next({ name: "login" });
+     }
+  }
+})
 
 export default router;

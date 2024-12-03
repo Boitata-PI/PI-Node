@@ -6,13 +6,9 @@
       <label for="nome">Nome do Grupo:</label>
       <input type="text" v-model="grupo.nome" id="nome" name="nome" placeholder="Nome do Grupo" required />
 
-      <label for="descricao">Descrição:</label>
-      <textarea v-model="grupo.descricao" id="descricao" name="descricao" placeholder="Descrição do Grupo"
-        required></textarea>
-
-      <label for="integrantes">Integrantes:</label>
-      <input type="text" v-model="grupo.integrantes" id="integrantes" name="integrantes"
-        placeholder="Integrantes do Grupo" required />
+      <label for="professor">Professor TG:</label>
+      <input type="text" v-model="grupo.professor" id="professor" name="professor"
+        placeholder="Professor" required />
 
       <button type="submit" class="submit-btn">Criar Grupo</button>
     </form>
@@ -79,7 +75,7 @@ textarea {
 }
 
 button {
-  background-color: #007bff;
+  background-color: #218838;
   color: white;
   border: none;
   padding: 15px;
@@ -90,6 +86,6 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #1b9c37;
 }
 </style>

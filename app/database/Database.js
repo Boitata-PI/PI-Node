@@ -35,21 +35,24 @@ class Database
         //console.log(modelFiles.length)
 
         for (const file of modelFiles) {
+            await new Promise(resolve => setTimeout(resolve, 200));
             const modelPath = pathToFileURL(path.join(__dirname + '/migrations/' + file)).href;
             const { default: defineModel } = await import(modelPath);
-            const model = defineModel(this.sequelize); // Passando sequelize para o modelo
+            const model = await defineModel(this.sequelize); // Passando sequelize para o modelo
 
             // Armazenando o modelo
             this.models[model.name] = model;
         }
     }
 
-    associate(){
-        Object.keys(this.models).forEach(modelName => {
+    async associate(){
+        const associations = Object.keys(this.models).map(async modelName => {
             if (this.models[modelName].associate) {
-                this.models[modelName].associate(this.models);
+                await this.models[modelName].associate(this.models);
             }
         });
+
+        await Promise.all(associations);
     }
 
     async seed(){
@@ -57,9 +60,11 @@ class Database
             .filter(file => file !== 'Database.js' && file.endsWith('.js'));
 
         for (const file of seedFiles) {
+            //intervalo de 200 microsssegundos
+            await new Promise(resolve => setTimeout(resolve, 200));
             const seedPath = pathToFileURL(path.join(__dirname + '/seeders/' + file)).href;
             const { default: seed } = await import(seedPath);
-            seed(this);
+            await seed(this);
         }
     }
 
@@ -69,7 +74,7 @@ class Database
 
     async sync(){
         await this.migrate();
-        this.associate();
+        await this.associate();
         await this.seed();
 
         //console.log(await this.models.Usuario.findAll())

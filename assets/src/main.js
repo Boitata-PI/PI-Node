@@ -19,7 +19,7 @@ import 'bootstrap';
 
 // Importa o Js global
 
-//import './js/requisitions/alunos'
+// import './js/requisitions/alunos'
 // import './js/requisitions/cadastroAluno'
 // import './js/requisitions/cadastroCurso'
 // import './js/requisitions/cadastroDisciplina'
