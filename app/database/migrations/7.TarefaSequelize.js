@@ -10,14 +10,6 @@ const TarefaSequelize = (sequelize) => {
             }
         },
 
-        codProf: {
-            type: Sequelize.INTEGER,
-            references: {
-              model: 'usuarios',
-              key: 'id',
-            }
-        },
-
         nome: {
             type: Sequelize.STRING,
             allowNull: false
@@ -62,7 +54,6 @@ const TarefaSequelize = (sequelize) => {
 
     // Definir associações neste método
     Tarefa.associate = (models) => {
-        models.Tarefa.belongsTo(models.Usuario, { foreignKey: 'codProf' });
         models.Tarefa.belongsTo(models.Disciplina, { foreignKey: 'codDisc' });
     };
 

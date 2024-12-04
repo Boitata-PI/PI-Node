@@ -21,11 +21,11 @@ const TarefaSeeder = async (database) => {
     ]);
 
     const Tarefas = [
-        new Tarefa({ codDisc: discA[0].id, codProf: profA[0].id, nome: '1° Sprint', material: material, instrucoes: 'Instruções 1', dataVencimento: '2024-12-31 00:00:00', dataFechamento: '2024-12-31 23:59:59', pontos: 10 }),
-        new Tarefa({ codDisc: discA[0].id, codProf: profA[0].id, nome: '2° Sprint', material: material, instrucoes: 'Instruções 2', dataVencimento: '2024-12-31 00:00:00', dataFechamento: '2024-12-31 23:59:59', pontos: 20 }),
+        new Tarefa({ codDisc: discA[0].id, nome: '1° Sprint', material: material, instrucoes: 'Instruções 1', dataVencimento: '2024-12-31 00:00:00', dataFechamento: '2024-12-31 23:59:59', pontos: 10 }),
+        new Tarefa({ codDisc: discA[0].id, nome: '2° Sprint', material: material, instrucoes: 'Instruções 2', dataVencimento: '2024-12-31 00:00:00', dataFechamento: '2024-12-31 23:59:59', pontos: 20 }),
 
-        new Tarefa({ codDisc: discB[0].id, codProf: profB[0].id, nome: 'Pré Projeto', material: material, instrucoes: 'Instruções 1', dataVencimento: '2024-12-31 00:00:00', dataFechamento: '2024-12-31 23:59:59', pontos: 10 }),
-        new Tarefa({ codDisc: discA[0].id, codProf: profA[0].id, nome: 'Justificativa', material: material, instrucoes: 'Instruções 2', dataVencimento: '2024-12-31 00:00:00', dataFechamento: '2024-12-31 23:59:59', pontos: 30 }),
+        new Tarefa({ codDisc: discB[0].id, nome: 'Pré Projeto', material: material, instrucoes: 'Instruções 1', dataVencimento: '2024-12-31 00:00:00', dataFechamento: '2024-12-31 23:59:59', pontos: 10 }),
+        new Tarefa({ codDisc: discA[0].id, nome: 'Justificativa', material: material, instrucoes: 'Instruções 2', dataVencimento: '2024-12-31 00:00:00', dataFechamento: '2024-12-31 23:59:59', pontos: 30 }),
     ];
 
     Tarefas.forEach(async (tarefa) => {

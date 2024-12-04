@@ -1,28 +1,20 @@
 import Tarefa from "../models/Tarefa.js";
 import TarefaRepository from "../repositories/TarefaRepository.js";
-import UsuarioRepository from "../repositories/UsuarioRepository.js";
 import DisciplinaRepository from "../repositories/DisciplinaRepository.js";
 
 class TarefaController {
   constructor(database) {
       this.TarefaRepository = new TarefaRepository(database);
-      this.UsuarioRepository = new UsuarioRepository(database);
       this.DisciplinaRepository = new DisciplinaRepository(database);
   }
 
 
   async store(req, res) {
     try {
-      const { codProf, codDisc, nome, material, dataVencimento, dataFechamento, pontos, instrucoes } = req.body;
+      const { codDisc, nome, material, dataVencimento, dataFechamento, pontos, instrucoes } = req.body;
 
-      if (!codProf || !codDisc || !nome || !material || !dataVencimento || !dataFechamento || !pontos || !instrucoes) {
+      if (!codDisc || !nome || !material || !dataVencimento || !dataFechamento || !pontos || !instrucoes) {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
-      }
-
-      if(codProf){
-        if(!await this.UsuarioRepository.find(codProf, 'PROFESSOR')){
-          return res.status(404).json({ status: false, message: "Professor não encontrado!" });
-        }
       }
 
       if(codDisc){
@@ -31,7 +23,7 @@ class TarefaController {
         }
       }
 
-      const tarefa = new Tarefa({ codProf, codDisc, nome, material, dataVencimento, dataFechamento, pontos, instrucoes });
+      const tarefa = new Tarefa({ codDisc, nome, material, dataVencimento, dataFechamento, pontos, instrucoes });
 
       const result = await this.TarefaRepository.create(tarefa);
 
@@ -39,7 +31,7 @@ class TarefaController {
         throw new Error("Tarefa não Cadastrado!");
       }
 
-      return res.status(200).json({ status: true, data: result, message: 'Tarefa Cadastrado!' });
+      return res.status(200).json({ status: true, data: result, message: 'Tarefa Cadastrada!' });
     } 
     catch (error) {
       console.error(error);
@@ -51,17 +43,11 @@ class TarefaController {
   async update(req, res) {
     try{
       const { id } = req.params;
-      const { codProf, codDisc, nome, material, dataVencimento, dataFechamento, pontos, instrucoes } = req.body;
+      const { codDisc, nome, material, dataVencimento, dataFechamento, pontos, instrucoes } = req.body;
       const tarefaSequelize = await this.TarefaRepository.find(id);
 
       if(!tarefaSequelize){
-        return res.status(404).json({ status: false, message: "Tarefa não encontrado!" });
-      }
-
-      if(codProf){
-        if(!await this.UsuarioRepository.find(codProf, 'PROFESSOR')){
-          return res.status(404).json({ status: false, message: "Professor não encontrado!" });
-        }
+        return res.status(404).json({ status: false, message: "Tarefa não encontrada!" });
       }
 
       if(codDisc){
@@ -79,7 +65,7 @@ class TarefaController {
         throw new Error("Tarefa não Atualizado!");
       }
 
-      return res.status(200).json({ status: true, data: tarefa, message: 'Tarefa Atualizado!' });
+      return res.status(200).json({ status: true, data: tarefa, message: 'Tarefa Atualizada!' });
     }
     catch(error){
       console.error(error);
@@ -92,7 +78,7 @@ class TarefaController {
     try {
       const resultSequelize = await this.TarefaRepository.list();
 
-      return res.status(200).json({ status: true, data: resultSequelize, message: 'Tarefas Listados!' });
+      return res.status(200).json({ status: true, data: resultSequelize, message: 'Tarefas Listadas!' });
     } 
     catch (error) {
       console.error(error);
@@ -108,7 +94,7 @@ class TarefaController {
       const resultSequelize = await this.TarefaRepository.find(id);
 
       if(!resultSequelize){
-        return res.status(404).json({ status: false, message: "Tarefa não encontrado!" });
+        return res.status(404).json({ status: false, message: "Tarefa não encontrada!" });
       }
 
       return res.status(200).json({ status: true, data: resultSequelize, message: 'Pesquisa Única Concluída!' });
@@ -138,7 +124,7 @@ class TarefaController {
       var tarefaSequelize = await this.TarefaRepository.find(id);
       
       if(!tarefaSequelize){
-        return res.status(404).json({ status: false, message: "Tarefa não encontrado!" });
+        return res.status(404).json({ status: false, message: "Tarefa não encontrada!" });
       }
 
       const tarefa = new Tarefa(tarefaSequelize.get()); 
@@ -149,7 +135,7 @@ class TarefaController {
         throw new Error("Tarefa não Deletado!");
       }
 
-      return res.status(200).json({ status: true, data: tarefa, message: 'Tarefa Deletado!' });
+      return res.status(200).json({ status: true, data: tarefa, message: 'Tarefa Deletada!' });
     }
     catch (error) {
       return res.status(500).json({ status: false, message: `Erro ao deletar Tarefa: ${error.message}`, stack: error.stack });
