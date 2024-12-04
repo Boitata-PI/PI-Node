@@ -7,7 +7,8 @@ const AlunoGrupoSequelize = (sequelize) => {
             references: {
               model: 'grupos',
               key: 'id',
-            }
+            },
+            allowNull: false
         },
 
         codAluno: {
@@ -15,7 +16,8 @@ const AlunoGrupoSequelize = (sequelize) => {
             references: {
               model: 'usuarios',
               key: 'id',
-            }
+            },
+            allowNull: false
         },
     },
     {

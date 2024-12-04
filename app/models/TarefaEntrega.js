@@ -16,12 +16,12 @@ class Tarefa {
         return this.id;
     }
 
-    setCodTarefa(CodTarefa) {
-        this.CodTarefa = CodTarefa;
+    setCodTarefa(novoCodTarefa) {
+        this.codTarefa = novoCodTarefa;
     }
 
     getCodTarefa() {
-        return this.CodTarefa;
+        return this.codTarefa;
     }
 
     setCodGrupo(codGrupo) {
@@ -40,6 +40,14 @@ class Tarefa {
         return this.corrigida;
     }
 
+    setDataCorrecao(dataCorrecao) {
+        this.dataCorrecao = dataCorrecao;
+    }
+
+    getDataCorrecao() {
+        return this.dataCorrecao;
+    }
+
     setPontos(pontos) {
         this.pontos = pontos;
     }   
@@ -54,6 +62,14 @@ class Tarefa {
 
     getComentarios() {
         return this.comentarios;
+    }
+
+    setEntrega(entrega) {
+        this.entrega = entrega;
+    }
+
+    getEntrega() {
+        return this.entrega;
     }
 }
 

@@ -52,10 +52,20 @@ const database = new Database(process.env);
 
 try{
     await database.connect();
-    console.log(`Conexão ao banco de dados estabelecida!`);
+    console.log('');
+    console.log('=============================================');
+    console.log('');
+    console.log(`CONEXÃO COM O BANCO DE DADOS ESTABELECIDA!`);
+    console.log('');
+    console.log('=============================================');
 
     await database.sync();
-    console.log(`Sincronização com o banco de dados realizada!`);
+    console.log('');
+    console.log('=============================================');
+    console.log('');
+    console.log('SINCRONIZAÇÃO COM O BANCO DE DADOS REALIZADA!');
+    console.log('');
+    console.log('=============================================');
 }
 catch(error){
     console.error('Erro ao conectar ao banco de dados: ', error);
@@ -106,5 +116,8 @@ app.use((req, res) => res.status(404).json({status: false, message: 'Not Found -
 
 //INICIANDO SERVIDOR
 app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`);
+    console.log('');
+    console.log(`SERVIDOR RODANDO NA PORTA ${port}`);
+    console.log('');
+    console.log('=============================================');
 });

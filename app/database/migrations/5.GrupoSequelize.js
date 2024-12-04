@@ -7,11 +7,13 @@ const GrupoSequelize = (sequelize) => {
             references: {
               model: 'disciplinas',
               key: 'id',
-            }
+            },
+            allowNull: false
         },
 
         nome: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false
         }
     },
     {

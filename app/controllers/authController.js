@@ -1,7 +1,8 @@
 import UsuarioRepository from "../repositories/UsuarioRepository.js";
 import bcrypt from 'bcryptjs';
-import  signJWT  from '../helpers/jwt/signJWT.js';
+import signJWT  from '../helpers/jwt/signJWT.js';
 import jwtValidate from '../helpers/jwt/jwtValidate.js';
+import userPermissions from '../helpers/permissions/userPermissions.js';
 
 class AuthController {
   constructor(database) {
@@ -30,7 +31,13 @@ class AuthController {
             return res.status(400).json({ message: 'Credenciais Incorretas!' });
           }
 
-          const payload = {userId: usuario.id, tipo: usuario.tipo, nome: usuario.nome};
+          const permissions = userPermissions(usuario);
+
+          if(!permissions){
+            return res.status(403).json({ status: false, message: 'Usuário sem Permissões!' });
+          }
+          
+          const payload = {userId: usuario.id, nome: usuario.nome, permissions };
           const token = signJWT(payload);
 
           res.cookie("token", token, {
@@ -40,7 +47,7 @@ class AuthController {
             maxAge: 3600000,
           });
 
-          return res.status(200).json({ status: true, data: { usuario }, message: 'Usuário Logado!' });
+          return res.status(200).json({ status: true, data: { usuario }, permissions, message: 'Usuário Logado!' });
         })
         .catch((error) => {
           throw new Error(error);

@@ -10,16 +10,46 @@ const TarefaSequelize = (sequelize) => {
             }
         },
 
-        codAluno: {
+        codProf: {
             type: Sequelize.INTEGER,
             references: {
               model: 'usuarios',
               key: 'id',
             }
         },
+
+        nome: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+
+        material: {
+            type: Sequelize.TEXT,
+            allowNull: false
+        },
+
+        instrucoes: {
+            type: Sequelize.TEXT,
+            allowNull: false
+        }   ,
+
+        dataVencimento: {
+            type: Sequelize.DATE,
+            allowNull: false
+        },
+
+        dataFechamento: {
+            type: Sequelize.DATE,
+            allowNull: false
+        },
+
+        pontos: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        }
     },
     {
-        tableName: 'aluno_disc',
+        tableName: 'tarefas',
         hooks: {
             beforeFind: (options) => {
                 if (!options.include) {
@@ -32,7 +62,7 @@ const TarefaSequelize = (sequelize) => {
 
     // Definir associações neste método
     Tarefa.associate = (models) => {
-        models.Tarefa.belongsTo(models.Usuario, { foreignKey: 'codAluno' });
+        models.Tarefa.belongsTo(models.Usuario, { foreignKey: 'codProf' });
         models.Tarefa.belongsTo(models.Disciplina, { foreignKey: 'codDisc' });
     };
 

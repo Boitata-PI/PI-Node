@@ -21,7 +21,8 @@ class Database
             {
                 host: environment.DB_HOST,
                 dialect: environment.DB_TYPE,
-                port: environment.DB_PORT
+                port: environment.DB_PORT,
+                logging: false,
             }
         );
 
@@ -29,12 +30,17 @@ class Database
     }
 
     async migrate(){
+        console.log('')
+        console.log('MIGRATING MODELS...');
+
         const modelFiles = readdirSync(__dirname + '/migrations')
             .filter(file => file !== 'Database.js' && file.endsWith('.js'));
 
         //console.log(modelFiles.length)
 
         for (const file of modelFiles) {
+            console.log('------------------------------------');
+            console.log('Migrating: ' + file);
             await new Promise(resolve => setTimeout(resolve, 200));
             const modelPath = pathToFileURL(path.join(__dirname + '/migrations/' + file)).href;
             const { default: defineModel } = await import(modelPath);
@@ -42,10 +48,18 @@ class Database
 
             // Armazenando o modelo
             this.models[model.name] = model;
+            console.log('Migrated: ' + file);
         }
+
+        console.log('------------------------------------');
+        console.log('MODELS MIGRATED!');
     }
 
     async associate(){
+        console.log('');
+        console.log('=============================================');
+        console.log('')
+        console.log('ASSOCIATING MODELS...');
         const associations = Object.keys(this.models).map(async modelName => {
             if (this.models[modelName].associate) {
                 await this.models[modelName].associate(this.models);
@@ -53,15 +67,24 @@ class Database
         });
 
         await Promise.all(associations);
+        console.log('ASSOCIATIONS DONE!');
     }
 
     async seed(){
+        console.log('');
+        console.log('=============================================');
+        console.log('')
+        console.log('SEEDING DATABASE...');
+
         const seedFiles = readdirSync(__dirname + '/seeders')
             .filter(file => file !== 'Database.js' && file.endsWith('.js'));
 
         for (const file of seedFiles) {
             //intervalo de 200 microsssegundos
             await new Promise(resolve => setTimeout(resolve, 200));
+            console.log('------------------------------------');
+            console.log('Seeding: ' + file);
+            console.log('');
             const seedPath = pathToFileURL(path.join(__dirname + '/seeders/' + file)).href;
             const { default: seed } = await import(seedPath);
             await seed(this);
