@@ -16,14 +16,14 @@
             <div v-if="activeTab === 'Ações'">
                 <div class="button-container">
                     <!-- Botão Editar -->
-                        <button @click="editButton()" class="action-btn edit-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                                viewBox="0 0 16 16">
-                                <path
-                                    d="M15.502 1.94a1.5 1.5 0 0 1 0 2.121L14.121 5.44l-3.293-3.293 1.38-1.38a1.5 1.5 0 0 1 2.121 0l1.173 1.173ZM1 13.293V16h2.707L13.44 6.268l-3.293-3.293L1 13.293Z" />
-                            </svg>
-                            Editar
-                        </button>
+                    <button @click="editButton()" class="action-btn edit-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M15.502 1.94a1.5 1.5 0 0 1 0 2.121L14.121 5.44l-3.293-3.293 1.38-1.38a1.5 1.5 0 0 1 2.121 0l1.173 1.173ZM1 13.293V16h2.707L13.44 6.268l-3.293-3.293L1 13.293Z" />
+                        </svg>
+                        Editar
+                    </button>
 
                     <!-- Botão Excluir -->
                     <button @click="handleDelete()" class="action-btn delete-btn">
@@ -43,16 +43,28 @@
                     </button>
                 </RouterLink>
                 <ul>
-                    <li v-for="tarefa in tarefas" :key="tarefa.id">{{ tarefa.nome }}</li>
+                    <li v-for="tarefa in tarefas" :key="tarefa.id" @click="navigateToTarefas(tarefa.id)"
+                        style="cursor: pointer; color: #155c55;">{{ tarefa.nome }}</li>
                 </ul>
             </div>
             <div v-if="activeTab === 'Alunos'">
-                    <button @click="addAlunoButton()" class="confirm-btn edit-btn">
-                        + Adicionar
-                    </button>
+                <button @click="addAlunoButton()" class="confirm-btn edit-btn">
+                    + Adicionar
+                </button>
                 <ul>
-                    <li v-for="aluno in alunos" :key="aluno.Usuario.id">
-                            {{ aluno.Usuario.nome }}
+                    <li v-for="aluno in alunos" :key="aluno.Usuario.id"
+                        style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: #155c55; padding: 5px 10px; border-radius: 5px; transition: background-color 0.3s ease;"
+                        @mouseover="highlight = aluno.Usuario.id" @mouseleave="highlight = null"
+                        :style="{ backgroundColor: highlight === aluno.Usuario.id ? '#e6f7f1' : 'transparent' }">
+                        <span @click="navigateToAlunos(aluno.Usuario.id)" style="flex-grow: 1;">{{ aluno.Usuario.nome
+                            }}</span>
+                        <button @click.stop="deleteAluno(aluno.Usuario.id)" class="delete-icon-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M5.5 5.5A.5.5 0 0 1 6 5h4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-7ZM3 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5V4H3v-.5Zm5-1.5a1 1 0 0 1 1 1H7a1 1 0 0 1 1-1Zm-2.5 1a.5.5 0 0 1-.5.5h-3A.5.5 0 0 1 2 3.5v-1A.5.5 0 0 1 2.5 2h3a.5.5 0 0 1 .5.5v1Z" />
+                            </svg>
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -63,7 +75,10 @@
                     </button>
                 </RouterLink>
                 <ul>
-                    <li v-for="grupo in grupos" :key="grupo.id">{{ grupo.nome }}</li>
+                    <li v-for="grupo in grupos" :key="grupo.id" @click="navigateToGrupos(grupo.id)"
+                        style="cursor: pointer; color: #155c55;">
+                        {{ grupo.nome }}
+                    </li>
                 </ul>
             </div>
         </div>
@@ -109,6 +124,32 @@ export default {
             localStorage.setItem("disciplina", this.$route.params.id)
             this.$router.push("/cadastroAlunos")
         },
+
+        navigateToAlunos(id) {
+            this.$router.push({ name: 'AlunoDetalhes', params: { id } });
+        },
+
+        navigateToTarefas(id) {
+            this.$router.push({ name: 'TarefaDetalhes', params: { id } });
+        },
+
+        navigateToGrupos(id) {
+            this.$router.push({ name: 'GrupoDetalhes', params: { id } });
+        },
+
+
+        async deleteAluno(id) {
+            try {
+                // Implemente a lógica de exclusão aqui, ex: chamada de API para excluir o aluno.
+                await deleteAlunoAPI(id); // Exemplo de função de API
+                // Remova o aluno da lista localmente para atualizar a exibição
+                this.alunos = this.alunos.filter(aluno => aluno.Usuario.id !== id);
+                alert("Aluno removido com sucesso!");
+            } catch (error) {
+                console.error("Erro ao excluir aluno:", error);
+                alert("Erro ao tentar excluir o aluno.");
+            }
+        },
     },
     async mounted() {
         this.disciplina = await this.findDisciplinas(this.$route.params.id);
@@ -120,8 +161,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 /* Container */
 .container {
     background-color: #ffffff;
@@ -256,42 +295,42 @@ ul li::before {
 }
 
 .action-btn {
-  padding: 12px 30px;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  text-align: center;
-  display: inline-block;
-  font-weight: bold;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+    padding: 12px 30px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .confirm-btn {
-  padding: 2px 10px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  text-align: center;
-  display: inline-block;
-  font-weight: bold;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+    padding: 2px 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .action-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
 .edit-btn {
-  background-color: #28a745;
-  color: white;
+    background-color: #28a745;
+    color: white;
 }
 
 .edit-btn:hover {
-  background-color: #218838;
+    background-color: #218838;
 }
 
 .delete-btn {
@@ -308,5 +347,25 @@ ul li::before {
     width: 20px;
     height: 20px;
     fill: white;
+}
+
+.delete-icon-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.3s ease;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.delete-icon-btn:hover {
+    color: #c82333;
+    transform: scale(1.1);
+}
+
+.delete-icon-btn svg {
+    width: 20px;
+    height: 20px;
 }
 </style>
