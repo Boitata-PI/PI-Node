@@ -18,17 +18,15 @@
             <div v-if="activeTab === 'Ações'">
                 <div class="button-container">
                     <!-- Botão Editar -->
-                    <router-link to="/editarProfessores">
-                        <button class="action-btn edit-btn">
+                        <button @click="editButton()" class="action-btn edit-btn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
                                 <path d="M15.502 1.94a1.5 1.5 0 0 1 0 2.121L14.121 5.44l-3.293-3.293 1.38-1.38a1.5 1.5 0 0 1 2.121 0l1.173 1.173ZM1 13.293V16h2.707L13.44 6.268l-3.293-3.293L1 13.293Z" />
                             </svg>
                             Editar
                         </button>
-                    </router-link>
 
                     <!-- Botão Excluir -->
-                    <button @click="deleteProfessor" class="action-btn delete-btn">
+                    <button @click="deleteButton()" class="action-btn delete-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 5h4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-7ZM3 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5V4H3v-.5Zm5-1.5a1 1 0 0 1 1 1H7a1 1 0 0 1 1-1Zm-2.5 1a.5.5 0 0 1-.5.5h-3A.5.5 0 0 1 2 3.5v-1A.5.5 0 0 1 2.5 2h3a.5.5 0 0 1 .5.5v1Z" />
                         </svg>
@@ -38,12 +36,7 @@
             </div>
             <div v-if="activeTab === 'Disciplinas'">
                 <ul>
-                    <li v-for="(disciplina, index) in professor.disciplinas" :key="index">{{ disciplina }}</li>
-                </ul>
-            </div>
-            <div v-if="activeTab === 'Alunos'">
-                <ul>
-                    <li v-for="(aluno, index) in professor.alunos" :key="index">{{ aluno }}</li>
+                    <li v-for="disciplina in professor.Disciplinas" :key="index">{{ disciplina.nome }}</li>
                 </ul>
             </div>
         </div>
@@ -51,56 +44,38 @@
 </template>
 
 <script>
+
+import { findProfessor, deleteProfessor } from '../js/requisitions/users';
+
 export default {
     name: 'ProfessorDetalhes',
     props: ['id'],
     data() {
         return {
-            tabs: ['Ações', 'Disciplinas', 'Alunos'], // Abas específicas para professores
+            tabs: ['Ações', 'Disciplinas'], // Abas específicas para professores
             activeTab: 'Ações', // Aba ativa por padrão
-            professores: [
-                {
-                    id: 1,
-                    nome: 'Cristina',
-                    disciplinas: ['Projeto Integrado', 'Gestão de Projetos'],
-                    alunos: ['João', 'Maria', 'Carlos']
-                },
-                {
-                    id: 2,
-                    nome: 'João',
-                    disciplinas: ['Matemática', 'Álgebra Linear'],
-                    alunos: ['Ana', 'Lucas', 'Beatriz']
-                },
-                {
-                    id: 3,
-                    nome: 'Ana',
-                    disciplinas: ['Física I', 'Física II'],
-                    alunos: ['Pedro', 'Mariana', 'Ricardo']
-                },
-                {
-                    id: 4,
-                    nome: 'Carlos',
-                    disciplinas: ['Química Geral', 'Química Orgânica'],
-                    alunos: ['Tiago', 'Fernanda', 'Clara']
-                }
-            ],
             professor: {}
         };
     },
 
     methods: {
-        async deleteProfessor() {
+        async deleteButton() {
+
             try {
-                alert(`Professor ${this.professor.nome} excluído com sucesso!`);
-                this.$router.push('/menuProfessores');
+                await deleteProfessor(this.professor.id);
+                this.$router.back();
             } catch (error) {
-                console.error('Erro ao excluir professor:', error);
-                alert('Erro ao tentar excluir o professor.');
+                console.error(error);
             }
+
+        },
+        editButton() {
+            localStorage.setItem("professor", this.professor.id);
+            this.$router.push("/editarProfessores");
         }
     },
-    created() {
-        this.professor = this.professores.find((p) => p.id == this.id);
+    async mounted() {
+        this.professor = await findProfessor(this.id);
     }
 };
 </script>

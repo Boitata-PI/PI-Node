@@ -3,21 +3,21 @@
     <!-- Cabeçalho com título e voltar -->
     <div class="header">
       <router-link to="/" class="voltar">Voltar</router-link>
-      <h1>{{ tarefa.titulo }}</h1>
+      <h1>{{ tarefa.nome }}</h1>
     </div>
 
     <!-- Detalhes da tarefa -->
     <div class="tarefa-card">
       <div class="informacoes">
-        <p><strong>Prazo:</strong> <span class="data">{{ tarefa.prazo }}</span></p>
-        <p><strong>Disciplina:</strong> <span>{{ tarefa.materia }}</span></p>
+        <p><strong>Prazo:</strong> <span class="data">{{ formatarData(tarefa.dataVencimento) + ' ' + formatarHora(tarefa.dataVencimento) }}</span></p>
+        <p><strong>Disciplina:</strong> <span>{{ disciplina.nome }}</span></p>
         <p><strong>Instruções: <span>{{ tarefa.instrucoes }}</span></strong></p>
       </div>
 
       <h4>Arquivos:</h4>
       <ul>
-        <li v-for="(instrucao, index) in tarefa.instrucoes" :key="index">
-          {{ instrucao }}
+        <li v-for="link in material" >
+          {{ link.nome + ' - ' + link.link }}
         </li>
       </ul>
 
@@ -30,26 +30,38 @@
 </template>
 
 <script>
+
+import { findTarefas } from '@/js/requisitions/tarefas';
+
 export default {
   name: 'TarefaDetalhes',
   data() {
     return {
-      tarefa: {
-        id: 1,
-        titulo: 'Projeto Web/App',
-        prazo: '25 de nov. - segunda-feira',
-        materia: 'Técnicas Avançadas de Programação Web e Mobile - A929-N-ADS AMS-111-20240',
-        instrucoes: '',
-        arquivos: [
-          
-        ],
-      }
+      tarefa: {},
+      disciplina: {},
+      material: {}
     };
   },
   methods: {
     entregarTarefa() {
       alert('Tarefa entregue!');
+    },
+    formatarData(dataISO) {
+      const data = new Date(dataISO); // Converte para objeto Date
+      const dia = String(data.getDate()).padStart(2, "0");
+      const mes = String(data.getMonth() + 1).padStart(2, "0"); // Janeiro é 0
+      const ano = data.getFullYear();
+      return `${dia}/${mes}/${ano}`;
+    },
+    formatarHora(dataISO) {
+      const data = new Date(dataISO); // Converte para objeto Date
+      return data.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
     }
+  },
+  async mounted() {
+    this.tarefa = await findTarefas(this.$route.params.id);
+    this.material = await JSON.parse(this.tarefa.material);
+    this.disciplina = await this.tarefa.Disciplina;
   }
 };
 </script>

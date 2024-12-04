@@ -3,6 +3,7 @@ import Usuario from "../models/Usuario.js";
 import AlunoDiscRepository from "../repositories/AlunoDiscRepository.js";
 import UsuarioRepository from "../repositories/UsuarioRepository.js";
 import DisciplinaRepository from "../repositories/DisciplinaRepository.js";
+import bcrypt from 'bcryptjs';
 import xlsx from 'xlsx';
 
 class AlunoDiscController {

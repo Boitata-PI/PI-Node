@@ -1,5 +1,6 @@
 import Usuario from "../models/Usuario.js";
 import UsuarioRepository from "../repositories/UsuarioRepository.js";
+import bcrypt from 'bcryptjs';
 
 class ProfessorController {
   constructor(database) {
@@ -16,7 +17,7 @@ class ProfessorController {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
       }
 
-      const senha = await bcrypt.hash(req.body.senha, 10);
+      const senha = await bcrypt.hash("123", 10);
 
       const professor = new Usuario({nome, ra, senha, tipo});
 

@@ -15,10 +15,6 @@
       </router-link>
     </div>
 
-    <!-- Botão para adicionar disciplinas -->
-    <router-link class="btn-add" to="/cadastroDisciplinas">
-      <div class="add-task-btn">+</div>
-    </router-link>
   </div>
 </template>
 

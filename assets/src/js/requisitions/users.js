@@ -28,6 +28,62 @@ export const listProfessor = async () => {
   } catch (error) {}
 };
 
+export const updateProfessor = async (professor) => {
+
+  const reg = {
+    nome: professor.nome
+  }
+
+
+  try {
+    const response = await fetch("http://localhost:8081/professor/"+professor.id+"/update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reg),
+      credentials: 'include'
+    });
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch (error) {}
+};
+
+export const deleteProfessor = async (id) => {
+  try {
+    await fetch("http://localhost:8081/professor/"+id+"/delete",{
+        method: "DELETE",
+        credentials: 'include'
+    });
+  } catch (error) {}
+};
+
+export const cadProfessor = async (professor) => {
+
+  const reg = {
+    nome: professor.nome,
+    ra: professor.ra
+  }
+
+  console.log("Professor:",reg);
+
+  try {
+
+    await fetch("http://localhost:8081/professor/store", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reg),
+      credentials: 'include'
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
 export const findAluno = async (id) => {
   try {
     const response = await fetch("http://localhost:8081/aluno/"+id+"/find",{
