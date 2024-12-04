@@ -1,14 +1,16 @@
 <template>
   <main class="form-container">
     <h1>Adicionar Disciplina</h1>
-    <form @submit.prevent="cadDisc" id="regForm">
+    <form @submit.prevent="handleCadDisc()" id="regForm">
       <label for="name">Nome da Disciplina:</label>
       <input type="text" v-model="disciplina.nome" id="nameDisciplina" name="nameDisciplina" placeholder="Insira o nome da Disciplina" required />
 
       <label for="professor">Nome do Professor:</label>
       <select v-model="disciplina.professor" id="professor" name="professor" required>
         <option value="" disabled selected>Selecione o Professor</option>
-        <!-- Professores serão preenchidos dinamicamente -->
+        <option v-for="professor in professores" :key="professor.id" :value="professor.id">
+          {{ professor.nome }}
+        </option>
       </select>
 
       <button type="submit" class="submit-btn">Cadastrar</button>
@@ -17,6 +19,10 @@
 </template>
 
 <script>
+
+import { cadDisciplina } from "../../js/requisitions/disciplinas.js";
+import { listProfessor } from "../../js/requisitions/users.js";
+
 export default {
   data() {
     return {
@@ -24,19 +30,26 @@ export default {
         nome: '',
         professor: '',
       },
+      professores: {}
     };
   },
   methods: {
-    async cadDisc() {
+    cadDisciplina,
+    async handleCadDisc() {
       try {
-        // Lógica para cadastro da disciplina (pode ser uma chamada API)
-        alert(`Disciplina ${this.disciplina.nome} cadastrada com sucesso!`);
-        this.$router.push('/disciplinas');
-      } catch (error) {
-        console.error('Erro ao cadastrar disciplina:', error);
-        alert('Erro ao tentar cadastrar a disciplina.');
+        await this.cadDisciplina(this.disciplina);
+        this.$router.push('/index');
+      }catch (error) {
+        console.error(error);
       }
     },
+  },
+  async mounted() {
+    try {
+      this.professores = await listProfessor()
+    } catch (error) {
+      console.error(error);
+    }
   },
 };
 </script>

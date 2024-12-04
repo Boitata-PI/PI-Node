@@ -6,9 +6,11 @@
       <input type="text" v-model="disciplina.nome" id="nameDisciplina" name="nameDisciplina" placeholder="Insira o nome da Disciplina" required />
 
       <label for="professor">Nome do Professor:</label>
-      <select v-model="disciplina.professor" id="professor" name="professor" required>
+      <select v-model="disciplina.codProf" id="professor" name="professor" required>
         <option value="" disabled selected>Selecione o Professor</option>
-        <!-- Professores serão preenchidos dinamicamente -->
+        <option v-for="professor in professores" :key="professor.id" :value="professor.id">
+          {{ professor.nome }}
+        </option>
       </select>
 
       <button type="submit" class="submit-btn">Editar</button>
@@ -17,27 +19,35 @@
 </template>
 
 <script>
+
+import { findDisciplinas, updateDisciplina } from "../../js/requisitions/disciplinas";
+import { listProfessor } from "../../js/requisitions/users";
+
 export default {
   data() {
     return {
-      disciplina: {
-        nome: '',
-        professor: '',
-      },
+      disciplina: {},
+      professores: [],
     };
   },
     methods: {
       async updateDisciplina() {
         try {
-          // Lógica para atualizar a disciplina (pode ser via API ou outras ações)
-          alert(`Disciplina ${this.disciplina.nome} atualizada com sucesso!`);
-          this.$router.push('/disciplinas');
+          await updateDisciplina(this.disciplina);
+          this.$router.push("/menuDisciplinas");
         } catch (error) {
-          console.error('Erro ao atualizar a disciplina:', error);
-          alert('Erro ao tentar atualizar a disciplina.');
+          console.error(error);
         }
       },
     },
+    async mounted() {
+      try {
+        this.disciplina = await findDisciplinas(localStorage.getItem("disciplina"));
+        this.professores = await listProfessor();
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
   </script>
   

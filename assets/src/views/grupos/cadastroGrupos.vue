@@ -2,13 +2,9 @@
   <!-- Container de formulário de cadastro -->
   <div class="form-container">
     <h1>Cadastrar Novo Grupo</h1>
-    <form @submit.prevent="createGrupo" id="createForm">
+    <form @submit.prevent="handleCadGrupo()" id="createForm">
       <label for="nome">Nome do Grupo:</label>
       <input type="text" v-model="grupo.nome" id="nome" name="nome" placeholder="Nome do Grupo" required />
-
-      <label for="professor">Professor TG:</label>
-      <input type="text" v-model="grupo.professor" id="professor" name="professor"
-        placeholder="Professor" required />
 
       <button type="submit" class="submit-btn">Criar Grupo</button>
     </form>
@@ -16,25 +12,21 @@
 </template>
 
 <script>
+
+import { cadGrupo } from "../../js/requisitions/grupos";
+
 export default {
   data() {
     return {
-      grupo: {
-        nome: '',
-        descricao: '',
-        integrantes: '',
-      },
+      grupo: {},
     };
   },
   methods: {
-    async createGrupo() {
+    async handleCadGrupo() {
       try {
-        alert(`Grupo ${this.grupo.nome} criado com sucesso!`);
-        this.$router.push('/grupos');
-      } catch (error) {
-        console.error('Erro ao criar o grupo:', error);
-        alert('Erro ao tentar criar o grupo.');
-      }
+        await cadGrupo(localStorage.getItem("disciplina"), this.grupo);
+        this.$router.back();
+      } catch (error) {}
     },
   },
 };

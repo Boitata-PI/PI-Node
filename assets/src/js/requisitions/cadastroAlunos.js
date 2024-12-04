@@ -17,9 +17,6 @@ const cadAlunoForm = async (event) => {
       },
       body: JSON.stringify(reg),
     });
-    const result = await response.json();
-    console.log(result);
-    window.location.href = "/alunos";
   } catch (error) {
     console.error(error);
   }

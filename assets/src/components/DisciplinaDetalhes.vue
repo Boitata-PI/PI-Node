@@ -16,8 +16,7 @@
             <div v-if="activeTab === 'Ações'">
                 <div class="button-container">
                     <!-- Botão Editar -->
-                    <router-link to="/editarDisciplinas">
-                        <button class="action-btn edit-btn">
+                        <button @click="editButton()" class="action-btn edit-btn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                                 viewBox="0 0 16 16">
                                 <path
@@ -25,10 +24,9 @@
                             </svg>
                             Editar
                         </button>
-                    </router-link>
 
                     <!-- Botão Excluir -->
-                    <button @click="deleteDisciplina" class="action-btn delete-btn">
+                    <button @click="handleDelete()" class="action-btn delete-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                             viewBox="0 0 16 16">
                             <path
@@ -45,20 +43,18 @@
                     </button>
                 </RouterLink>
                 <ul>
-                    <li v-for="(tarefa, index) in disciplina.tarefas" :key="index">{{ tarefa }}</li>
+                    <li v-for="tarefa in tarefas" :key="tarefa.id">{{ tarefa.nome }}</li>
                 </ul>
             </div>
             <div v-if="activeTab === 'Alunos'">
-                <RouterLink to="/cadastroAlunos">
-                    <button class="confirm-btn edit-btn">
+                    <button @click="addAlunoButton()" class="confirm-btn edit-btn">
                         + Adicionar
                     </button>
-                </RouterLink>
                 <ul>
-                    <li v-for="(aluno, index) in disciplina.alunos" :key="index">
+                    <li v-for="aluno in alunos" :key="aluno.Usuario.id">
                         <!-- Assuma que o aluno é um objeto com 'nome' e 'id' -->
-                        <router-link :to="{ name: 'AlunoDetalhes', params: { id: aluno.id } }">
-                            {{ aluno.nome }}
+                        <router-link :to="{ name: 'AlunoDetalhes', params: { id: aluno.Usuario.id } }">
+                            {{ aluno.Usuario.nome }}
                         </router-link>
                     </li>
                 </ul>
@@ -70,7 +66,7 @@
                     </button>
                 </RouterLink>
                 <ul>
-                    <li v-for="(grupo, index) in disciplina.grupos" :key="index">{{ grupo }}</li>
+                    <li v-for="grupo in grupos" :key="grupo.id">{{ grupo.nome }}</li>
                 </ul>
             </div>
         </div>
@@ -78,73 +74,51 @@
 </template>
 
 <script>
+
+import { findDisciplinas, deleteDisciplinas } from "../js/requisitions/disciplinas";
+import { searchAlunosDisc } from "../js/requisitions/users.js";
+import { searchTarefas } from "../js/requisitions/tarefas.js";
+import { searchGrupos } from "../js/requisitions/grupos.js";
+
 export default {
     name: 'DisciplinaDetalhes',
-    props: ['id'],
     data() {
         return {
             tabs: ['Ações', 'Tarefas', 'Alunos', 'Grupos'], // Abas
             activeTab: 'Ações', // Aba ativa por padrão
-            disciplinas: [
-                {
-                    id: 1,
-                    nome: 'PI',
-                    tarefas: ['Estudo de Caso', 'Apresentação do Projeto'],
-                    alunos: [
-                        { id: 1, nome: 'João' },
-                        { id: 3, nome: 'Maria' },
-                        { id: 2, nome: 'Carlos' }
-                    ],
-                    grupos: ['Grupo 1', 'Grupo 2']
-                },
-                {
-                    id: 2,
-                    nome: 'PI',
-                    tarefas: ['Estudo de Caso', 'Apresentação do Projeto'],
-                    alunos: [
-                        { id: 1, nome: 'João' },
-                        { id: 3, nome: 'Maria' },
-                        { id: 103, nome: 'Carlos' }
-                    ],
-                    grupos: ['Grupo 1', 'Grupo 2']
-                },
-                {
-                    id: 3,
-                    nome: 'PI',
-                    tarefas: ['Estudo de Caso', 'Apresentação do Projeto'],
-                    alunos: ['João', 'Maria', 'Carlos'],
-                    grupos: ['Grupo 1', 'Grupo 2']
-                },
-                {
-                    id: 4,
-                    nome: 'Matemática',
-                    tarefas: ['Lista de Exercícios', 'Prova Parcial'],
-                    alunos: [
-                        { id: 201, nome: 'Ana' },
-                        { id: 202, nome: 'Lucas' },
-                        { id: 203, nome: 'Beatriz' }
-                    ],
-                    grupos: ['Grupo A', 'Grupo B']
-                }
-            ],
-            disciplina: {}
+            disciplina: {},
+            alunos: [],
+            tarefas: [],
+            grupos: [],
         };
     },
 
     methods: {
-        async deleteDisciplina() {
+        findDisciplinas,
+        deleteDisciplinas,
+        async handleDelete() {
             try {
-                alert(`Disciplina ${this.disciplina.nome} excluída com sucesso!`);
-                this.$router.push('/menuDisciplinas');
+                await deleteDisciplinas(this.disciplina.id);
+                this.$router.push("/index");
             } catch (error) {
-                console.error('Erro ao excluir disciplina:', error);
-                alert('Erro ao tentar excluir a disciplina.');
+                console.error("Erro ao excluir a disciplina:", error);
             }
         },
+        editButton() {
+            localStorage.setItem("disciplina", this.$route.params.id)
+            this.$router.push("/editarDisciplinas")
+        },
+        addAlunoButton() {
+            localStorage.setItem("disciplina", this.$route.params.id)
+            this.$router.push("/cadastroAlunos")
+        },
     },
-    created() {
-        this.disciplina = this.disciplinas.find((d) => d.id == this.id);
-    }
+    async mounted() {
+        this.disciplina = await this.findDisciplinas(this.$route.params.id);
+        this.alunos = await searchAlunosDisc(this.$route.params.id);
+        this.tarefas = await searchTarefas(this.$route.params.id);
+        this.grupos = await searchGrupos(this.$route.params.id);
+    },
 };
 </script>
 

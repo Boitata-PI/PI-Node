@@ -13,28 +13,6 @@
         </option>
       </select>
 
-      <label for="periodo">Período:</label>
-      <select v-model="curso.periodo" id="periodo" name="periodo" placeholder="Selecione o período" required>
-        <option value="manha" selected>Manhã</option>
-        <option value="tarde">Tarde</option>
-        <option value="noite">Noite</option>
-      </select>
-
-      <label for="modalidade">Modalidade:</label>
-      <select v-model="curso.modalidade" id="modalidade" name="modalidade" placeholder="Selecione a modalidade" required>
-        <option value="manha" selected>Semestral</option>
-        <option value="tarde">Anual</option>
-      </select>
-
-      <label for="tgprofessor">Professor TG:</label>
-      <div class="radio-group">
-        <input type="radio" id="sim" name="tgprofessor" value="sim">
-        <label for="sim">Sim</label>
-
-        <input type="radio" id="nao" name="tgprofessor" value="nao">
-        <label for="nao">Não</label>
-      </div>
-
       <button type="submit" class="submit-btn">Cadastrar</button>
     </form>
   </main>

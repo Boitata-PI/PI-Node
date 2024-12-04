@@ -23,18 +23,24 @@
 </template>
 
 <script>
+
+import { searchDisciplinas } from "../../js/requisitions/disciplinas.js";
+
 export default {
   name: "menuDisciplinas",
   data() {
     return {
-      disciplinas: [
-        { id: 1, nome: "PI", descricao: "Professora responsável: Cristina" },
-        { id: 2, nome: "Matemática", descricao: "Professor responsável: João" },
-        { id: 3, nome: "Física", descricao: "Professor responsável: Ana" },
-        { id: 4, nome: "Química", descricao: "Professor responsável: Carlos" },
-      ],
+      disciplinas: [],
     };
   },
+  async mounted() {
+    try {
+      const userData = JSON.parse(localStorage.getItem("userData"))
+      this.disciplinas = await searchDisciplinas(userData.id);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 };
 </script>
 

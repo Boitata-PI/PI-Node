@@ -39,11 +39,9 @@
       </ul>
     </div>
     <div v-if="activeTab === 'Disciplinas'">
-      <RouterLink to="/cadastroDisciplinas">
-        <button class="confirm-btn edit-btn">
-          + Adicionar
-        </button>
-      </RouterLink>
+      <button @click="addDiscButton()" class="confirm-btn edit-btn">
+        + Adicionar
+      </button>
       <ul>
         <li v-for="(disciplinas, index) in curso.Disciplinas" :key="index">
           {{ disciplinas.nome }}
@@ -93,6 +91,10 @@ export default {
     editButton() {
       localStorage.setItem("curso", this.$route.params.id)
       this.$router.push("/editarCursos")
+    },
+    addDiscButton() {
+      localStorage.setItem("curso", this.$route.params.id)
+      this.$router.push("/cadastroDisciplinas")
     },
     cadastrarButton() {
       /*Coloca o codigo para direcionar o BTN do adicionar aqui*/

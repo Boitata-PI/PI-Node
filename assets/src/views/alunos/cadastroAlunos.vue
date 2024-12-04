@@ -7,18 +7,18 @@
     <p>Adicione manualmente ou importe um arquivo</p>
     <br>
 
-      <form @submit.prevent="cadAlunoForm" id="regForm">
+      <form @submit.prevent="handleCadForm()" id="regForm">
         <label for="rm">Registro Aluno:</label>
-        <input v-model="ra" type="text" id="rm" name="rm" placeholder="Insira o RA" required />
+        <input v-model="aluno.ra" type="text" id="rm" name="rm" placeholder="Insira o RA" required />
 
         <label for="name">Nome completo:</label>
-        <input v-model="nome" type="text" id="name" name="name" placeholder="Insira o nome completo" required />
+        <input v-model="aluno.nome" type="text" id="name" name="name" placeholder="Insira o nome completo" required />
 
         <button type="submit" class="submit-btn">Cadastrar</button>
       </form>
 
       <!-- Formulário de Cadastro por Anexo -->
-      <form @submit.prevent="cadAlunoAnex" id="anexForm">
+      <form @submit.prevent="handlecadAnex()" id="anexForm">
         <div class="buttons">
           <button type="submit" class="attach-btn">Anexo</button>
           <hr />
@@ -32,49 +32,30 @@
 </template>
 
 <script>
+
+import { cadAlunoForm, cadAlunoAnex } from '../../js/requisitions/alunos';
+
 export default {
   data() {
     return {
-      nome: '',
-      ra: '',
+      aluno: {},
     };
   },
   methods: {
-    async cadAlunoForm() {
-      const reg = {
-        nome: this.nome,
-        ra: this.ra,
-        codDisc: sessionStorage.getItem("codDisc"),
-      };
-
+    cadAlunoForm,
+    cadAlunoAnex,
+    async handleCadForm() {
       try {
-        const response = await fetch("http://localhost:8081/alunoDisc/store", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(reg),
-        });
-        const result = await response.json();
-        console.log(result);
-        this.$router.push("/alunos");
+        await cadAlunoForm(this.aluno, localStorage.getItem('disciplina'));
+        this.$router.back();
       } catch (error) {
         console.error(error);
       }
     },
-    async cadAlunoAnex() {
-      const formData = new FormData();
-      formData.append("codDisc", sessionStorage.getItem("codDisc"));
-      formData.append("alunos", this.$refs.arquivo.files[0]);
-
+    async handlecadAnex() {
       try {
-        const response = await fetch("http://localhost:8081/alunoDisc/store", {
-          method: "post",
-          body: formData,
-        });
-        const result = await response.json();
-        console.log(result);
-        this.$router.push("/alunos");
+        await cadAlunoAnex(this.$refs.arquivo.files[0], localStorage.getItem('disciplina'));
+        this.$router.back();
       } catch (error) {
         console.error(error);
       }

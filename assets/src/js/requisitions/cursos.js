@@ -1,9 +1,5 @@
 export const searchCursos = async (codCord) => {
   try {
-
-    const userData = JSON.parse(localStorage.getItem("userData"))
-
-    console.log("ID: " + userData.id);
     
     const response = await fetch("http://localhost:8081/curso/search", {
       method: "post",
@@ -11,7 +7,7 @@ export const searchCursos = async (codCord) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        codCord: userData.id,
+        codCord: codCord,
       }),
       credentials: 'include'
     });
@@ -42,16 +38,16 @@ export const findCursos = async (id) => {
 
 }
 
-export const updateCursos = async (id) => {
+export const updateCursos = async (curso) => {
 
   const reg = {
-    codCord: document.getElementById("coordenador").value,
-    nome: document.getElementById("namecurso").value,
-  }
+    codCord: curso.codCord,
+    nome: curso.nome
+  };
 
   try {
 
-    await fetch("http://localhost:8081/curso/"+id+"/update",{
+    await fetch("http://localhost:8081/curso/"+curso.id+"/update",{
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

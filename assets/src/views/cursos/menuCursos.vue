@@ -37,8 +37,8 @@ export default {
     searchCursos
   },
   async mounted (){
-    
-    this.cursos = await this.searchCursos()
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    this.cursos = await this.searchCursos(userData.id)
     
     console.log(this.cursos);
   }
