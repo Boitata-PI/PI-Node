@@ -40,7 +40,7 @@ export default {
         prazo: '25 de nov. - segunda-feira',
         materia: 'Técnicas Avançadas de Programação Web e Mobile - A929-N-ADS AMS-111-20240',
         instrucoes: '',
-        arquivos: [
+        links: [
           
         ],
       }

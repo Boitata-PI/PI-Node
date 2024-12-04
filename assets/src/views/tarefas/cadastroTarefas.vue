@@ -13,13 +13,19 @@
       <input type="date" v-model="tarefa.dataFechamento" id="dataFechamento" name="dataFechamento" required />
 
       <label for="instrucoes">Instruções:</label>
-      <textarea v-model="tarefa.instrucoes" id="instrucoes" name="instrucoes" placeholder="Instruções para a tarefa" required></textarea>
+      <textarea v-model="tarefa.instrucoes" id="instrucoes" name="instrucoes" placeholder="Instruções para a tarefa"
+        required></textarea>
 
       <label for="pontos">Pontos:</label>
-      <input type="number" v-model="tarefa.pontos" id="pontos" name="pontos" placeholder="Insira a quantidade de pontos" min="0" max="10" required />
+      <input type="number" v-model="tarefa.pontos" id="pontos" name="pontos" placeholder="Insira a quantidade de pontos"
+        min="0" max="10" required />
 
-      <label for="arquivos">Arquivos de Apoio:</label>
-      <input type="file" @change="handleFileUpload" id="arquivos" name="arquivos" multiple />
+      <label>Links:</label>
+      <div v-for="(link, index) in tarefa.links" :key="index" class="link-group">
+        <input type="url" v-model="tarefa.links[index]" placeholder="Insira o link" required />
+        <button type="button" @click="removeLink(index)" class="remove-btn">Remover</button>
+      </div>
+      <button type="button" @click="addLink" class="add-btn">Adicionar Link</button>
 
       <button type="submit" class="submit-btn">Salvar Tarefa</button>
     </form>
@@ -36,7 +42,7 @@ export default {
         dataFechamento: '',
         instrucoes: '',
         pontos: '',
-        arquivos: [], // Para armazenar arquivos
+        links: [''], // Inicializa com um link vazio
       },
     };
   },
@@ -51,8 +57,11 @@ export default {
         alert('Erro ao tentar criar a tarefa.');
       }
     },
-    handleFileUpload(event) {
-      this.tarefa.arquivos = Array.from(event.target.files); // Armazena os arquivos selecionados
+    addLink() {
+      this.tarefa.links.push(''); // Adiciona um novo campo de link vazio
+    },
+    removeLink(index) {
+      this.tarefa.links.splice(index, 1); // Remove o link pelo índice
     },
   },
 };
@@ -87,10 +96,17 @@ textarea {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
-  margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
+  margin-bottom: 0px;
   font-size: 16px;
+}
+
+.link-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
 }
 
 button {
@@ -111,5 +127,22 @@ button:hover {
 button:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+}
+
+.add-btn,
+.remove-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.add-btn:hover,
+.remove-btn:hover {
+  background-color: #0056b3;
 }
 </style>
