@@ -7,7 +7,8 @@ const DisciplinaSequelize = (sequelize) => {
             references: {
               model: 'usuarios',
               key: 'id',
-            }
+            },
+            allowNull: false
         },
 
         codCurso: {
@@ -15,11 +16,13 @@ const DisciplinaSequelize = (sequelize) => {
             references: {
               model: 'cursos',
               key: 'id',
-            }
+            },
+            allowNull: false
         },
 
         nome: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false
         }
     },
     {

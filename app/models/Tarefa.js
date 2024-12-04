@@ -40,6 +40,14 @@ class Tarefa {
         return this.nome;
     }
 
+    setMaterial(material) {
+        this.material = material;
+    }
+
+    getMaterial() {
+        return this.material;
+    }
+
     setDataVencimento(dataVencimento) {
         this.dataVencimento = dataVencimento;
     }

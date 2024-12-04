@@ -20,7 +20,7 @@ const DisciplinaSeeder = async (database) => {
     ];
 
     Disciplinas.forEach(async (disciplina) => {
-        await disciplinaRepository.findOrCreate(disciplina, { nome: disciplina.getNome() })
+        await disciplinaRepository.findOrCreate(disciplina, { codCurso: disciplina.getCodCurso(), nome: disciplina.getNome() })
             .then(async (data) => {
                 //console.log(data);
                 console.log(`Disciplina ${disciplina.getNome()} cadastrada!`);

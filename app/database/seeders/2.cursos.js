@@ -7,9 +7,7 @@ const CursoSeeder = async (database) => {
     const usuarioRepository = new UsuarioRepository(database);
 
     const cordA = await usuarioRepository.search({ ra: '112211' });
-    console.log(cordA[0])
     const cordB = await usuarioRepository.search({ ra: '221122' });
-    console.log(cordB[0])
 
     const Cursos = [
         new Curso({ nome: 'Desenvolvimento de Sistemas AMS', codCord: cordA[0].id }),
@@ -17,7 +15,7 @@ const CursoSeeder = async (database) => {
     ];
 
     Cursos.forEach(async (curso) => {
-        await cursoRepository.findOrCreate(curso, { nome: curso.getNome() })
+        await cursoRepository.findOrCreate(curso, { codCord: curso.getCodCord(), nome: curso.getNome() })
             .then(async (data) => {
                 //console.log(data);
                 console.log(`Curso ${curso.getNome()} cadastrado!`);

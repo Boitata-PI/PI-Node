@@ -18,7 +18,7 @@ const GrupoSeeder = async (database) => {
     ];
 
     Grupos.forEach(async (grupo) => {
-        await grupoRepository.findOrCreate(grupo, { nome: grupo.getNome() })
+        await grupoRepository.findOrCreate(grupo, { codDisc: grupo.getCodDisc(), nome: grupo.getNome() })
             .then(async (data) => {
                 //console.log(data);
                 console.log(`Grupo ${grupo.getNome()} cadastrado!`);

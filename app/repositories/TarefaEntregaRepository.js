@@ -3,13 +3,18 @@ import TarefaEntrega from '../models/TarefaEntrega.js';
 class TarefaEntregaRepository {
   constructor(database) {
     this.models = database.getModels();
-    this.TarefaEntrega = database.getModels().tarefaEntrega;
+    this.TarefaEntrega = database.getModels().TarefaEntrega;
   }
 
   async create(tarefaEntrega) {
     return await this.TarefaEntrega.create({
-      nome: tarefaEntrega.getNome(),
-      codCord: tarefaEntrega.getCodCord()
+      codTarefa: tarefaEntrega.getCodTarefa(),
+      codGrupo: tarefaEntrega.getCodGrupo(),
+      corrigida: tarefaEntrega.getCorrigida(),
+      pontos: tarefaEntrega.getPontos(),
+      comentarios: tarefaEntrega.getComentarios(),
+      dataCorrecao: tarefaEntrega.getDataCorrecao(),
+      entrega: tarefaEntrega.getEntrega()
     });
   }
 
@@ -17,16 +22,26 @@ class TarefaEntregaRepository {
     return await this.TarefaEntrega.findOrCreate({
       where: params,
       defaults: {
-        nome: tarefaEntrega.getNome(),
-        codCord: tarefaEntrega.getCodCord()
+        codTarefa: tarefaEntrega.getCodTarefa(),
+        codGrupo: tarefaEntrega.getCodGrupo(),
+        corrigida: tarefaEntrega.getCorrigida(),
+        pontos: tarefaEntrega.getPontos(),
+        comentarios: tarefaEntrega.getComentarios(),
+        dataCorrecao: tarefaEntrega.getDataCorrecao(),
+        entrega: tarefaEntrega.getEntrega()
       }
     }); 
   }
 
   async update(tarefaEntrega){
     return await this.TarefaEntrega.update({
-      nome: tarefaEntrega.getNome(),
-      codCord: tarefaEntrega.getCodCord()
+      codTarefa: tarefaEntrega.getCodTarefa(),
+      codGrupo: tarefaEntrega.getCodGrupo(),
+      corrigida: tarefaEntrega.getCorrigida(),
+      pontos: tarefaEntrega.getPontos(),
+      comentarios: tarefaEntrega.getComentarios(),
+      dataCorrecao: tarefaEntrega.getDataCorrecao(),
+      entrega: tarefaEntrega.getEntrega()
     }, {
       where: {
         id: tarefaEntrega.getId()

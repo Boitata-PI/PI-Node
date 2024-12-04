@@ -3,13 +3,19 @@ import Tarefa from '../models/Tarefa.js';
 class TarefaRepository {
   constructor(database) {
     this.models = database.getModels();
-    this.Tarefa = database.getModels().tarefa;
+    this.Tarefa = database.getModels().Tarefa;
   }
 
   async create(tarefa) {
     return await this.Tarefa.create({
       nome: tarefa.getNome(),
-      codCord: tarefa.getCodCord()
+      codDisc: tarefa.getCodDisc(),
+      codProf: tarefa.getCodProf(),
+      material: tarefa.getMaterial(),
+      instrucoes: tarefa.getInstrucoes(),
+      dataVencimento: tarefa.getDataVencimento(),
+      dataFechamento: tarefa.getDataFechamento(),
+      pontos: tarefa.getPontos()
     });
   }
 
@@ -18,7 +24,13 @@ class TarefaRepository {
       where: params,
       defaults: {
         nome: tarefa.getNome(),
-        codCord: tarefa.getCodCord()
+        codDisc: tarefa.getCodDisc(),
+        codProf: tarefa.getCodProf(),
+        material: tarefa.getMaterial(),
+        instrucoes: tarefa.getInstrucoes(),
+        dataVencimento: tarefa.getDataVencimento(),
+        dataFechamento: tarefa.getDataFechamento(),
+        pontos: tarefa.getPontos()
       }
     }); 
   }
@@ -26,7 +38,13 @@ class TarefaRepository {
   async update(tarefa){
     return await this.Tarefa.update({
       nome: tarefa.getNome(),
-      codCord: tarefa.getCodCord()
+      codDisc: tarefa.getCodDisc(),
+      codProf: tarefa.getCodProf(),
+      material: tarefa.getMaterial(),
+      instrucoes: tarefa.getInstrucoes(),
+      dataVencimento: tarefa.getDataVencimento(),
+      dataFechamento: tarefa.getDataFechamento(),
+      pontos: tarefa.getPontos()
     }, {
       where: {
         id: tarefa.getId()

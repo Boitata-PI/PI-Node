@@ -7,7 +7,8 @@ const AlunoDiscSequelize = (sequelize) => {
             references: {
               model: 'disciplinas',
               key: 'id',
-            }
+            },
+            allowNull: false
         },
 
         codAluno: {
@@ -15,7 +16,8 @@ const AlunoDiscSequelize = (sequelize) => {
             references: {
               model: 'usuarios',
               key: 'id',
-            }
+            },
+            allowNull: false
         },
     },
     {

@@ -3,16 +3,21 @@ import Sequelize from 'sequelize';
 const UsuarioSequelize = (sequelize) => {
     const Usuario = sequelize.define('Usuario',{
         nome:{
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false
         },
         senha:{
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false
         },
         ra:{
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: true
         },
         tipo:{
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false,
+            defaultValue: 'ALUNO'
         }
     },
     {
