@@ -141,19 +141,19 @@ const routes = [
   {
     path: '/disciplina/:id',
     name: 'DisciplinaDetalhes',
-    component: DisciplinaDetalhes,
+    component: () => import('@/components/DisciplinaDetalhes.vue'),
     props: true
   },
   {
     path: "/curso/:id",
     name: "CursoDetalhes",
-    component: CursoDetalhes,
+    component: () => import('@/components/CursoDetalhes.vue'),
     props: true,
   },
   {
     path: '/aluno/:id',
     name: 'AlunoDetalhes',
-    component: AlunoDetalhes,
+    component: () => import('@/components/AlunoDetalhes.vue'),
     props: true
   },
   {

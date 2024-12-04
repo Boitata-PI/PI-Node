@@ -43,7 +43,7 @@
         + Adicionar
       </button>
       <ul>
-        <li v-for="(disciplinas, index) in curso.Disciplinas" :key="index">
+        <li v-for="(disciplinas, index) in curso.Disciplinas" :key="disciplinas.id"  @click="navigateToDisciplinas(disciplinas.id)" style="cursor: pointer; color: #155c55;">
           {{ disciplinas.nome }}
           <br>
           {{ professores[disciplinas.codProf] }}
@@ -78,6 +78,11 @@ export default {
         console.error("Erro ao excluir o curso:", error);
       }
     },
+
+    navigateToDisciplinas(id) {
+            this.$router.push({ name: 'DisciplinaDetalhes', params: { id } });
+        },
+
     findCursos,
     findProfessor,
     async fetchProfessores() {
@@ -100,6 +105,7 @@ export default {
       /*Coloca o codigo para direcionar o BTN do adicionar aqui*/
     }
   },
+
   async mounted() {
 
     this.curso = await this.findCursos(this.$route.params.id)

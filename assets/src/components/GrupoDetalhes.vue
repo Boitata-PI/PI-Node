@@ -4,10 +4,7 @@
 
         <!-- Abas -->
         <div class="tabs">
-            <button 
-                v-for="(tab, index) in tabs" 
-                :key="index" 
-                :class="{ active: activeTab === tab }"
+            <button v-for="(tab, index) in tabs" :key="index" :class="{ active: activeTab === tab }"
                 @click="activeTab = tab">
                 {{ tab }}
             </button>
@@ -40,14 +37,17 @@
                     </button>
                 </div>
             </div>
-            <div v-if="activeTab === 'Membros'">
+            <div v-if="activeTab === 'Alunos'">
                 <ul>
-                    <li v-for="(membro, index) in grupo.membros" :key="index">{{ membro }}</li>
+                    <li v-for="(aluno, index) in grupo.alunos" :key="aluno.id" @click="navigateToAluno(aluno.id)"
+                        style="cursor: pointer; color: #155c55;">
+                        {{ aluno }}
+                    </li>
                 </ul>
             </div>
             <div v-if="activeTab === 'Tarefas'">
                 <ul>
-                    <li v-for="(tarefa, index) in grupo.tarefas" :key="index">{{ tarefa }}</li>
+                    <li v-for="(tarefa, index) in grupo.tarefas" :key="index"  @click="navigateToAluno(aluno.id)">{{ tarefa }}</li>
                 </ul>
             </div>
         </div>
@@ -60,31 +60,31 @@ export default {
     props: ['id'],
     data() {
         return {
-            tabs: ['Ações','Membros', 'Tarefas'], // Abas específicas para grupos
+            tabs: ['Ações', 'Alunos', 'Tarefas'], // Abas específicas para grupos
             activeTab: 'Ações', // Aba ativa por padrão
             grupos: [
                 {
                     id: 1,
                     nome: 'Desenvolvimento Web',
-                    membros: ['Alice', 'Carlos', 'Joana'],
+                    alunos: ['Alice', 'Carlos', 'Joana'],
                     tarefas: ['Site E-commerce', 'Dashboard de Analytics']
                 },
                 {
                     id: 2,
                     nome: 'Data Science',
-                    membros: ['Lucas', 'Maria', 'Carlos'],
+                    alunos: ['Lucas', 'Maria', 'Carlos'],
                     tarefas: ['Análise de Sentimentos', 'Modelagem Preditiva']
                 },
                 {
                     id: 3,
                     nome: 'Redes e Infraestrutura',
-                    membros: ['André', 'Fernanda', 'João'],
+                    alunos: ['André', 'Fernanda', 'João'],
                     tarefas: ['Configuração de Servidores', 'Monitoramento de Rede']
                 },
                 {
                     id: 4,
                     nome: 'Inteligência Artificial',
-                    membros: ['Roberta', 'Rafael', 'Clara'],
+                    alunos: ['Roberta', 'Rafael', 'Clara'],
                     tarefas: ['Chatbot IA', 'Sistema de Recomendação']
                 }
             ],
@@ -94,6 +94,12 @@ export default {
 
     created() {
         this.grupo = this.grupos.find((g) => g.id == this.id);
+    },
+
+    methods: {
+        navigateToAluno(id) {
+            this.$router.push({ name: 'AlunoDetalhes', params: { id } });
+        }
     }
 };
 </script>

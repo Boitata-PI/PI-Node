@@ -52,10 +52,7 @@
                     </button>
                 <ul>
                     <li v-for="aluno in alunos" :key="aluno.Usuario.id">
-                        <!-- Assuma que o aluno é um objeto com 'nome' e 'id' -->
-                        <router-link :to="{ name: 'AlunoDetalhes', params: { id: aluno.Usuario.id } }">
                             {{ aluno.Usuario.nome }}
-                        </router-link>
                     </li>
                 </ul>
             </div>
