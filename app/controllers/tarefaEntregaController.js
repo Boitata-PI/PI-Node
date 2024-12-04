@@ -1,29 +1,37 @@
 import TarefaEntrega from "../models/TarefaEntrega.js";
 import TarefaEntregaRepository from "../repositories/TarefaEntregaRepository.js";
-import UsuarioRepository from "../repositories/UsuarioRepository.js";
+import TarefaRepository from "../repositories/TarefaRepository.js";
+import GrupoRepository from "../repositories/GrupoRepository.js";
 
 class TarefaEntregaController {
   constructor(database) {
       this.TarefaEntregaRepository = new TarefaEntregaRepository(database);
-      this.UsuarioRepository = new UsuarioRepository(database);
+      this.TarefaRepository = new TarefaRepository(database);
+      this.GrupoRepository = new GrupoRepository(database);
   }
 
 
   async store(req, res) {
     try {
-      const { nome, codCord } = req.body;
+      const { codTarefa, codGrupo, corrigida, dataCorrecao, pontos, comentarios, entrega } = req.body;
 
-      if (!nome || !codCord ) {
+      if (!codTarefa || !codGrupo || !corrigida || !dataCorrecao || !pontos || !comentarios || !entrega) {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
       }
 
-      if(codCord){
-        if(!await this.UsuarioRepository.find(codCord, 'PROFESSOR')){
-          return res.status(404).json({ status: false, message: "Professor não encontrado!" });
+      if(codTarefa){
+        if(!await this.TarefaRepository.find(codTarefa)){
+          return res.status(404).json({ status: false, message: "Tarefa não encontrada!" });
         }
       }
 
-      const tarefaEntrega = new TarefaEntrega({nome, codCord});
+      if(codGrupo){
+        if(!await this.GrupoRepository.find(codGrupo)){
+          return res.status(404).json({ status: false, message: "Grupo não encontrado!" });
+        }
+      }
+
+      const tarefaEntrega = new TarefaEntrega({ codTarefa, codGrupo, corrigida, dataCorrecao, pontos, comentarios, entrega });
 
       const result = await this.TarefaEntregaRepository.create(tarefaEntrega);
 
@@ -43,16 +51,22 @@ class TarefaEntregaController {
   async update(req, res) {
     try{
       const { id } = req.params;
-      const { codCord } = req.body;
+      const { codTarefa, codGrupo, corrigida, dataCorrecao, pontos, comentarios, entrega } = req.body;
       const tarefaEntregaSequelize = await this.TarefaEntregaRepository.find(id);
 
       if(!tarefaEntregaSequelize){
         return res.status(404).json({ status: false, message: "TarefaEntrega não encontrado!" });
       }
 
-      if(codCord){
-        if(!await this.UsuarioRepository.find(codProf, 'PROFESSOR')){
-          return res.status(404).json({ status: false, message: "Professor não encontrado!" });
+      if(codTarefa){
+        if(!await this.TarefaRepository.find(codTarefa)){
+          return res.status(404).json({ status: false, message: "Tarefa não encontrada!" });
+        }
+      }
+
+      if(codGrupo){
+        if(!await this.GrupoRepository.find(codGrupo)){
+          return res.status(404).json({ status: false, message: "Grupo não encontrado!" });
         }
       }
 

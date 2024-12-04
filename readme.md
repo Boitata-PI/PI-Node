@@ -2,7 +2,8 @@
 O projeto está em Desenvolvimento:
 
 - [x] Estrutura
-- [x] 1° Sprint
+- [x] 1° Sprint - Disciplinas, Cursos e Usuários
+- [ ] 2° Sprint - Auth(JWT), Permissões e Tarefas
 
 > Projeto Integrador: Sistema para Armazenamento e Gerenciamento de P.Is realizados pelos alunos da FATEC Zona Leste
 > Padrão REST API
@@ -19,12 +20,10 @@ git clone -b homologation https://github.com/Boitata-PI/PI-Node.git
 - Execute os arquivos .bat para iniciar os servidores
 - Front-End: http://localhost:8080
 - Back-End: http://localhost:8081
-- API: http://localhost:3000
 
 <br><br>
 
 # EXPLICAÇÕES
-- api: Pasta da API
 - app: Pasta do Back-End
 - assets: Pasta do Front-End
 
