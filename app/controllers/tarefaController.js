@@ -1,29 +1,37 @@
 import Tarefa from "../models/Tarefa.js";
 import TarefaRepository from "../repositories/TarefaRepository.js";
 import UsuarioRepository from "../repositories/UsuarioRepository.js";
+import DisciplinaRepository from "../repositories/DisciplinaRepository.js";
 
 class TarefaController {
   constructor(database) {
       this.TarefaRepository = new TarefaRepository(database);
       this.UsuarioRepository = new UsuarioRepository(database);
+      this.DisciplinaRepository = new DisciplinaRepository(database);
   }
 
 
   async store(req, res) {
     try {
-      const { nome, codCord } = req.body;
+      const { codProf, codDisc, nome, material, dataVencimento, dataFechamento, pontos, instrucoes } = req.body;
 
-      if (!nome || !codCord ) {
+      if (!codProf || !codDisc || !nome || !material || !dataVencimento || !dataFechamento || !pontos || !instrucoes) {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
       }
 
-      if(codCord){
-        if(!await this.UsuarioRepository.find(codCord, 'PROFESSOR')){
+      if(codProf){
+        if(!await this.UsuarioRepository.find(codProf, 'PROFESSOR')){
           return res.status(404).json({ status: false, message: "Professor não encontrado!" });
         }
       }
 
-      const tarefa = new Tarefa({nome, codCord});
+      if(codDisc){
+        if(!await this.DisciplinaRepository.find(codDisc)){
+          return res.status(404).json({ status: false, message: "Disciplina não encontrada!" });
+        }
+      }
+
+      const tarefa = new Tarefa({ codProf, codDisc, nome, material, dataVencimento, dataFechamento, pontos, instrucoes });
 
       const result = await this.TarefaRepository.create(tarefa);
 
@@ -43,16 +51,22 @@ class TarefaController {
   async update(req, res) {
     try{
       const { id } = req.params;
-      const { codCord } = req.body;
+      const { codProf, codDisc, nome, material, dataVencimento, dataFechamento, pontos, instrucoes } = req.body;
       const tarefaSequelize = await this.TarefaRepository.find(id);
 
       if(!tarefaSequelize){
         return res.status(404).json({ status: false, message: "Tarefa não encontrado!" });
       }
 
-      if(codCord){
+      if(codProf){
         if(!await this.UsuarioRepository.find(codProf, 'PROFESSOR')){
           return res.status(404).json({ status: false, message: "Professor não encontrado!" });
+        }
+      }
+
+      if(codDisc){
+        if(!await this.DisciplinaRepository.find(codDisc)){
+          return res.status(404).json({ status: false, message: "Disciplina não encontrada!" });
         }
       }
 
