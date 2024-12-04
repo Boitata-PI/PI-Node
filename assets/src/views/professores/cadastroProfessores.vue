@@ -4,12 +4,12 @@
 
       <h1>Adicionar Professor</h1>
       <br>
-      <form @submit.prevent="cadAlunoForm" id="regForm">
+      <form @submit.prevent="handleCadastro()" id="regForm">
         <label for="rm">Registro Professor:</label>
-        <input v-model="ra" type="text" id="rm" name="rm" placeholder="Insira o RM">
+        <input v-model="professor.ra" type="text" id="rm" name="rm" placeholder="Insira o RM">
 
         <label for="name">Nome completo:</label>
-        <input v-model="nome" type="text" id="name" name="name" placeholder="Insira o nome completo">
+        <input v-model="professor.nome" type="text" id="name" name="name" placeholder="Insira o nome completo">
 
         <button type="submit" class="submit-btn">Cadastrar</button>
       </form>
@@ -18,53 +18,24 @@
 </template>
 
 <script>
+
+import { cadProfessor } from '../../js/requisitions/users';
+
 export default {
   data() {
     return {
-      nome: '',
-      ra: '',
+      professor: {},
     };
   },
   methods: {
-    async cadAlunoForm() {
-      const reg = {
-        nome: this.nome,
-        ra: this.ra,
-        codDisc: sessionStorage.getItem("codDisc"),
-      };
-
+    async handleCadastro() {
       try {
-        const response = await fetch("http://localhost:8081/alunoDisc/store", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(reg),
-        });
-        const result = await response.json();
-        console.log(result);
-        this.$router.push("/alunos");
+        await cadProfessor(this.professor);
+        this.$router.back();
       } catch (error) {
-        console.error(error);
+        console.error("Erro ao cadastrar o professor:", error);
       }
-    },
-    async cadAlunoAnex() {
-      const formData = new FormData();
-      formData.append("codDisc", sessionStorage.getItem("codDisc"));
-      formData.append("alunos", this.$refs.arquivo.files[0]);
-
-      try {
-        const response = await fetch("http://localhost:8081/alunoDisc/store", {
-          method: "post",
-          body: formData,
-        });
-        const result = await response.json();
-        console.log(result);
-        this.$router.push("/alunos");
-      } catch (error) {
-        console.error(error);
-      }
-    },
+    }
   },
 };
 </script>

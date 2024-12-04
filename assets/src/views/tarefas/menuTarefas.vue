@@ -15,96 +15,83 @@
     <!-- Lista de Tarefas -->
     <div class="tarefas-lista">
       <router-link 
-        v-for="(tarefa, index) in tarefasFiltradas" 
-        :key="index" 
+        v-for="tarefa in tarefasFiltradas" 
+        :key="tarefa.id" 
         :to="{ name: 'TarefaDetalhes', params: { id: tarefa.id } }"
         class="tarefa-item"
       >
         <div class="tarefa-header">
           <div>
-            <h5>{{ tarefa.titulo }}</h5>
-            <p>{{ tarefa.descricao }}</p>
+            <h5>{{ tarefa.nome }}</h5>
+            <p>{{ 'Prazo de entrega às '+formatarHora(tarefa.dataVencimento) }}</p>
           </div>
         </div>
         <div class="tarefa-footer">
-          <p><strong>Prazo de entrega:</strong> {{ tarefa.prazo }}</p>
-          <p>{{ tarefa.materia }}</p>
+          <p><strong>Prazo de entrega:</strong> {{ formatarData(tarefa.dataVencimento) }}</p>
+          <p>{{ tarefa.Disciplina.nome }}</p>
         </div>
       </router-link>
-      <!-- Mensagem quando não houver tarefas -->
-      <p v-if="tarefasFiltradas.length === 0" class="sem-tarefas">
-        Nenhuma tarefa encontrada nesta aba.
-      </p>
     </div>
   </div>
 </template>
 
 <script>
+
+import { listTarefas } from '../../js/requisitions/tarefas';
+
 export default {
   name: 'menuTarefas',
   data() {
     return {
       abaAtiva: 'Em breve', // Aba ativa
       abas: ['Em breve', 'Em atraso', 'Concluída'], // Abas disponíveis
-      tarefas: [
-        {
-          id: 1,
-          titulo: 'Projeto Web/App',
-          descricao: 'Prazo de entrega às 23:59',
-          prazo: '25 de nov. - segunda-feira',
-          materia: 'Técnicas Avançadas de Programação Web e Mobile - A929-N-ADS AMS-111-20240',
-          status: 'Em breve',
-        },
-        {
-          id: 2,
-          titulo: 'Apresentação - System Calls',
-          descricao: 'Prazo de entrega às 23:59',
-          prazo: '29 de nov. - sexta-feira',
-          materia: 'O.C.S.O. - A929-N-ADS AMS-111-20240',
-          status: 'Em breve',
-        },
-        // Tarefas em atraso
-        {
-          id: 3,
-          titulo: 'Revisão de Algoritmos',
-          descricao: 'Prazo de entrega expirado.',
-          prazo: '22 de nov. - quarta-feira',
-          materia: 'Estrutura de Dados - A929-N-ADS AMS-111-20240',
-          status: 'Em atraso',
-        },
-        {
-          id: 4,
-          titulo: 'Trabalho Final de Banco de Dados',
-          descricao: 'Prazo de entrega expirado.',
-          prazo: '20 de nov. - segunda-feira',
-          materia: 'Banco de Dados Avançado - A929-N-ADS AMS-111-20240',
-          status: 'Em atraso',
-        },
-        // Tarefas concluídas
-        {
-          id: 5,
-          titulo: 'Implementação de API',
-          descricao: 'Entregue antes do prazo.',
-          prazo: '18 de nov. - sábado',
-          materia: 'Desenvolvimento Back-End - A929-N-ADS AMS-111-20240',
-          status: 'Concluída',
-        },
-        {
-          id: 6,
-          titulo: 'Design de Interface',
-          descricao: 'Entregue antes do prazo.',
-          prazo: '15 de nov. - quarta-feira',
-          materia: 'UX/UI Design - A929-N-ADS AMS-111-20240',
-          status: 'Concluída',
-        }
-      ]
+      tarefasFiltradas: [], // Tarefas exibidas
+      todasTarefas: [], // Tarefas completas retornadas pelo backend
     };
   },
-  computed: {
-    tarefasFiltradas() {
-      return this.tarefas.filter((tarefa) => tarefa.status === this.abaAtiva);
+  methods: {
+    definirStatus(tarefa) {
+      const agora = new Date();
+      const vencimento = new Date(tarefa.dataVencimento);
+      const fechamento = tarefa.dataFechamento ? new Date(tarefa.dataFechamento) : null;
+
+      if (vencimento < agora) return "Em atraso";
+      if (fechamento < agora) return "Concluída";
+
+      return "Em breve";
+    },
+    filtrarTarefas() {
+      this.tarefasFiltradas = this.todasTarefas.filter(
+        (tarefa) => tarefa.status === this.abaAtiva
+      );
+    },
+    formatarData(dataISO) {
+      const data = new Date(dataISO); // Converte para objeto Date
+      const dia = String(data.getDate()).padStart(2, "0");
+      const mes = String(data.getMonth() + 1).padStart(2, "0"); // Janeiro é 0
+      const ano = data.getFullYear();
+      return `${dia}/${mes}/${ano}`;
+    },
+    formatarHora(dataISO) {
+      const data = new Date(dataISO); // Converte para objeto Date
+      return data.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
     }
-  }
+  },
+  async mounted() {
+    this.tarefas = await listTarefas();
+    const todasTarefas = await listTarefas();
+    this.todasTarefas = todasTarefas.map((tarefa) => ({
+      ...tarefa,
+      status: this.definirStatus(tarefa),
+    }));
+    this.filtrarTarefas();
+  },
+  watch: {
+    // Atualiza a lista de tarefas quando a aba ativa muda
+    abaAtiva() {
+      this.filtrarTarefas();
+    },
+  },
 };
 </script>
 

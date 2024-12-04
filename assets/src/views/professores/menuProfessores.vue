@@ -5,13 +5,12 @@
     <!-- Grid de professores -->
     <div class="professores-grid">
       <router-link 
-        v-for="(professor, index) in professores" 
-        :key="index" 
+        v-for="professor in professores" 
+        :key="professor.id" 
         :to="{ name: 'ProfessorDetalhes', params: { id: professor.id } }"
         class="professor-item"
       >
         <h5>{{ professor.nome }}</h5>
-        <p>{{ professor.materia }}</p>
       </router-link>
     </div>
 
@@ -23,6 +22,9 @@
 </template>
 
 <script>
+
+import { listProfessor } from "../../js/requisitions/users";
+
 export default {
   name: "menuProfessores",
   data() {
@@ -34,6 +36,9 @@ export default {
         { id: 4, nome: "Carlos", materia: "Ensina: Química" },
       ],
     };
+  },
+  async mounted() {
+    this.professores = await listProfessor();
   },
 };
 </script>

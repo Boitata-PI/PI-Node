@@ -4,19 +4,16 @@
     <div class="form-container">
       <h1>Editar Professor</h1>
       <br>
-      <form @submit.prevent="editarProfessorForm" id="editForm">
-        <!-- Campo de Registro Professor (RM) -->
-        <label for="rm">Registro Professor:</label>
-        <input v-model="ra" type="text" id="rm" name="rm" placeholder="Insira o RM" required />
+      <form @submit.prevent="handleUpdate()" id="editForm">
 
         <!-- Campo de Nome Completo -->
         <label for="name">Nome completo:</label>
-        <input v-model="nome" type="text" id="name" name="name" placeholder="Insira o nome completo" required />
+        <input v-model="professor.nome" type="text" id="name" name="name" placeholder="Insira o nome completo" required />
 
         <!-- Botões de ação -->
         <div class="button-group">
           <button type="submit" class="submit-btn">Editar</button>
-          <button type="button" class="cancel-btn" @click="cancelEdit">Cancelar</button>
+          <button type="button" class="cancel-btn" @click="cancelEdit()">Cancelar</button>
         </div>
       </form>
     </div>
@@ -24,55 +21,33 @@
 </template>
 
 <script>
+
+import { findProfessor, updateProfessor } from '../../js/requisitions/users';
+
 export default {
   data() {
     return {
-      nome: '',
-      ra: '',
+      professor: {}
     };
-  },
-  mounted() {
-    // Simulando a obtenção do professor (substitua com API real)
-    this.professor = {
-      nome: 'João Silva',
-      ra: '12345',
-    };
-    this.ra = this.professor.ra;
-    this.nome = this.professor.nome;
   },
   methods: {
-    async editarProfessorForm() {
-      const professor = {
-        nome: this.nome,
-        ra: this.ra,
-      };
-
+    async handleUpdate() {
       try {
-        const response = await fetch("http://localhost:8081/professor/update", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(professor),
-        });
-        const result = await response.json();
-        console.log(result);
-        this.$router.push("/professores"); // Redireciona para a lista de professores após a edição
+        await updateProfessor(this.professor);
+        this.$router.back();
       } catch (error) {
-        console.error('Erro ao editar professor:', error);
-        alert('Erro ao tentar editar o professor.');
+        console.error('Erro ao atualizar professor:', error);
+        alert('Erro ao tentar atualizar o professor.');
       }
     },
     cancelEdit() {
-      this.$router.push("/professores"); // Cancela a edição e volta para a lista
-    },
-    closeNav() {
-      document.getElementById("mySidenav").style.width = "0";
-    },
-    openNav() {
-      document.getElementById("mySidenav").style.width = "250px";
-    },
+      this.$router.back();
+    }
   },
+  async mounted() {
+    this.professor = await findProfessor(localStorage.getItem("professor"));
+  }
+
 };
 </script>
 
