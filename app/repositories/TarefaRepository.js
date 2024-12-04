@@ -10,7 +10,6 @@ class TarefaRepository {
     return await this.Tarefa.create({
       nome: tarefa.getNome(),
       codDisc: tarefa.getCodDisc(),
-      codProf: tarefa.getCodProf(),
       material: tarefa.getMaterial(),
       instrucoes: tarefa.getInstrucoes(),
       dataVencimento: tarefa.getDataVencimento(),
@@ -25,7 +24,6 @@ class TarefaRepository {
       defaults: {
         nome: tarefa.getNome(),
         codDisc: tarefa.getCodDisc(),
-        codProf: tarefa.getCodProf(),
         material: tarefa.getMaterial(),
         instrucoes: tarefa.getInstrucoes(),
         dataVencimento: tarefa.getDataVencimento(),
@@ -39,7 +37,6 @@ class TarefaRepository {
     return await this.Tarefa.update({
       nome: tarefa.getNome(),
       codDisc: tarefa.getCodDisc(),
-      codProf: tarefa.getCodProf(),
       material: tarefa.getMaterial(),
       instrucoes: tarefa.getInstrucoes(),
       dataVencimento: tarefa.getDataVencimento(),
