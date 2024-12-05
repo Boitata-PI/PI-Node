@@ -14,7 +14,7 @@
       <div v-if="activeTab === 'Detalhes'">
         <h4>Informações Gerais</h4>
         <ul>
-          <li><strong>Matrícula:</strong> {{ aluno.matricula }}</li>
+          <li><strong>Matrícula:</strong> {{ aluno.ra }}</li>
           <li><strong>Email:</strong> {{ aluno.email }}</li>
         </ul>
       </div>
@@ -22,9 +22,9 @@
       <div v-if="activeTab === 'Grupos'">
         <h4>Grupos</h4>
         <ul>
-          <li v-for="(grupo, index) in aluno.grupos" :key="index" @click="navigateToGrupo(grupo.id)"
+          <li v-for="grupo in grupos" :key="grupo.Grupo.id" @click="navigateToGrupo(grupo.Grupo.id)"
             style="cursor: pointer; color: #155c55;">
-            {{ grupo.nome }}
+            {{ grupo.Grupo.nome }}
           </li>
         </ul>
       </div>
@@ -41,18 +41,16 @@
       <div v-if="activeTab === 'Ações'">
         <div class="button-container">
           <!-- Botão Editar -->
-          <router-link to="/editarAlunos">
-            <button class="action-btn edit-btn">
+            <button class="action-btn edit-btn" @click="editButton()">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
                 <path
                   d="M15.502 1.94a1.5 1.5 0 0 1 0 2.121L14.121 5.44l-3.293-3.293 1.38-1.38a1.5 1.5 0 0 1 2.121 0l1.173 1.173ZM1 13.293V16h2.707L13.44 6.268l-3.293-3.293L1 13.293Z" />
               </svg>
               Editar
             </button>
-          </router-link>
 
           <!-- Botão Excluir -->
-          <button @click="deleteAluno" class="action-btn delete-btn">
+          <button @click="handleDeleteAluno()" class="action-btn delete-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
               <path
                 d="M5.5 5.5A.5.5 0 0 1 6 5h4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-7ZM3 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5V4H3v-.5Zm5-1.5a1 1 0 0 1 1 1H7a1 1 0 0 1 1-1Zm-2.5 1a.5.5 0 0 1-.5.5h-3A.5.5 0 0 1 2 3.5v-1A.5.5 0 0 1 2.5 2h3a.5.5 0 0 1 .5.5v1Z" />
@@ -66,6 +64,10 @@
 </template>
 
 <script>
+
+import { findAluno, deleteAluno } from '@/js/requisitions/users';
+import { searchGruposAluno } from '@/js/requisitions/grupos';
+
 export default {
   name: 'AlunoDetalhes',
   props: ['id'],
@@ -73,167 +75,38 @@ export default {
     return {
       tabs: ['Ações', 'Grupos', 'Detalhes'], // Abas
       activeTab: 'Ações', // Aba ativa por padrão
-      alunos: [
-        {
-          id: 1,
-          nome: 'João Silva',
-          matricula: '20231001',
-          email: 'joao.silva@example.com',
-          grupos: [{ id: 1, nome: 'Desenvolvimento Web' }],
-        },
-        {
-          id: 2,
-          nome: 'Carlos Santos',
-          matricula: '20231002',
-          email: 'carlos.santos@example.com',
-          grupos: [{ id: 2, nome: 'Data Science' }],
-        },
-        {
-          id: 3,
-          nome: 'Maria Oliveira',
-          matricula: '20231003',
-          email: 'maria.oliveira@example.com',
-          grupos: [{ id: 3, nome: 'Redes e Infraestrutura' }],
-        },
-        {
-          id: 4,
-          nome: 'Ana Beatriz',
-          matricula: '20231004',
-          email: 'ana.beatriz@example.com',
-          grupos: [{ id: 4, nome: 'Inteligência Artificial' }],
-        },
-        {
-          id: 5,
-          nome: 'Lucas Pereira',
-          matricula: '20231005',
-          email: 'lucas.pereira@example.com',
-          grupos: [{ id: 5, nome: 'DevOps' }],
-        },
-        {
-          id: 6,
-          nome: 'Beatriz Souza',
-          matricula: '20231006',
-          email: 'beatriz.souza@example.com',
-          grupos: [{ id: 6, nome: 'Machine Learning' }],
-        },
-        {
-          id: 7,
-          nome: 'Paulo Henrique',
-          matricula: '20231007',
-          email: 'paulo.henrique@example.com',
-          grupos: [{ id: 7, nome: 'Blockchain' }],
-        },
-        {
-          id: 8,
-          nome: 'Clara Medeiros',
-          matricula: '20231008',
-          email: 'clara.medeiros@example.com',
-          grupos: [{ id: 8, nome: 'Segurança da Informação' }],
-        },
-        {
-          id: 9,
-          nome: 'Renato Lima',
-          matricula: '20231009',
-          email: 'renato.lima@example.com',
-          grupos: [{ id: 9, nome: 'Automação' }],
-        },
-        {
-          id: 10,
-          nome: 'Juliana Costa',
-          matricula: '20231010',
-          email: 'juliana.costa@example.com',
-          grupos: [{ id: 10, nome: 'Robótica' }],
-        },
-        {
-          id: 11,
-          nome: 'Gabriel Almeida',
-          matricula: '20231011',
-          email: 'gabriel.almeida@example.com',
-          grupos: [{ id: 11, nome: 'Desenvolvimento Mobile' }],
-        },
-        {
-          id: 12,
-          nome: 'Sofia Fernandes',
-          matricula: '20231012',
-          email: 'sofia.fernandes@example.com',
-          grupos: [{ id: 12, nome: 'Design UX/UI' }],
-        },
-        {
-          id: 13,
-          nome: 'Ricardo Gonçalves',
-          matricula: '20231013',
-          email: 'ricardo.goncalves@example.com',
-          grupos: [{ id: 13, nome: 'Redes Sociais' }],
-        },
-        {
-          id: 14,
-          nome: 'Laura Martins',
-          matricula: '20231014',
-          email: 'laura.martins@example.com',
-          grupos: [{ id: 14, nome: 'Big Data' }],
-        },
-        {
-          id: 15,
-          nome: 'Fernando Ribeiro',
-          matricula: '20231015',
-          email: 'fernando.ribeiro@example.com',
-          grupos: [{ id: 15, nome: 'Ciência de Dados' }],
-        },
-        {
-          id: 16,
-          nome: 'Isabela Rocha',
-          matricula: '20231016',
-          email: 'isabela.rocha@example.com',
-          grupos: [{ id: 16, nome: 'Games' }],
-        },
-        {
-          id: 17,
-          nome: 'Vinícius Duarte',
-          matricula: '20231017',
-          email: 'vinicius.duarte@example.com',
-          grupos: [{ id: 17, nome: 'Inteligência Computacional' }],
-        },
-        {
-          id: 18,
-          nome: 'Camila Barros',
-          matricula: '20231018',
-          email: 'camila.barros@example.com',
-          grupos: [{ id: 18, nome: 'Análise de Sistemas' }],
-        },
-        {
-          id: 19,
-          nome: 'Pedro Mendes',
-          matricula: '20231019',
-          email: 'pedro.mendes@example.com',
-          grupos: [{ id: 19, nome: 'Realidade Virtual' }],
-        },
-        {
-          id: 20,
-          nome: 'Natália Freitas',
-          matricula: '20231020',
-          email: 'natalia.freitas@example.com',
-          grupos: [{ id: 20, nome: 'Computação Gráfica' }],
-        }
-      ],
-      aluno: {}
+      aluno: {},
+      grupos: []
     };
   },
   methods: {
-    async deleteAluno() {
+    findAluno,
+    searchGruposAluno,
+    async handleDeleteAluno() {
+
       try {
-        alert(`Aluno ${this.aluno.nome} excluído com sucesso!`);
-        this.$router.push('/menuAlunos');
+        await deleteAluno(this.aluno.id);
+        this.$router.back();
       } catch (error) {
         console.error('Erro ao excluir aluno:', error);
-        alert('Erro ao tentar excluir o aluno.');
       }
+      
     },
     navigateToGrupo(grupoId) {
       this.$router.push({ name: 'GrupoDetalhes', params: { id: grupoId } });
+    },
+    editButton() {
+      localStorage.setItem("aluno", this.aluno.id);
+      this.$router.push("/editarAlunos");
     }
   },
-  created() {
-    this.aluno = this.alunos.find((a) => a.id == this.id);
+  async mounted() {
+    try {
+      this.aluno = await this.findAluno(this.id);
+      this.grupos = await this.searchGruposAluno(this.id);
+    } catch (error) {
+      console.error('Erro ao buscar aluno:', error);
+    }
   }
 };
 </script>

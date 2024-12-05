@@ -243,14 +243,13 @@ class AlunoDiscController {
 
   async delete(req, res) {
     try {
-      const { id } = req.params;
-      var AlunoDiscSequelize = await this.AlunoDiscRepository.find(id);
+      var AlunoDiscSequelize = await this.AlunoDiscRepository.search(req.body);
       
       if(!AlunoDiscSequelize){
         return res.status(404).json({ status: false, message: "AlunoDisc não encontrado!" });
       }
 
-      const alunoDisc = new AlunoDisc(AlunoDiscSequelize.get()); 
+      const alunoDisc = new AlunoDisc(AlunoDiscSequelize[0].get()); 
 
       const result = await this.AlunoDiscRepository.delete(alunoDisc);
 

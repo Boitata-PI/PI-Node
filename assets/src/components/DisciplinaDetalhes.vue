@@ -37,14 +37,23 @@
                 </div>
             </div>
             <div v-if="activeTab === 'Tarefas'">
-                <RouterLink to="/cadastroTarefas">
-                    <button class="confirm-btn edit-btn">
+                    <button class="confirm-btn edit-btn" @click="addTarefaButton()">
                         + Adicionar
                     </button>
-                </RouterLink>
                 <ul>
                     <li v-for="tarefa in tarefas" :key="tarefa.id" @click="navigateToTarefas(tarefa.id)"
-                        style="cursor: pointer; color: #155c55;">{{ tarefa.nome }}</li>
+                        style="cursor: pointer; color: #155c55; display: flex; justify-content: space-between;">
+                        <span>
+                            {{ tarefa.nome }}
+                        </span>
+                        <button @click="handleDeleteTarefa(tarefa.id)" class="delete-icon-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M5.5 5.5A.5.5 0 0 1 6 5h4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-7ZM3 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5V4H3v-.5Zm5-1.5a1 1 0 0 1 1 1H7a1 1 0 0 1 1-1Zm-2.5 1a.5.5 0 0 1-.5.5h-3A.5.5 0 0 1 2 3.5v-1A.5.5 0 0 1 2.5 2h3a.5.5 0 0 1 .5.5v1Z" />
+                            </svg>
+                        </button>
+                    </li>
                 </ul>
             </div>
             <div v-if="activeTab === 'Alunos'">
@@ -54,11 +63,10 @@
                 <ul>
                     <li v-for="aluno in alunos" :key="aluno.Usuario.id"
                         style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: #155c55; padding: 5px 10px; border-radius: 5px; transition: background-color 0.3s ease;"
-                        @mouseover="highlight = aluno.Usuario.id" @mouseleave="highlight = null"
-                        :style="{ backgroundColor: highlight === aluno.Usuario.id ? '#e6f7f1' : 'transparent' }">
+                        @mouseover="highlight = aluno.Usuario.id" @mouseleave="highlight = null">
                         <span @click="navigateToAlunos(aluno.Usuario.id)" style="flex-grow: 1;">{{ aluno.Usuario.nome
                             }}</span>
-                        <button @click.stop="deleteAluno(aluno.Usuario.id)" class="delete-icon-btn">
+                        <button @click="handleDeleteAlunoDisc(aluno.Usuario.id )" class="delete-icon-btn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 viewBox="0 0 16 16">
                                 <path
@@ -87,9 +95,9 @@
 
 <script>
 
-import { findDisciplinas, deleteDisciplinas } from "../js/requisitions/disciplinas";
+import { findDisciplinas, deleteDisciplinas, deleteAlunoDisc } from "../js/requisitions/disciplinas";
 import { searchAlunosDisc } from "../js/requisitions/users.js";
-import { searchTarefas } from "../js/requisitions/tarefas.js";
+import { searchTarefas, deleteTarefa } from "../js/requisitions/tarefas.js";
 import { searchGrupos } from "../js/requisitions/grupos.js";
 
 export default {
@@ -125,6 +133,11 @@ export default {
             this.$router.push("/cadastroAlunos")
         },
 
+        addTarefaButton() {
+            localStorage.setItem("disciplina", this.$route.params.id)
+            this.$router.push("/cadastroTarefas")
+        },
+
         navigateToAlunos(id) {
             this.$router.push({ name: 'AlunoDetalhes', params: { id } });
         },
@@ -136,20 +149,31 @@ export default {
         navigateToGrupos(id) {
             this.$router.push({ name: 'GrupoDetalhes', params: { id } });
         },
+        async handleDeleteAlunoDisc(codAluno) {
 
-
-        async deleteAluno(id) {
             try {
-                // Implemente a lógica de exclusão aqui, ex: chamada de API para excluir o aluno.
-                await deleteAlunoAPI(id); // Exemplo de função de API
-                // Remova o aluno da lista localmente para atualizar a exibição
-                this.alunos = this.alunos.filter(aluno => aluno.Usuario.id !== id);
-                alert("Aluno removido com sucesso!");
+                const aluno = {
+                    codDisc: localStorage.getItem("disciplina"),
+                    codAluno: codAluno
+                }
+                console.log(aluno);
+                await deleteAlunoDisc(aluno);
+                this.$router.back();
             } catch (error) {
-                console.error("Erro ao excluir aluno:", error);
-                alert("Erro ao tentar excluir o aluno.");
+                console.error("Erro ao excluir o aluno da disciplina:", error);
             }
+           
         },
+
+        async handleDeleteTarefa(id) {
+            try {
+                await deleteTarefa(id);
+                this.$router.back();
+            } catch (error) {
+                console.error("Erro ao excluir a tarefa:", error);
+            }
+        }
+
     },
     async mounted() {
         this.disciplina = await this.findDisciplinas(this.$route.params.id);

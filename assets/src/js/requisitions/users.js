@@ -131,3 +131,35 @@ export const searchAlunosDisc = async (codDisc) => {
     console.error(error);
   }
 };
+
+export const updateAluno = async (aluno) => {
+
+  const reg = {
+    nome: aluno.nome,
+    ra: aluno.ra,
+  }
+
+
+  try {
+    const response = await fetch("http://localhost:8081/aluno/"+aluno.id+"/update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reg),
+      credentials: 'include'
+    });
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch (error) {}
+}
+
+export const deleteAluno = async (id) => {
+  try {
+    await fetch("http://localhost:8081/aluno/"+id+"/delete",{
+        method: "DELETE",
+        credentials: 'include'
+    });
+  } catch (error) {}
+};

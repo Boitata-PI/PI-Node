@@ -27,7 +27,8 @@
           </div>
         </div>
         <div class="tarefa-footer">
-          <p><strong>Prazo de entrega:</strong> {{ formatarData(tarefa.dataVencimento) }}</p>
+          <p><strong>Data de vencimento:</strong> {{ formatarData(tarefa.dataVencimento) }}</p>
+          <p><strong>Data de fechamento:</strong> {{ formatarData(tarefa.dataFechamento) }}</p>
           <p>{{ tarefa.Disciplina.nome }}</p>
         </div>
       </router-link>
@@ -37,34 +38,21 @@
 
 <script>
 
-import { listTarefas } from '../../js/requisitions/tarefas';
+import { listTarefas, searchTarefas, searchEntregas } from '../../js/requisitions/tarefas';
+import { searchGruposAluno } from '../../js/requisitions/grupos';
 
 export default {
   name: 'menuTarefas',
   data() {
     return {
-      abaAtiva: 'Em breve', // Aba ativa
-      abas: ['Em breve', 'Em atraso', 'Concluída'], // Abas disponíveis
-      tarefasFiltradas: [], // Tarefas exibidas
-      todasTarefas: [], // Tarefas completas retornadas pelo backend
+      abaAtiva: 'Em breve', 
+      abas: ['Em breve', 'Em atraso', 'Concluída'], 
+      todasTarefas: [], 
+      tarefasFiltradas: [],
+      grupos: [],
     };
   },
   methods: {
-    definirStatus(tarefa) {
-      const agora = new Date();
-      const vencimento = new Date(tarefa.dataVencimento);
-      const fechamento = tarefa.dataFechamento ? new Date(tarefa.dataFechamento) : null;
-
-      if (vencimento < agora) return "Em atraso";
-      if (fechamento < agora) return "Concluída";
-
-      return "Em breve";
-    },
-    filtrarTarefas() {
-      this.tarefasFiltradas = this.todasTarefas.filter(
-        (tarefa) => tarefa.status === this.abaAtiva
-      );
-    },
     formatarData(dataISO) {
       const data = new Date(dataISO); // Converte para objeto Date
       const dia = String(data.getDate()).padStart(2, "0");
@@ -75,23 +63,69 @@ export default {
     formatarHora(dataISO) {
       const data = new Date(dataISO); // Converte para objeto Date
       return data.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+    },
+    async definirStatus(tarefa) {
+
+      const dataAtual = new Date();
+      const vencimento = new Date(tarefa.dataVencimento);
+      const fechamento = new Date(tarefa.dataFechamento);
+
+
+      const entregasPorGrupo = await Promise.all(
+        this.grupos.map(grupo => searchEntregas(tarefa.id, grupo.Grupo.id))
+      );
+
+      // Verifica se alguma entrega foi feita
+      if (entregasPorGrupo.some(entregas => entregas.length > 0)) {
+        return "Concluída";
+      }
+
+      if (dataAtual < vencimento) {
+        return "Em breve";
+      } else if (dataAtual < fechamento) {
+        return "Em atraso";
+      } else {
+        return "Concluída";
+      }
+    },
+    filtrarTarefas() {
+      this.tarefasFiltradas = this.todasTarefas.filter((tarefa) => {
+        return tarefa.status === this.abaAtiva;
+      });
     }
   },
   async mounted() {
-    this.tarefas = await listTarefas();
-    const todasTarefas = await listTarefas();
-    this.todasTarefas = todasTarefas.map((tarefa) => ({
-      ...tarefa,
-      status: this.definirStatus(tarefa),
-    }));
+
+    const userData = JSON.parse(localStorage.getItem("userData"));
+
+    this.grupos = await searchGruposAluno(userData.id);
+
+    await userData.AlunoDiscs.forEach(async (alunoDisc) => {
+      console.log(alunoDisc.codDisc)
+      this.todasTarefas.push(...await searchTarefas(alunoDisc.codDisc));
+    })
+
+    // tempo de duzentos ms
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    this.todasTarefas.forEach(async (tarefa) => {
+      tarefa.status = await this.definirStatus(tarefa);
+      console.log("Status: ",tarefa.nome,tarefa.status);
+    });
+
+    console.log(this.todasTarefas);
+    await new Promise(resolve => setTimeout(resolve, 200));
+
     this.filtrarTarefas();
+
+    console.log(this.todasTarefas);
+
   },
   watch: {
-    // Atualiza a lista de tarefas quando a aba ativa muda
     abaAtiva() {
       this.filtrarTarefas();
-    },
-  },
+    }
+  }
 };
 </script>
 

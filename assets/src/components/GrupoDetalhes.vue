@@ -15,8 +15,7 @@
             <div v-if="activeTab === 'Ações'">
                 <div class="button-container">
                     <!-- Botão Editar -->
-                    <router-link to="/editarGrupos">
-                        <button class="action-btn edit-btn">
+                        <button class="action-btn edit-btn" @click="editButton()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                                 viewBox="0 0 16 16">
                                 <path
@@ -24,10 +23,9 @@
                             </svg>
                             Editar
                         </button>
-                    </router-link>
 
                     <!-- Botão Excluir -->
-                    <button @click="deleteDisciplina" class="action-btn delete-btn">
+                    <button @click="handleDelete()" class="action-btn delete-btn" >
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                             viewBox="0 0 16 16">
                             <path
@@ -39,15 +37,10 @@
             </div>
             <div v-if="activeTab === 'Alunos'">
                 <ul>
-                    <li v-for="(aluno, index) in grupo.alunos" :key="aluno.id" @click="navigateToAluno(aluno.id)"
+                    <li v-for="aluno in alunos" :key="aluno.Usuario.id" @click="navigateToAluno(aluno.Usuario.id)"
                         style="cursor: pointer; color: #155c55;">
-                        {{ aluno }}
+                        {{ aluno.Usuario.nome }}
                     </li>
-                </ul>
-            </div>
-            <div v-if="activeTab === 'Tarefas'">
-                <ul>
-                    <li v-for="(tarefa, index) in grupo.tarefas" :key="index"  @click="navigateToAluno(aluno.id)">{{ tarefa }}</li>
                 </ul>
             </div>
         </div>
@@ -55,52 +48,42 @@
 </template>
 
 <script>
+
+import { findGrupo, searchAlunosGrupo, deleteGrupo } from "../js/requisitions/grupos";
+
 export default {
     name: 'GrupoDetalhes',
     props: ['id'],
     data() {
         return {
-            tabs: ['Ações', 'Alunos', 'Tarefas'], // Abas específicas para grupos
+            tabs: ['Ações', 'Alunos'], // Abas específicas para grupos
             activeTab: 'Ações', // Aba ativa por padrão
-            grupos: [
-                {
-                    id: 1,
-                    nome: 'Desenvolvimento Web',
-                    alunos: ['Alice', 'Carlos', 'Joana'],
-                    tarefas: ['Site E-commerce', 'Dashboard de Analytics']
-                },
-                {
-                    id: 2,
-                    nome: 'Data Science',
-                    alunos: ['Lucas', 'Maria', 'Carlos'],
-                    tarefas: ['Análise de Sentimentos', 'Modelagem Preditiva']
-                },
-                {
-                    id: 3,
-                    nome: 'Redes e Infraestrutura',
-                    alunos: ['André', 'Fernanda', 'João'],
-                    tarefas: ['Configuração de Servidores', 'Monitoramento de Rede']
-                },
-                {
-                    id: 4,
-                    nome: 'Inteligência Artificial',
-                    alunos: ['Roberta', 'Rafael', 'Clara'],
-                    tarefas: ['Chatbot IA', 'Sistema de Recomendação']
-                }
-            ],
-            grupo: {}
+            grupo: {},
+            alunos: [],
         };
     },
-
-    created() {
-        this.grupo = this.grupos.find((g) => g.id == this.id);
-    },
-
     methods: {
         navigateToAluno(id) {
             this.$router.push({ name: 'AlunoDetalhes', params: { id } });
+        },
+        editButton() {
+            localStorage.setItem("grupo", this.grupo.id);
+            this.$router.push("/editarGrupos");
+        },
+        async handleDelete() {
+            try {
+                await deleteGrupo(this.grupo.id);
+                this.$router.back();
+            } catch (error) {
+                console.error("Erro ao excluir o grupo:", error);
+            }
         }
+    },
+    async mounted() {
+        this.grupo = await findGrupo(this.id);
+        this.alunos = await searchAlunosGrupo(this.id);
     }
+
 };
 </script>
 

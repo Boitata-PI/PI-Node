@@ -2,7 +2,7 @@
   <div class="container tarefa-detalhes">
     <!-- Cabeçalho com título e voltar -->
     <div class="header">
-      <router-link to="/" class="voltar">Voltar</router-link>
+      <router-link to="/menuTarefas" class="voltar">Voltar</router-link>
       <h1>{{ tarefa.nome }}</h1>
     </div>
 
@@ -21,17 +21,32 @@
         </li>
       </ul>
 
-      <!-- Ação para entrega -->
-      <div class="tarefa-acoes">
-        <button @click="entregarTarefa" class="btn-entregar">Entregar Tarefa</button>
-      </div>
+      <form @submit.prevent="entregarTarefa()">
+
+        <h4>Entrega:</h4>
+          <div v-for="(link, index) in links" :key="index" class="link-group">
+            <input type="text" v-model="links[index].nome" placeholder="Insira o nome" required />
+            <input type="url" v-model="links[index].link" placeholder="Insira o link" required />
+            <button type="button" @click="removeLink(index)" class="remove-btn">Remover</button>
+          </div>
+          <button type="button" @click="addLink" class="add-btn">Adicionar Link</button>
+  
+        <!-- Ação para entrega -->
+        <div class="tarefa-acoes">
+          <button type="submit" class="btn-entregar">Entregar Tarefa</button>
+        </div>
+
+      </form>
+      
     </div>
   </div>
 </template>
 
 <script>
 
-import { findTarefas } from '@/js/requisitions/tarefas';
+import { findTarefas, searchEntregaTarefa, cadEntregas, updateEntrega } from '@/js/requisitions/tarefas';
+import { searchGruposAluno } from '../js/requisitions/grupos';
+
 
 export default {
   name: 'TarefaDetalhes',
@@ -39,12 +54,45 @@ export default {
     return {
       tarefa: {},
       disciplina: {},
-      material: {}
+      material: {},
+      grupos: [],
+      entrega: {},
+      links: []
     };
   },
   methods: {
-    entregarTarefa() {
-      alert('Tarefa entregue!');
+    async entregarTarefa() {
+      try {
+
+        const links = JSON.stringify(this.links);
+          console.log("LINKS",links);
+
+        console.log(this.entrega.length);
+
+        if (this.entrega.length > 0) {
+
+          await updateEntrega(
+            this.entrega[0].id,
+            {
+              codGrupo: this.grupos.filter(grupo => grupo.Grupo.codDisc === this.disciplina.id)[0].Grupo.id,
+              entrega: links
+            }
+          )
+          
+        }else{
+
+          await cadEntregas({
+            codTarefa: this.tarefa.id,
+            codGrupo: this.grupos.filter(grupo => grupo.Grupo.codDisc === this.disciplina.id)[0].Grupo.id,
+            entrega: links
+          })
+
+        }
+
+        this.$router.back();
+      } catch (error) {
+        console.error(error);
+      }
     },
     formatarData(dataISO) {
       const data = new Date(dataISO); // Converte para objeto Date
@@ -56,12 +104,28 @@ export default {
     formatarHora(dataISO) {
       const data = new Date(dataISO); // Converte para objeto Date
       return data.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-    }
+    },
+    addLink() {
+      this.links.push({ nome: '', link: '' }); // Adiciona um novo campo de link vazio
+    },
+    removeLink(index) {
+      this.links.splice(index, 1); // Remove o link pelo índice
+    },
   },
   async mounted() {
     this.tarefa = await findTarefas(this.$route.params.id);
     this.material = await JSON.parse(this.tarefa.material);
     this.disciplina = await this.tarefa.Disciplina;
+    this.grupos = await searchGruposAluno(JSON.parse(localStorage.getItem('userData')).id);
+    this.entrega = await searchEntregaTarefa({
+      codTarefa: this.tarefa.id,
+      codGrupo: this.grupos.filter(grupo => grupo.Grupo.codDisc === this.disciplina.id)[0].Grupo.id
+    });
+
+    if (this.entrega.length > 0) {
+      this.links = await JSON.parse(this.entrega[0].entrega);
+    }
+
   }
 };
 </script>
@@ -199,6 +263,33 @@ ul li::before {
 .btn-entregar:focus {
   outline: none;
   box-shadow: 0 0 10px rgba(67, 131, 125, 0.5);
+}
+
+.add-btn,
+.remove-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.add-btn:hover,
+.remove-btn:hover {
+  background-color: #0056b3;
+}
+
+.link-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.link-group input {
+  width: 100%;
+  margin: 10px 0 ;
 }
 
 /* Responsividade */

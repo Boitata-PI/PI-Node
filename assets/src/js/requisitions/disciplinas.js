@@ -106,3 +106,43 @@ export const updateDisciplina = async (disciplina) => {
   }
 
 }
+
+export const findDisciplina = async (id) => {
+
+  try {
+    const response = await fetch("http://localhost:8081/disciplina/"+id+"/find", {
+      credentials: 'include'
+    });
+    const result = await response.json();
+    const disciplina = result.data;
+    console.log(disciplina);
+    return disciplina
+  } catch (error) {
+    console.error(error);
+  }
+
+}
+
+export const deleteAlunoDisc = async (alunoDisc) => {
+
+  const reg = {
+    codDisc: alunoDisc.codDisc,
+    codAluno: alunoDisc.codAluno
+  };
+
+  console.log(reg);
+
+  try {
+    await fetch("http://localhost:8081/alunoDisc/delete", {
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reg),
+      credentials: 'include'
+    });
+  } catch (error) {
+    console.error(error);
+  }
+
+}

@@ -15,7 +15,7 @@ class TarefaEntregaController {
     try {
       const { codTarefa, codGrupo, corrigida, dataCorrecao, pontos, comentarios, entrega } = req.body;
 
-      if (!codTarefa || !codGrupo || !corrigida || !dataCorrecao || !pontos || !comentarios || !entrega) {
+      if (!codTarefa || !codGrupo || !entrega) {
         return res.status(400).json({ status: false, message: "Dados Incompletos!" });
       }
 

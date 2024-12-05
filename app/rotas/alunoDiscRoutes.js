@@ -29,7 +29,7 @@ class AlunoDiscRoutes {
 
         this.router.post('/search', jwtVerify, (req, res) => this.AlunoDiscController.search(req, res));
 
-        this.router.delete('/:id/delete', jwtVerify, (req, res) => this.AlunoDiscController.delete(req, res));
+        this.router.delete('/delete', jwtVerify, (req, res) => this.AlunoDiscController.delete(req, res));
     }
 
     getRouter(){

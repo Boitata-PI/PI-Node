@@ -7,15 +7,15 @@
         <form @submit.prevent="editarAlunoForm" id="editForm">
           <!-- Campo de Registro Aluno (RA) -->
           <label for="rm">Registro Aluno:</label>
-          <input v-model="ra" type="text" id="rm" name="rm" placeholder="Atualize o RM" required />
+          <input v-model="aluno.ra" type="text" id="rm" name="rm" placeholder="Atualize o RM" required />
   
           <!-- Campo de Nome Completo -->
           <label for="name">Nome completo:</label>
-          <input v-model="nome" type="text" id="name" name="name" placeholder="Atualize o nome completo" required />
+          <input v-model="aluno.nome" type="text" id="name" name="name" placeholder="Atualize o nome completo" required />
   
           <!-- Botões de ação -->
           <div class="button-group">
-            <button type="submit" class="submit-btn">Editar</button>
+            <button type="submit" class="submit-btn" @click="handleUpdateAluno()">Editar</button>
             <button type="button" class="cancel-btn" @click="cancelEdit">Cancelar</button>
           </div>
         </form>
@@ -24,43 +24,22 @@
   </template>
   
   <script>
+
+  import { findAluno, updateAluno } from "../../js/requisitions/users";
+
   export default {
     data() {
       return {
-        nome: '',
-        ra: '',
+        aluno: {},
       };
-    },
-    mounted() {
-      // Simulando a obtenção do aluno (substitua com API real)
-      this.aluno = {
-        nome: 'Maria Oliveira',
-        ra: '54321',
-      };
-      this.ra = this.aluno.ra;
-      this.nome = this.aluno.nome;
     },
     methods: {
-      async editarAlunoForm() {
-        const aluno = {
-          nome: this.nome,
-          ra: this.ra,
-        };
-  
+      async handleUpdateAluno() {
         try {
-          const response = await fetch("http://localhost:8081/aluno/update", {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(aluno),
-          });
-          const result = await response.json();
-          console.log(result);
-          this.$router.push("/alunos"); // Redireciona para a lista de alunos após a edição
+          await updateAluno(this.aluno);
+          this.$router.back();
         } catch (error) {
-          console.error('Erro ao editar aluno:', error);
-          alert('Erro ao tentar editar o aluno.');
+          console.error("Erro ao atualizar aluno:", error);
         }
       },
       cancelEdit() {
@@ -73,6 +52,9 @@
         document.getElementById("mySidenav").style.width = "250px";
       },
     },
+    async mounted() {
+      this.aluno = await findAluno(localStorage.getItem("aluno"));
+    }
   };
   </script>
   

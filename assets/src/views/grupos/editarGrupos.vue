@@ -2,13 +2,9 @@
   <!-- Container de formulário de edição -->
   <div class="form-container">
     <h1>Editar Grupo</h1>
-    <form @submit.prevent="updateGrupo" id="editForm">
+    <form @submit.prevent="handleUpdateGrupo()" id="editForm">
       <label for="nome">Nome do Grupo:</label>
       <input type="text" v-model="grupo.nome" id="nome" name="nome" placeholder="Nome do Grupo" required />
-
-      <label for="professor">Professor TG:</label>
-      <input type="text" v-model="grupo.professor" id="professor" name="professor"
-        placeholder="Professor" required />
 
       <button type="submit" class="submit-btn">Editar</button>
     </form>
@@ -16,43 +12,33 @@
 </template>
 
 <script>
+
+import { findGrupo, updateGrupos } from "../../js/requisitions/grupos";
+
 export default {
   data() {
     return {
-      grupo: {
-        nome: '',
-        descricao: '',
-        integrantes: '',
-      },
+      grupo: {},
     };
   },
-  mounted() {
-    // Aqui você pode simular a obtenção do grupo ou realizar uma requisição para pegar os detalhes do grupo
-    const grupoId = this.$route.params.id; // Pega o id da URL
-    if (grupoId === '1') {
-      this.grupo = {
-        nome: 'LittleHost - Grupo 01',
-        descricao: 'Grupo de estudantes focado em desenvolvimento web.',
-        integrantes: 'João, Maria, Pedro',
-      };
-    } else if (grupoId === '2') {
-      this.grupo = {
-        nome: 'BAE Guard - Grupo 02',
-        descricao: 'Grupo focado em segurança de redes e sistemas.',
-        integrantes: 'Lucas, Ana, Felipe',
-      };
-    }
-  },
   methods: {
-    async updateGrupo() {
+    async handleUpdateGrupo() {
       try {
-        alert(`Grupo ${this.grupo.nome} atualizado com sucesso!`);
-        this.$router.push('/grupos');
+        await updateGrupos(this.grupo);
+        this.$router.back();
       } catch (error) {
         console.error('Erro ao atualizar o grupo:', error);
         alert('Erro ao tentar atualizar o grupo.');
       }
     },
+  },
+  async mounted() {
+    try {
+      this.grupo = await findGrupo(localStorage.getItem('grupo'));
+    } catch (error) {
+      console.error('Erro ao buscar o grupo:', error);
+      alert('Erro ao tentar buscar o grupo.');
+    }
   },
 };
 </script>

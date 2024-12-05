@@ -2,7 +2,7 @@
   <!-- Formulário de Cadastrar Tarefa -->
   <main class="form-container">
     <h1>Cadastrar Tarefa</h1>
-    <form @submit.prevent="createTarefa" id="createForm">
+    <form @submit.prevent="handleCreateTarefa()" id="createForm">
       <label for="nome">Nome da Tarefa:</label>
       <input type="text" v-model="tarefa.nome" id="nome" name="nome" placeholder="Insira o nome da tarefa" required />
 
@@ -21,8 +21,9 @@
         min="0" max="10" required />
 
       <label>Links:</label>
-      <div v-for="(link, index) in tarefa.links" :key="index" class="link-group">
-        <input type="url" v-model="tarefa.links[index]" placeholder="Insira o link" required />
+      <div v-for="(link, index) in tarefa.material" :key="index" class="link-group">
+        <input type="text" v-model="tarefa.material[index].nome" placeholder="Insira o nome" required />
+        <input type="url" v-model="tarefa.material[index].link" placeholder="Insira o link" required />
         <button type="button" @click="removeLink(index)" class="remove-btn">Remover</button>
       </div>
       <button type="button" @click="addLink" class="add-btn">Adicionar Link</button>
@@ -33,6 +34,9 @@
 </template>
 
 <script>
+
+import { cadTarefas } from '../../js/requisitions/tarefas';
+
 export default {
   data() {
     return {
@@ -42,27 +46,28 @@ export default {
         dataFechamento: '',
         instrucoes: '',
         pontos: '',
-        links: [''], // Inicializa com um link vazio
+        material: [], // Inicializa com um link vazio
       },
     };
   },
   methods: {
-    async createTarefa() {
+    async handleCreateTarefa() {
       try {
-        // Lógica para criar tarefa (ex: envio para API)
-        alert(`Tarefa "${this.tarefa.nome}" criada com sucesso!`);
-        this.$router.push('/tarefas');
+        await cadTarefas(this.tarefa);
+        this.$router.back();
       } catch (error) {
-        console.error('Erro ao criar tarefa:', error);
-        alert('Erro ao tentar criar a tarefa.');
+        console.error(error);
       }
     },
     addLink() {
-      this.tarefa.links.push(''); // Adiciona um novo campo de link vazio
+      this.tarefa.material.push({ nome: '', link: '' }); // Adiciona um novo campo de link vazio
     },
     removeLink(index) {
-      this.tarefa.links.splice(index, 1); // Remove o link pelo índice
+      this.tarefa.material.splice(index, 1); // Remove o link pelo índice
     },
+  },
+  mounted() {
+    this.addLink();
   },
 };
 </script>
