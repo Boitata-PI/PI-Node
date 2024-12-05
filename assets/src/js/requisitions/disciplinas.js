@@ -1,4 +1,7 @@
-export const searchDisciplinas = async (id) => {
+export const searchDisciplinas = async (params) => {
+
+
+
   try {
 
     const response = await fetch("http://localhost:8081/disciplina/search", {
@@ -6,9 +9,7 @@ export const searchDisciplinas = async (id) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        codProf: id,
-      }),
+      body: JSON.stringify(params),
       credentials: 'include'
     });
     const result = await response.json();

@@ -5,11 +5,11 @@
       <!--Links Gerais sidenav-->
       <a href="javascript:void(0)" class="closebtn" @click="closeNav">&times;</a>
       <router-link to="/index">Dashboard</router-link>
-      <router-link to="/menuCursos">Curso</router-link>
+      <router-link to="/menuCursos" v-if="user.tipo === 'PROFESSOR'">Curso</router-link>
       <router-link to="/menuDisciplinas">Disciplinas</router-link>
-      <router-link to="/menuProfessores">Professores</router-link>
-      <router-link to="/pagDesenvolvimento">Relatorios</router-link>
-      <router-link to="/menuTarefas">Tarefas</router-link>
+      <router-link to="/menuProfessores" v-if="user.tipo === 'PROFESSOR'">Professores</router-link>
+      <router-link to="/pagDesenvolvimento" v-if="user.tipo === 'PROFESSOR'">Relatorios</router-link>
+      <router-link to="/menuTarefas" v-if="user.tipo === 'ALUNO'">Tarefas</router-link>
 
     </div>
 
@@ -26,18 +26,18 @@
             <router-link class="nav-link" to="/index">Dashboard</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/menuCursos">Curso</router-link>
+            <router-link class="nav-link" to="/menuCursos" v-if="user.tipo === 'PROFESSOR'">Curso</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/menuDisciplinas">Disciplinas</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/menuProfessores">Professores</router-link>
+            <router-link class="nav-link" to="/menuProfessores" v-if="user.tipo === 'PROFESSOR'">Professores</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/pagDesenvolvimento">Relatórios</router-link>
+            <router-link class="nav-link" to="/pagDesenvolvimento" v-if="user.tipo === 'PROFESSOR'">Relatórios</router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="user.tipo === 'ALUNO'">
             <router-link class="nav-link" to="/menuTarefas">Tarefas</router-link>
           </li>
         </ul>
@@ -56,6 +56,12 @@ import { logout } from "../js/requisitions/auth";
 
 export default {
   name: "Navbar",
+  data() {
+    return {
+      user: JSON.parse(localStorage.getItem("userData")),
+      a: false
+    }
+  },
   methods: {
     openNav() {
       document.getElementById("mySidenav").style.width = "250px";
@@ -67,6 +73,11 @@ export default {
     },
     logout
   },
+  mounted() {
+    this.a = this.user.tipo === "ALUNO";
+    console.log(this.a);
+  }
+
 };
 </script>
 

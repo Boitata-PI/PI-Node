@@ -5,18 +5,18 @@
 
         <!-- Abas -->
         <div class="tabs">
-            <button v-for="(tab, index) in tabs" :key="index" :class="{ active: activeTab === tab }"
-                @click="activeTab = tab">
+            <button v-for="(tab, index) in tabs[user.tipo]" :key="index" :class="{ active: activeTab[user.tipo] === tab }"
+                @click="activeTab[user.tipo] = tab">
                 {{ tab }}
             </button>
         </div>
 
         <!-- Conteúdo das Abas -->
         <div class="tab-content">
-            <div v-if="activeTab === 'Ações'">
+            <div v-if="activeTab[user.tipo] === 'Ações'">
                 <div class="button-container">
                     <!-- Botão Editar -->
-                    <button @click="editButton()" class="action-btn edit-btn">
+                    <button @click="editButton()" class="action-btn edit-btn" v-if="user.tipo === 'PROFESSOR'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                             viewBox="0 0 16 16">
                             <path
@@ -26,7 +26,7 @@
                     </button>
 
                     <!-- Botão Excluir -->
-                    <button @click="handleDelete()" class="action-btn delete-btn">
+                    <button @click="handleDelete()" class="action-btn delete-btn" v-if="user.tipo === 'PROFESSOR'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                             viewBox="0 0 16 16">
                             <path
@@ -36,11 +36,11 @@
                     </button>
                 </div>
             </div>
-            <div v-if="activeTab === 'Tarefas'">
-                    <button class="confirm-btn edit-btn" @click="addTarefaButton()">
+            <div v-if="activeTab[user.tipo] === 'Tarefas'">
+                    <button class="confirm-btn edit-btn" @click="addTarefaButton()" v-if="user.tipo === 'PROFESSOR'">
                         + Adicionar
                     </button>
-                <ul>
+                <ul v-if="user.tipo === 'PROFESSOR'">
                     <li v-for="tarefa in tarefas" :key="tarefa.id" @click="navigateToTarefas(tarefa.id)"
                         style="cursor: pointer; color: #155c55; display: flex; justify-content: space-between;">
                         <span>
@@ -55,12 +55,23 @@
                         </button>
                     </li>
                 </ul>
+
+                <ul v-if="user.tipo === 'ALUNO'">
+                    <li v-for="tarefa in tarefas" :key="tarefa.id" @click="navigateToTarefas(tarefa.id)"
+                        style="cursor: pointer; color: #155c55; display: flex; ">
+                        <span>
+                            {{ tarefa.nome }}
+                        </span>
+                    </li>
+                </ul>
+
+
             </div>
-            <div v-if="activeTab === 'Alunos'">
-                <button @click="addAlunoButton()" class="confirm-btn edit-btn">
+            <div v-if="activeTab[user.tipo] === 'Alunos'">
+                <button @click="addAlunoButton()" class="confirm-btn edit-btn" v-if="user.tipo === 'PROFESSOR'">
                     + Adicionar
                 </button>
-                <ul>
+                <ul v-if="user.tipo === 'PROFESSOR'">
                     <li v-for="aluno in alunos" :key="aluno.Usuario.id"
                         style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: #155c55; padding: 5px 10px; border-radius: 5px; transition: background-color 0.3s ease;"
                         @mouseover="highlight = aluno.Usuario.id" @mouseleave="highlight = null">
@@ -75,9 +86,21 @@
                         </button>
                     </li>
                 </ul>
+
+                <ul v-if="user.tipo === 'ALUNO'">
+                    <li v-for="aluno in alunos" :key="aluno.Usuario.id"
+                        style="color: #155c55; padding: 5px 10px; border-radius: 5px; transition: background-color 0.3s ease;"
+                        @mouseover="highlight = aluno.Usuario.id" @mouseleave="highlight = null">
+                        <span style="flex-grow: 1;">{{ aluno.Usuario.nome
+                            }}</span>
+                    </li>
+                </ul>
+
+
+
             </div>
-            <div v-if="activeTab === 'Grupos'">
-                <RouterLink to="/cadastroGrupos">
+            <div v-if="activeTab[user.tipo] === 'Grupos'">
+                <RouterLink to="/cadastroGrupos" v-if="user.tipo === 'PROFESSOR'">
                     <button class="confirm-btn edit-btn">
                         + Adicionar
                     </button>
@@ -104,12 +127,20 @@ export default {
     name: 'DisciplinaDetalhes',
     data() {
         return {
-            tabs: ['Ações', 'Tarefas', 'Alunos', 'Grupos'], // Abas
-            activeTab: 'Ações', // Aba ativa por padrão
+            // Abas dinâmicas de acordo com o tipo de usuário
+            tabs: {
+                "PROFESSOR": ['Ações','Tarefas', 'Alunos', 'Grupos'],
+                "ALUNO": ['Tarefas','Alunos', 'Grupos']
+            },
+            activeTab: {
+                "PROFESSOR": 'Ações',
+                "ALUNO": 'Tarefas'
+            }, // Aba ativa por padrão
             disciplina: {},
             alunos: [],
             tarefas: [],
             grupos: [],
+            user: {}
         };
     },
 
@@ -180,6 +211,8 @@ export default {
         this.alunos = await searchAlunosDisc(this.$route.params.id);
         this.tarefas = await searchTarefas(this.$route.params.id);
         this.grupos = await searchGrupos(this.$route.params.id);
+        
+        this.user = JSON.parse(localStorage.getItem('userData'));
     },
 };
 </script>

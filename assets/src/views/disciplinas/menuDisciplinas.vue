@@ -3,7 +3,7 @@
     <h2>Lista de Disciplinas</h2>
 
     <!-- Grid de disciplinas -->
-    <div class="disciplinas-grid">
+    <div class="disciplinas-grid" v-if="user.tipo === 'PROFESSOR'">
       <router-link 
         v-for="(disciplina, index) in disciplinas" 
         :key="index" 
@@ -12,6 +12,18 @@
       >
         <h5>{{ disciplina.nome }}</h5>
         <p>{{ disciplina.descricao }}</p>
+      </router-link>
+    </div>
+
+    <div class="disciplinas-grid" v-if="user.tipo === 'ALUNO'">
+      <router-link 
+        v-for="(disciplina, index) in disciplinas" 
+        :key="index" 
+        :to="{ name: 'DisciplinaDetalhes', params: { id: disciplina[index].id } }"
+        class="disciplina-item"
+      >
+        <h5>{{ disciplina[index].nome }}</h5>
+        <p>{{ disciplina[index].descricao }}</p>
       </router-link>
     </div>
 
@@ -27,12 +39,22 @@ export default {
   data() {
     return {
       disciplinas: [],
+      user: {}
     };
   },
   async mounted() {
     try {
       const userData = JSON.parse(localStorage.getItem("userData"))
-      this.disciplinas = await searchDisciplinas(userData.id);
+      this.user = userData
+      if (userData.tipo === "PROFESSOR") {
+        this.disciplinas = await searchDisciplinas({
+          codProf: userData.id
+        });
+      } else {
+        userData.AlunoDiscs.forEach(async element => {
+          this.disciplinas.push(await searchDisciplinas({ id: element.codDisc }))
+        });
+      }
     } catch (error) {
       console.error(error);
     }
