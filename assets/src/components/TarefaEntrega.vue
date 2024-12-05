@@ -20,6 +20,14 @@
             {{ link.nome + ' - ' + link.link }}
           </li>
         </ul>
+
+
+        <div v-if="corrigida">
+          <h4>Devolutiva:</h4>
+              <p><strong>Pontos: <span>{{ pontos }}</span></strong></p>
+              <p><strong>Comentários: <span>{{ comentarios }}</span></strong></p>
+
+        </div>
   
         <form @submit.prevent="entregarTarefa()">
   
@@ -57,7 +65,10 @@
         material: {},
         grupos: [],
         entrega: {},
-        links: []
+        links: [],
+        pontos: '',
+        comentarios: '',
+        corrigida: false
       };
     },
     methods: {
@@ -125,6 +136,11 @@
       if (this.entrega.length > 0) {
         this.links = await JSON.parse(this.entrega[0].entrega);
       }
+
+      this.pontos = this.entrega[0].pontos;
+      this.comentarios = this.entrega[0].comentarios;
+      this.corrigida = this.entrega[0].corrigida;
+      console.log("ENTREGA",this.corrigida);
   
     }
   };

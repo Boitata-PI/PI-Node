@@ -20,14 +20,21 @@
             {{ link.nome + ' - ' + link.link }}
           </li>
         </ul>
+
+        <h4>Entrega:</h4>
+            <ul>
+              <li v-for="link in links" >
+                {{ link.nome + ' - ' + link.link }}
+              </li>
+            </ul>
   
         <form @submit.prevent="entregarTarefa()">
   
           <h4>Devolutiva:</h4>
-            <div class="link-group">
-              <input type="text" placeholder="Insira a nota" required />
-              <input type="url" placeholder="Insira o comentario" required />
-            </div>
+          <div class="link-group">
+            <input v-model="pontos" type="text" placeholder="Insira a nota" required />
+            <input v-model="comentarios" type="text" placeholder="Insira o comentario" required />
+          </div>
     
           <!-- Ação para entrega -->
           <div class="tarefa-acoes">
@@ -44,6 +51,7 @@
   
   import { findTarefas, searchEntregaTarefa, cadEntregas, updateEntrega } from '@/js/requisitions/tarefas';
   import { searchGruposAluno } from '../js/requisitions/grupos';
+import { data } from 'jquery';
   
   
   export default {
@@ -55,7 +63,9 @@
         material: {},
         grupos: [],
         entrega: {},
-        links: []
+        links: [],
+        pontos: '',
+        comentarios: ''
       };
     },
     methods: {
@@ -72,8 +82,10 @@
             await updateEntrega(
               this.entrega[0].id,
               {
-                codGrupo: this.grupos.filter(grupo => grupo.Grupo.codDisc === this.disciplina.id)[0].Grupo.id,
-                entrega: links
+                pontos: this.pontos,
+                comentarios: this.comentarios,
+                corrigida: 1,
+                dataCorrecao: Date.now()
               }
             )
             
@@ -114,15 +126,30 @@
       this.tarefa = await findTarefas(this.$route.params.id);
       this.material = await JSON.parse(this.tarefa.material);
       this.disciplina = await this.tarefa.Disciplina;
-      this.grupos = await searchGruposAluno(JSON.parse(localStorage.getItem('userData')).id);
+      this.grupos = await searchGruposAluno(localStorage.getItem('grupo'));
+
+      // tempo de duzentos ms
+      await new Promise(resolve => setTimeout(resolve, 200));
+
       this.entrega = await searchEntregaTarefa({
         codTarefa: this.tarefa.id,
-        codGrupo: this.grupos.filter(grupo => grupo.Grupo.codDisc === this.disciplina.id)[0].Grupo.id
+        codGrupo: localStorage.getItem('grupo')
       });
+
+      await new Promise(resolve => setTimeout(resolve, 200));
+
+      console.log("ENTREGA",this.entrega);
   
       if (this.entrega.length > 0) {
         this.links = await JSON.parse(this.entrega[0].entrega);
       }
+
+      await new Promise(resolve => setTimeout(resolve, 200));
+
+      console.log("LINKS",this.links);
+
+      this.pontos = this.entrega[0].pontos;
+      this.comentarios = this.entrega[0].comentarios;
   
     }
   };

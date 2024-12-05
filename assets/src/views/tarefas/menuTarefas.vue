@@ -17,7 +17,7 @@
       <router-link 
         v-for="tarefa in tarefasFiltradas" 
         :key="tarefa.id" 
-        :to="{ name: 'TarefaDetalhes', params: { id: tarefa.id } }"
+        :to="{ name: 'TarefaEntrega', params: { id: tarefa.id } }"
         class="tarefa-item"
       >
         <div class="tarefa-header">

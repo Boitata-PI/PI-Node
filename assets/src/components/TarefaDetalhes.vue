@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-5">
-    <h2>Tarefas Entregues: {{ disciplina.nome }}</h2>
+    <h2>Tarefas Entregues: {{ tarefa.nome }}</h2>
 
     <!-- Abas -->
     <div class="tabs">
@@ -38,12 +38,12 @@
       <div v-else-if="activeTab[user.tipo] === 'Entregue'">
         <ul>
           <li
-            v-for="tarefa in tarefas"
-            :key="tarefa.id"
-            @click="navigateToTarefas(tarefa.id)"
+            v-for="grupo in gruposEntregues"
+            :key="grupo.id"
+            @click="navigateToEntregas(grupo.id)"
             class="list-item"
           >
-            {{ tarefa.nome }}
+            {{ grupo.nome }}
           </li>
         </ul>
       </div>
@@ -52,11 +52,11 @@
       <div v-else-if="activeTab[user.tipo] === 'Não Entregue'">
         <ul>
           <li
-            v-for="aluno in alunos"
-            :key="aluno.Usuario.id"
+            v-for="grupo in gruposNaoEntregues"
+            :key="grupo.id"
             class="list-item"
           >
-            {{ aluno.Usuario.nome }}
+            {{ grupo.nome }}
           </li>
         </ul>
       </div>
@@ -67,7 +67,8 @@
 <script>
 import { findDisciplinas, deleteDisciplinas } from "../js/requisitions/disciplinas";
 import { searchAlunosDisc } from "../js/requisitions/users.js";
-import { searchTarefas, deleteTarefa } from "../js/requisitions/tarefas.js";
+import { searchEntregaTarefa, deleteTarefa, findTarefas } from "../js/requisitions/tarefas.js";
+import { searchGrupos } from "../js/requisitions/grupos.js";
 
 export default {
   name: "TarefaDetalhes",
@@ -82,9 +83,12 @@ export default {
         ALUNO: "Entregue",
       },
       disciplina: {},
-      alunos: [],
-      tarefas: [],
+      tarefa: {},
       user: {},
+      grupos: [],
+      entregas: [],
+      gruposNaoEntregues: [],
+      gruposEntregues: [],
     };
   },
   methods: {
@@ -99,16 +103,22 @@ export default {
     editButton() {
       this.$router.push({ name: "editarDisciplinas", params: { id: this.disciplina.id } });
     },
-    navigateToTarefas(id) {
-      this.$router.push({ name: "TarefaDetalhes", params: { id } });
+
+    navigateToEntregas(id) {
+      localStorage.setItem("grupo", id);
+      this.$router.push("/entrega2/"+this.$route.params.id);
     },
   },
   async mounted() {
     try {
       this.user = JSON.parse(localStorage.getItem("userData"));
-      this.disciplina = await findDisciplinas(this.$route.params.id);
-      this.alunos = await searchAlunosDisc(this.$route.params.id);
-      this.tarefas = await searchTarefas(this.$route.params.id);
+      this.disciplina = await findDisciplinas(localStorage.getItem("disciplina"));
+      this.tarefa = await findTarefas(this.$route.params.id);
+      this.grupos = await searchGrupos(this.disciplina.id);
+      console.log("GRUPOS",this.grupos);
+      this.entregas = await searchEntregaTarefa({ codTarefa: this.tarefa.id });
+      this.gruposEntregues = this.grupos.filter(grupo => this.entregas.some(entrega => entrega.codGrupo === grupo.id));
+      this.gruposNaoEntregues = this.grupos.filter(grupo => !this.entregas.some(entrega => entrega.codGrupo === grupo.id));
     } catch (error) {
       console.error("Erro ao carregar dados:", error);
     }

@@ -174,7 +174,14 @@ export default {
         },
 
         navigateToTarefas(id) {
-            this.$router.push({ name: 'TarefaDetalhes', params: { id } });
+            localStorage.setItem("disciplina", this.$route.params.id)
+            if (this.user.tipo === 'PROFESSOR') {
+                this.$router.push({ name: 'TarefaDetalhes', params: { id } });
+            }
+
+            if (this.user.tipo === 'ALUNO') {
+                this.$router.push({ name: 'TarefaEntrega', params: { id } });
+            }
         },
 
         navigateToGrupos(id) {
