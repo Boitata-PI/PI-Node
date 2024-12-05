@@ -13,6 +13,7 @@ import MenuProfessorView from '@/views/professores/menuProfessores.vue';
 import MenuRelatoriosView from '@/views/relatorios/menuRelatorios.vue';
 import MenuGruposView from '@/views/grupos/menuGrupos.vue';
 
+
 // Páginas de Erro e Desenvolvimento
 import PagDesenvolvimentoView from '@/views/pagDesenvolvimento.vue';
 import Error403View from '@/views/errors/error403View.vue';
@@ -69,6 +70,9 @@ import TarefaDetalhes from '@/components/TarefaDetalhes.vue';
 
 import { checkAuth } from "../js/requisitions/auth";
 
+import TarefaEntrega from '@/components/TarefaEntrega.vue';
+import TarefaEntrega2 from '@/components/TarefaEntrega2.vue';
+
 const routes = [
   //Rotas Padrão DashBoard e Login
   { path: '/', name: 'login', component: LoginView, meta:{hideNavbar: true, noRequiresAuth: true} },
@@ -82,6 +86,8 @@ const routes = [
   { path: '/menuProfessores', name: 'menuProfessores', component: MenuProfessorView },
   { path: '/menuRelatorios', name: 'menuRelatorios', component: MenuRelatoriosView },
   { path: '/menuGrupos', name: 'menuGrupos', component: MenuGruposView },
+  { path: '/tarefaEntrega', name: 'tarefaEntrega', component: TarefaEntrega},
+  { path: '/tarefaEntrega2', name: 'tarefaEntrega2', component: TarefaEntrega2},
 
   //Páginas em Desenvolvimento e Erros
   { path: '/pagDesenvolvimento', name: 'pagDesenvolvimento', component: PagDesenvolvimentoView },
@@ -167,6 +173,18 @@ const routes = [
     name: 'GrupoDetalhes',
     component: () => import('@/components/GrupoDetalhes.vue'),
     props: true
+  },
+  {
+    path: '/entrega/:id',
+    name: 'TarefaEntrega',
+    component: () => import('@/components/TarefaEntrega.vue'),
+    props: true
+  },
+  {
+  path: '/entrega2/:id',
+  name: 'TarefaEntrega2',
+  component: () => import('@/components/TarefaEntrega2.vue'),
+  props: true
   },
   {
     path: '/tarefa/:id',

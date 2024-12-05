@@ -1,199 +1,183 @@
 <template>
-  <div class="container tarefa-detalhes">
-    <!-- Cabeçalho com título e voltar -->
-    <div class="header">
-      <router-link to="/menuTarefas" class="voltar">Voltar</router-link>
-      <h1>{{ tarefa.nome }}</h1>
+  <div class="container mt-5">
+    <h2>Tarefas Entregues: {{ disciplina.nome }}</h2>
+
+    <!-- Abas -->
+    <div class="tabs">
+      <button
+        v-for="tab in tabs[user.tipo]"
+        :key="tab"
+        :class="{ active: activeTab[user.tipo] === tab }"
+        @click="activeTab[user.tipo] = tab"
+      >
+        {{ tab }}
+      </button>
     </div>
 
-    <!-- Detalhes da tarefa -->
-    <div class="tarefa-card">
-      <div class="informacoes">
-        <p><strong>Prazo:</strong> <span class="data">{{ formatarData(tarefa.dataVencimento) + ' ' + formatarHora(tarefa.dataVencimento) }}</span></p>
-        <p><strong>Disciplina:</strong> <span>{{ disciplina.nome }}</span></p>
-        <p><strong>Instruções: <span>{{ tarefa.instrucoes }}</span></strong></p>
+    <!-- Conteúdo das Abas -->
+    <div class="tab-content">
+      <!-- Ações -->
+      <div v-if="activeTab[user.tipo] === 'Ações'" class="button-container">
+        <button
+          @click="editButton"
+          class="action-btn edit-btn"
+          v-if="user.tipo === 'PROFESSOR'"
+        >
+          Editar
+        </button>
+        <button
+          @click="handleDelete"
+          class="action-btn delete-btn"
+          v-if="user.tipo === 'PROFESSOR'"
+        >
+          Excluir
+        </button>
       </div>
 
-      <h4>Arquivos:</h4>
-      <ul>
-        <li v-for="link in material" >
-          {{ link.nome + ' - ' + link.link }}
-        </li>
-      </ul>
+      <!-- Tarefas Entregues -->
+      <div v-else-if="activeTab[user.tipo] === 'Entregue'">
+        <ul>
+          <li
+            v-for="tarefa in tarefas"
+            :key="tarefa.id"
+            @click="navigateToTarefas(tarefa.id)"
+            class="list-item"
+          >
+            {{ tarefa.nome }}
+          </li>
+        </ul>
+      </div>
 
-      <form @submit.prevent="entregarTarefa()">
-
-        <h4>Entrega:</h4>
-          <div v-for="(link, index) in links" :key="index" class="link-group">
-            <input type="text" v-model="links[index].nome" placeholder="Insira o nome" required />
-            <input type="url" v-model="links[index].link" placeholder="Insira o link" required />
-            <button type="button" @click="removeLink(index)" class="remove-btn">Remover</button>
-          </div>
-          <button type="button" @click="addLink" class="add-btn">Adicionar Link</button>
-  
-        <!-- Ação para entrega -->
-        <div class="tarefa-acoes">
-          <button type="submit" class="btn-entregar">Entregar Tarefa</button>
-        </div>
-
-      </form>
-      
+      <!-- Tarefas Não Entregues -->
+      <div v-else-if="activeTab[user.tipo] === 'Não Entregue'">
+        <ul>
+          <li
+            v-for="aluno in alunos"
+            :key="aluno.Usuario.id"
+            class="list-item"
+          >
+            {{ aluno.Usuario.nome }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-
-import { findTarefas, searchEntregaTarefa, cadEntregas, updateEntrega } from '@/js/requisitions/tarefas';
-import { searchGruposAluno } from '../js/requisitions/grupos';
-
+import { findDisciplinas, deleteDisciplinas } from "../js/requisitions/disciplinas";
+import { searchAlunosDisc } from "../js/requisitions/users.js";
+import { searchTarefas, deleteTarefa } from "../js/requisitions/tarefas.js";
 
 export default {
-  name: 'TarefaDetalhes',
+  name: "TarefaDetalhes",
   data() {
     return {
-      tarefa: {},
+      tabs: {
+        PROFESSOR: ["Ações", "Entregue", "Não Entregue"],
+        ALUNO: ["Entregue", "Não Entregue"],
+      },
+      activeTab: {
+        PROFESSOR: "Ações",
+        ALUNO: "Entregue",
+      },
       disciplina: {},
-      material: {},
-      grupos: [],
-      entrega: {},
-      links: []
+      alunos: [],
+      tarefas: [],
+      user: {},
     };
   },
   methods: {
-    async entregarTarefa() {
+    async handleDelete() {
       try {
-
-        const links = JSON.stringify(this.links);
-          console.log("LINKS",links);
-
-        console.log(this.entrega.length);
-
-        if (this.entrega.length > 0) {
-
-          await updateEntrega(
-            this.entrega[0].id,
-            {
-              codGrupo: this.grupos.filter(grupo => grupo.Grupo.codDisc === this.disciplina.id)[0].Grupo.id,
-              entrega: links
-            }
-          )
-          
-        }else{
-
-          await cadEntregas({
-            codTarefa: this.tarefa.id,
-            codGrupo: this.grupos.filter(grupo => grupo.Grupo.codDisc === this.disciplina.id)[0].Grupo.id,
-            entrega: links
-          })
-
-        }
-
-        this.$router.back();
+        await deleteDisciplinas(this.disciplina.id);
+        this.$router.push("/index");
       } catch (error) {
-        console.error(error);
+        console.error("Erro ao excluir a disciplina:", error);
       }
     },
-    formatarData(dataISO) {
-      const data = new Date(dataISO); // Converte para objeto Date
-      const dia = String(data.getDate()).padStart(2, "0");
-      const mes = String(data.getMonth() + 1).padStart(2, "0"); // Janeiro é 0
-      const ano = data.getFullYear();
-      return `${dia}/${mes}/${ano}`;
+    editButton() {
+      this.$router.push({ name: "editarDisciplinas", params: { id: this.disciplina.id } });
     },
-    formatarHora(dataISO) {
-      const data = new Date(dataISO); // Converte para objeto Date
-      return data.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-    },
-    addLink() {
-      this.links.push({ nome: '', link: '' }); // Adiciona um novo campo de link vazio
-    },
-    removeLink(index) {
-      this.links.splice(index, 1); // Remove o link pelo índice
+    navigateToTarefas(id) {
+      this.$router.push({ name: "TarefaDetalhes", params: { id } });
     },
   },
   async mounted() {
-    this.tarefa = await findTarefas(this.$route.params.id);
-    this.material = await JSON.parse(this.tarefa.material);
-    this.disciplina = await this.tarefa.Disciplina;
-    this.grupos = await searchGruposAluno(JSON.parse(localStorage.getItem('userData')).id);
-    this.entrega = await searchEntregaTarefa({
-      codTarefa: this.tarefa.id,
-      codGrupo: this.grupos.filter(grupo => grupo.Grupo.codDisc === this.disciplina.id)[0].Grupo.id
-    });
-
-    if (this.entrega.length > 0) {
-      this.links = await JSON.parse(this.entrega[0].entrega);
+    try {
+      this.user = JSON.parse(localStorage.getItem("userData"));
+      this.disciplina = await findDisciplinas(this.$route.params.id);
+      this.alunos = await searchAlunosDisc(this.$route.params.id);
+      this.tarefas = await searchTarefas(this.$route.params.id);
+    } catch (error) {
+      console.error("Erro ao carregar dados:", error);
     }
-
-  }
+  },
 };
 </script>
 
 <style scoped>
-/* Container principal */
+/* Container */
 .container {
-  max-width: 1200px;
-  margin: 50px auto;
-  padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f7fa;
-  border-radius: 10px;
-}
-
-/* Cabeçalho */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  border-bottom: 2px solid #e1e4e8;
-  padding-bottom: 15px;
-}
-
-.header h1 {
-  font-size: 36px;
-  color: #43837d;  /* Ajustado para o verde */
-  font-weight: 600;
-  margin: 0;
-}
-
-.voltar {
-  color: #43837d;  /* Ajustado para o verde */
-  font-size: 18px;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.voltar:hover {
-  text-decoration: underline;
-}
-
-/* Detalhes da tarefa */
-.tarefa-card {
   background-color: #ffffff;
-  padding: 30px;
+  border: 1px solid #e1dfdd;
   border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border-left: 5px solid #43837d;  /* Ajustado para o verde */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 30px 50px;
+  max-width: 600px;
+  text-align: center;
+  width: 90%;
 }
 
-.informacoes p {
-  font-size: 18px;
-  color: #3c4043;
-  margin: 10px 0;
-}
-
-.informacoes .data {
-  font-weight: 600;
-  color: #ff7043;
+/* Títulos */
+h2 {
+  font-size: 28px;
+  color: #155c55;
+  margin-bottom: 20px;
 }
 
 h4 {
-  font-size: 24px;
-  color: #43837d;  /* Ajustado para o verde */
-  margin-top: 25px;
-  font-weight: 600;
+  font-size: 20px;
+  color: #323130;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* Abas */
+.tabs {
+  display: flex;
+  justify-content: center;
+  border-bottom: 2px solid #e1dfdd;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+.tabs button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #605e5c;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: color 0.3s, border-bottom 0.3s;
+  border-bottom: 2px solid transparent;
+}
+
+.tabs button:hover {
+  color: #155c55;
+}
+
+.tabs button.active {
+  color: #155c55;
+  font-weight: bold;
+  border-bottom: 2px solid #155c55;
+}
+
+/* Conteúdo das Abas */
+.tab-content {
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
 }
 
 ul {
@@ -204,110 +188,140 @@ ul {
 
 ul li {
   font-size: 16px;
-  color: #5f6368;
-  background-color: #f5f5f5;
-  padding: 12px 20px;
-  margin-bottom: 12px;
-  border-radius: 8px;
+  color: #323130;
+  background-color: #f9f9f9;
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  gap: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 ul li:hover {
-  background-color: #e3f2fd;
-  transform: translateY(-4px);
+  background-color: #e6f7f1;
+  transform: translateY(-2px);
 }
+
 
 ul li::before {
   content: '';
   width: 30px;
   height: 30px;
-  background-color: #43837d;  /* Ajustado para o verde */
-  border-radius: 50%;
+  background-color: #28a745;
+  border-radius: 2px;
   display: inline-block;
 }
 
-/* Ação de entrega */
-.tarefa-acoes {
-  margin-top: 40px;
-  text-align: center;
-}
-
-.btn-entregar {
-  padding: 14px 28px;
-  background-color: #43837d;  /* Ajustado para o verde */
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: 500;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  width: 100%;
-  max-width: 300px;
-}
-
-.btn-entregar:hover {
-  background-color: #366f63;  /* Cor mais escura de verde */
-  transform: scale(1.05);
-}
-
-.btn-entregar:active {
-  background-color: #2b5d4e;  /* Cor ainda mais escura */
-}
-
-/* Efeitos de foco */
-.btn-entregar:focus {
-  outline: none;
-  box-shadow: 0 0 10px rgba(67, 131, 125, 0.5);
-}
-
-.add-btn,
-.remove-btn {
-  background-color: #007bff;
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.add-btn:hover,
-.remove-btn:hover {
-  background-color: #0056b3;
-}
-
-.link-group {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.link-group input {
-  width: 100%;
-  margin: 10px 0 ;
+/* Responsividade */
+@media (max-width: 768px) {
+  ul li {
+      font-size: 14px;
+      padding: 8px 12px;
+  }
 }
 
 /* Responsividade */
 @media (max-width: 768px) {
   .container {
-    padding: 15px;
+      padding: 20px 30px;
   }
 
-  .tarefa-card {
-    padding: 20px;
+  h2 {
+      font-size: 22px;
   }
 
-  .header h1 {
-    font-size: 28px;
+  h4 {
+      font-size: 18px;
   }
 
-  .btn-entregar {
-    padding: 12px 24px;
+  ul li {
+      font-size: 14px;
   }
+}
+
+/* Botões Editar e Excluir */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.action-btn {
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.confirm-btn {
+  padding: 2px 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.action-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.edit-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #218838;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* Estilo dos ícones dentro dos botões */
+.action-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+}
+
+.delete-icon-btn {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.3s ease;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.delete-icon-btn:hover {
+  color: #c82333;
+  transform: scale(1.1);
+}
+
+.delete-icon-btn svg {
+  width: 20px;
+  height: 20px;
 }
 </style>
