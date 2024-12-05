@@ -17,7 +17,7 @@
   </div>
 
      <!-- Botão para adicionar cursos -->
-     <router-link class="btn-add" to="/cadastroCursos">
+    <router-link class="btn-add" to="/cadastroCursos" v-if="permissions.some(role => ['ADM'].includes(role))">
       <div class="add-task-btn">+</div>
     </router-link>
 </template>
@@ -31,6 +31,7 @@ export default {
   data() {
     return {
       cursos: [],
+      permissions: JSON.parse(localStorage.getItem("permissions")),
     };
   },
   methods: {

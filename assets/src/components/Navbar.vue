@@ -5,11 +5,11 @@
       <!--Links Gerais sidenav-->
       <a href="javascript:void(0)" class="closebtn" @click="closeNav">&times;</a>
       <router-link to="/index">Dashboard</router-link>
-      <router-link to="/menuCursos" v-if="user.tipo === 'PROFESSOR'">Curso</router-link>
-      <router-link to="/menuDisciplinas">Disciplinas</router-link>
-      <router-link to="/menuProfessores" v-if="user.tipo === 'PROFESSOR'">Professores</router-link>
-      <router-link to="/pagDesenvolvimento" v-if="user.tipo === 'PROFESSOR'">Relatorios</router-link>
-      <router-link to="/menuTarefas" v-if="user.tipo === 'ALUNO'">Tarefas</router-link>
+      <router-link to="/menuCursos" v-if="permissions.some(role => ['COORDENADOR', 'ADM'].includes(role))">Curso</router-link>
+      <router-link to="/menuDisciplinas" v-if="permissions.some(role => ['ALUNO', 'PROFESSOR'].includes(role))">Disciplinas</router-link>
+      <router-link to="/menuProfessores" v-if="permissions.some(role => ['ADM'].includes(role))">Professores</router-link>
+      <router-link to="/pagDesenvolvimento" v-if="permissions.some(role => ['COORDENADOR', 'ADM', 'PROFESSOR'].includes(role))">Relatorios</router-link>
+      <router-link to="/menuTarefas" v-if="permissions.some(role => ['ALUNO'].includes(role))">Tarefas</router-link>
 
     </div>
 
@@ -26,18 +26,18 @@
             <router-link class="nav-link" to="/index">Dashboard</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/menuCursos" v-if="user.tipo === 'PROFESSOR'">Curso</router-link>
+            <router-link class="nav-link" to="/menuCursos" v-if="permissions.some(role => ['COORDENADOR', 'ADM'].includes(role))">Curso</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/menuDisciplinas">Disciplinas</router-link>
+            <router-link class="nav-link" to="/menuDisciplinas" v-if="permissions.some(role => ['ALUNO', 'PROFESSOR'].includes(role))">Disciplinas</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/menuProfessores" v-if="user.tipo === 'PROFESSOR'">Professores</router-link>
+            <router-link class="nav-link" to="/menuProfessores" v-if="permissions.some(role => ['ADM'].includes(role))">Professores</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/pagDesenvolvimento" v-if="user.tipo === 'PROFESSOR'">Relatórios</router-link>
+            <router-link class="nav-link" to="/pagDesenvolvimento" v-if="permissions.some(role => ['COORDENADOR', 'ADM', 'PROFESSOR'].includes(role))">Relatórios</router-link>
           </li>
-          <li class="nav-item" v-if="user.tipo === 'ALUNO'">
+          <li class="nav-item" v-if="permissions.some(role => ['ALUNO'].includes(role))">
             <router-link class="nav-link" to="/menuTarefas">Tarefas</router-link>
           </li>
         </ul>
@@ -58,8 +58,7 @@ export default {
   name: "Navbar",
   data() {
     return {
-      user: JSON.parse(localStorage.getItem("userData")),
-      a: false
+      permissions: JSON.parse(localStorage.getItem("permissions")),
     }
   },
   methods: {
@@ -74,8 +73,6 @@ export default {
     logout
   },
   mounted() {
-    this.a = this.user.tipo === "ALUNO";
-    console.log(this.a);
   }
 
 };

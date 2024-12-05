@@ -4,15 +4,15 @@
 
         <!-- Abas -->
         <div class="tabs">
-            <button v-for="(tab, index) in tabs" :key="index" :class="{ active: activeTab === tab }"
-                @click="activeTab = tab">
+            <button v-for="(tab, index) in tabs[user.tipo]" :key="index" :class="{ active: activeTab[user.tipo] === tab }"
+                @click="activeTab[user.tipo] = tab">
                 {{ tab }}
             </button>
         </div>
 
         <!-- Conteúdo das Abas -->
         <div class="tab-content">
-            <div v-if="activeTab === 'Ações'">
+            <div v-if="activeTab[user.tipo] === 'Ações'">
                 <div class="button-container">
                     <!-- Botão Editar -->
                         <button class="action-btn edit-btn" @click="editButton()">
@@ -35,13 +35,21 @@
                     </button>
                 </div>
             </div>
-            <div v-if="activeTab === 'Alunos'">
-                <ul>
+            <div v-if="activeTab[user.tipo] === 'Alunos'">
+                <ul v-if="user.tipo === 'PROFESSOR'">
                     <li v-for="aluno in alunos" :key="aluno.Usuario.id" @click="navigateToAluno(aluno.Usuario.id)"
                         style="cursor: pointer; color: #155c55;">
                         {{ aluno.Usuario.nome }}
                     </li>
                 </ul>
+
+                <ul v-if="user.tipo === 'ALUNO'">
+                    <li v-for="aluno in alunos" :key="aluno.Usuario.id"
+                        style="color: #155c55;">
+                        {{ aluno.Usuario.nome }}
+                    </li>
+                </ul>
+
             </div>
         </div>
     </div>
@@ -56,10 +64,17 @@ export default {
     props: ['id'],
     data() {
         return {
-            tabs: ['Ações', 'Alunos'], // Abas específicas para grupos
-            activeTab: 'Ações', // Aba ativa por padrão
+            tabs: {
+                PROFESSOR: ['Ações', 'Alunos'],
+                ALUNO: ['Alunos']
+            }, // Abas específicas para grupos
+            activeTab: {
+                PROFESSOR: 'Ações',
+                ALUNO: 'Alunos'
+            }, // Aba ativa por padrão
             grupo: {},
             alunos: [],
+            user: {}
         };
     },
     methods: {
@@ -82,6 +97,7 @@ export default {
     async mounted() {
         this.grupo = await findGrupo(this.id);
         this.alunos = await searchAlunosGrupo(this.id);
+        this.user = JSON.parse(localStorage.getItem('userData'));
     }
 
 };

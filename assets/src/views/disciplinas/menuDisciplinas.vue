@@ -3,7 +3,7 @@
     <h2>Lista de Disciplinas</h2>
 
     <!-- Grid de disciplinas -->
-    <div class="disciplinas-grid" v-if="user.tipo === 'PROFESSOR'">
+    <div class="disciplinas-grid" v-if="permissions.includes('PROFESSOR')">
       <router-link 
         v-for="(disciplina, index) in disciplinas" 
         :key="index" 
@@ -15,7 +15,7 @@
       </router-link>
     </div>
 
-    <div class="disciplinas-grid" v-if="user.tipo === 'ALUNO'">
+    <div class="disciplinas-grid" v-if="permissions.includes('ALUNO')">
       <router-link 
         v-for="(disciplina, index) in disciplinas" 
         :key="index" 
@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       disciplinas: [],
-      user: {}
+      permissions: JSON.parse(localStorage.getItem("permissions")),
     };
   },
   async mounted() {

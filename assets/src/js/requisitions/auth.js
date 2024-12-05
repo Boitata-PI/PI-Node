@@ -15,9 +15,12 @@ export const login = async (ra, senha, router) => {
         });
 
         const data = await response.json()
+        console.log(data)
         const { usuario } = data.data;
+        const permissions = data.permissions;
 
         localStorage.setItem("userData", JSON.stringify(usuario));
+        localStorage.setItem("permissions", JSON.stringify(permissions));
 
         console.log(response.ok)
 
